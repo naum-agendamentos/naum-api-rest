@@ -1,5 +1,6 @@
 package school.sptech.naumspringapi.dto.loginAdmDto;
 
+import jakarta.persistence.ForeignKey;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
