@@ -1,4 +1,7 @@
 package school.sptech.naumspringapi.repository;
 
-public interface BarbeariaRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import school.sptech.naumspringapi.entity.Barbearia;
+
+public interface BarbeariaRepository extends JpaRepository<Barbearia, Integer> {
 }

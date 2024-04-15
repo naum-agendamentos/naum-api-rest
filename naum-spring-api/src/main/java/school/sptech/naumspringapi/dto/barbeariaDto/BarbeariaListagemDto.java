@@ -1,31 +1,23 @@
 package school.sptech.naumspringapi.dto.barbeariaDto;
 
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.URL;
 import school.sptech.naumspringapi.entity.Endereco;
 
-public class BarbeariaCriacaoDto {
-    @NotNull
-    @NotBlank
+public class BarbeariaListagemDto {
+    private int id;
     private String nome;
-    @URL
-    @NotNull
-    @NotBlank
     private String linkBarbearia;
-    @NotNull
-    @NotBlank
     private byte[] fotoBarbearia;
-    @NotNull
-    @NotBlank
-    @AssertTrue
-    private boolean ativa;
-    @NotNull
-    @NotBlank
     private Endereco endereco;
 
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;
@@ -49,14 +41,6 @@ public class BarbeariaCriacaoDto {
 
     public void setFotoBarbearia(byte[] fotoBarbearia) {
         this.fotoBarbearia = fotoBarbearia;
-    }
-
-    public boolean isAtiva() {
-        return ativa;
-    }
-
-    public void setAtiva(boolean ativa) {
-        this.ativa = ativa;
     }
 
     public Endereco getEndereco() {
