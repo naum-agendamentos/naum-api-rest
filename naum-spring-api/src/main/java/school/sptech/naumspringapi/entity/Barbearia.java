@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.util.Collection;
+
 @Entity
 public class Barbearia {
     @Id
@@ -64,5 +66,8 @@ public class Barbearia {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public Collection<Servico> getServicos() {
     }
 }
