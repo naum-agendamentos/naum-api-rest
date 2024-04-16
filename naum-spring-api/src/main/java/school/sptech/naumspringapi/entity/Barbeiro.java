@@ -1,9 +1,6 @@
 package school.sptech.naumspringapi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 
 @Entity
@@ -18,6 +15,8 @@ public class Barbeiro {
     private String descricao;
     private boolean barbeiroAtivo;
     private byte[] foto;
+    @OneToOne
+    @JoinColumn(name = "id")
     private Barbearia barbearia;
     private int fkPermissao;
 

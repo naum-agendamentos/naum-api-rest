@@ -1,19 +1,19 @@
-package school.sptech.naumspringapi.dto.loginAdmDto;
+package school.sptech.naumspringapi.mapper;
 
+import school.sptech.naumspringapi.dto.loginAdmDto.LoginAdmAtualizarSenhaDto;
 import school.sptech.naumspringapi.entity.LoginAdm;
 
 public class LoginAdmMapper {
-    public static LoginAdm toEntity(LoginAdmCriacaoDto dto) {
+    public static LoginAdm toEntity(LoginAdmAtualizarSenhaDto dto) {
         if(dto == null) return null;
 
         LoginAdm loginAdm = new LoginAdm();
-        loginAdm.setEmail(dto.getEmail());
-        loginAdm.setSenha(dto.getSenha());
+        loginAdm.setSenha(dto.getNovaSenha());
 
         return loginAdm;
     }
 
-    public static LoginAdmListagemDto toDto(LoginAdm entity) {
+    public static boolean toDto(LoginAdm entity) {
         if (entity == null) return null;
 
         LoginAdmListagemDto dto = new LoginAdmListagemDto();

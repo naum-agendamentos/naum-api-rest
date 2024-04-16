@@ -1,9 +1,6 @@
 package school.sptech.naumspringapi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Servico {
@@ -14,6 +11,8 @@ public class Servico {
     private int id;
     private String nomeServico;
     private double preco;
+    @OneToOne
+    @JoinColumn(name = "id")
     private Barbearia barbearia;
 
     public int getId() {

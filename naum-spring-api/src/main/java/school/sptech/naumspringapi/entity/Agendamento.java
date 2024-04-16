@@ -1,11 +1,9 @@
 package school.sptech.naumspringapi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Agendamento {
@@ -13,9 +11,15 @@ public class Agendamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDate dataAgendamento;
+    @OneToOne
+    @JoinColumn(name = "id")
     private Barbeiro barbeiro;
+    @OneToOne
+    @JoinColumn(name = "id")
     private Cliente cliente;
-    private Servico servico;
+    @OneToMany
+    @JoinColumn(name = "id")
+    private List<Servico> servico;
 
 
 
@@ -51,11 +55,7 @@ public class Agendamento {
         this.cliente = cliente;
     }
 
-    public Servico getServico() {
-        return servico;
-    }
+    public List<Servico> getServico() { return servico; }
 
-    public void setServico(Servico servico) {
-        this.servico = servico;
-    }
+    public void setServico(List<Servico> servico) { this.servico = servico; }
 }

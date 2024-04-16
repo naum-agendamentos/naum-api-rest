@@ -1,5 +1,7 @@
-package school.sptech.naumspringapi.dto.barbeariaDto;
+package school.sptech.naumspringapi.mapper;
 
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
 import school.sptech.naumspringapi.entity.Barbearia;
 
 import java.util.List;

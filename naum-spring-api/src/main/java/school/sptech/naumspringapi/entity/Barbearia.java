@@ -1,9 +1,7 @@
 package school.sptech.naumspringapi.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
 
 import java.util.Collection;
 
@@ -16,8 +14,9 @@ public class Barbearia {
     private String linkBarbearia;
     private boolean ativa;
     private byte[] fotoBarbearia;
+    @OneToOne
+    @JoinColumn(name = "id")
     private Endereco endereco;
-
 
 
     public Integer getId() {
@@ -66,8 +65,5 @@ public class Barbearia {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
-    }
-
-    public Collection<Servico> getServicos() {
     }
 }
