@@ -1,15 +1,21 @@
 package school.sptech.naumspringapi.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.entity.Servico;
+import school.sptech.naumspringapi.repository.ServicoRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/servicos")
 public class ServicoController {
 
     @Autowired
-    private ServiceRepository serviceRepository;
+    private ServicoRepository serviceRepository;
 
     @PostMapping
     public ResponseEntity<Servico> criarServico(@RequestBody @Valid Servico novoServico) {

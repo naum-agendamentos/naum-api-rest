@@ -4,6 +4,7 @@ import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
 import school.sptech.naumspringapi.entity.Barbearia;
+import school.sptech.naumspringapi.entity.Endereco;
 
 import java.util.List;
 
@@ -14,10 +15,14 @@ public class BarbeariaMapper {
 
         Barbearia barbearia = new Barbearia();
         barbearia.setNome(dto.getNome());
-        barbearia.setAtiva(dto.isAtiva());
-        barbearia.setEndereco(dto.getEndereco());
         barbearia.setLinkBarbearia(dto.getLinkBarbearia());
         barbearia.setFotoBarbearia(dto.getFotoBarbearia());
+
+        if (dto.getEndereco() != null) {
+            // Convertendo o EnderecoCriacaoDto para Endereco
+            Endereco endereco = EnderecoMapper.toEntity(dto.getEndereco());
+            barbearia.setEndereco(endereco);
+        }
 
         return barbearia;
     }
@@ -28,9 +33,13 @@ public class BarbeariaMapper {
         BarbeariaListagemDto dto = new BarbeariaListagemDto();
         dto.setId(entity.getId());
         dto.setNome(entity.getNome());
-        dto.setFotoBarbearia(entity.getFotoBarbearia());
         dto.setLinkBarbearia(entity.getLinkBarbearia());
-        dto.setEndereco(entity.getEndereco());
+        dto.setFotoBarbearia(entity.getFotoBarbearia());
+
+        if (entity.getEndereco() != null) {
+            // Mapear o endereço para EnderecoListagemDto
+            dto.setEndereco(EnderecoMapper.toDto(entity.getEndereco()));
+        }
 
         return dto;
     }

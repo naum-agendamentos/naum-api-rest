@@ -26,11 +26,9 @@ import java.util.List;
 public class BarbeariaController {
 
     private final BarbeariaService barbeariaService;
-    private final EnderecoService enderecoService;
 
     @PostMapping
     public ResponseEntity<BarbeariaListagemDto> cadastrar(@RequestBody @Valid BarbeariaCriacaoDto novaBarbearia) {
-        enderecoService.cadastrarEndereco(novaBarbearia);
         BarbeariaListagemDto barbeariaCriada = barbeariaService.criarBarbearia(novaBarbearia);
         return ResponseEntity.ok(barbeariaCriada);
     }
@@ -38,18 +36,28 @@ public class BarbeariaController {
     @GetMapping
     public ResponseEntity<List<BarbeariaListagemDto>> listarBarbearias() {
         List<BarbeariaListagemDto> barbeariaListagem = barbeariaService.listarBarbearia();
-        if (barbeariaListagem == null) return ResponseEntity.notFound().build();
+        if (barbeariaListagem == null) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(barbeariaListagem);
     }
 
     @PutMapping("/editar/{id}")
     public ResponseEntity<BarbeariaListagemDto> atualizarBarbearia(@PathVariable int id, @RequestBody @Valid BarbeariaCriacaoDto novaBarbearia) {
-
-        BarbeariaListagemDto barbeariaAtualizada = barbeariaService.atualizarBarbearia(novaBarbearia, id);
+        BarbeariaListagemDto barbeariaAtualizada = barbeariaService.atualizarBarbearia(id, novaBarbearia);
 
         if (barbeariaAtualizada == null) return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok(barbeariaAtualizada);
+    }
+
+    @PutMapping("/desativar/{id}")
+    public ResponseEntity<BarbeariaAtualizacaoDto> desativarBarbearia(@PathVariable int id){
+        BarbeariaAtualizacaoDto barbeariaDesativada = barbeariaService.desativarBarbearia(id);
+
+        if(barbeariaDesativada == null){
+            return ResponseEntity.status(404).build();
+        }
+
+        return ResponseEntity.status(200).body(barbeariaDesativada);
     }
 }
 

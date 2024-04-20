@@ -10,12 +10,11 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
-  private int id;
-  private String nome;
-  private String email;
-  private String senha;
-  private String telefone;
+    private int id;
+    private String nome;
+    private String email;
+    private String senha;
+    private String telefone;
 
 
   public Boolean validarSenha() {

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
+import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
 import school.sptech.naumspringapi.entity.Endereco;
 
 @Data
@@ -20,9 +21,5 @@ public class BarbeariaCriacaoDto {
     @NotBlank
     private String fotoBarbearia;
     @NotNull
-    @AssertTrue
-    private boolean ativa;
-    @NotNull
-    @NotBlank
-    private Endereco endereco;
+    private EnderecoCriacaoDto endereco;
 }

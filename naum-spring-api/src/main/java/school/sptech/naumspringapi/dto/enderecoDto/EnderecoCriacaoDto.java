@@ -9,22 +9,21 @@ import lombok.Data;
 public class EnderecoCriacaoDto {
     @NotNull
     @NotBlank
-    private String Cidade;
-    @NotNull
-    @NotBlank
-    private String Rua;
-    @NotNull
-    @NotBlank
-    private String bairro;
+    private String cidade;
     @NotNull
     @NotBlank
     @Size(min = 8, max = 8)
     private String cep;
     @NotNull
-    @NotBlank
     private String numero;
+    @NotNull
+    @NotBlank
+    private String bairro;
     @NotNull
     @NotBlank
     @Size(min = 2, max = 2)
     private String uf;
+    @NotNull
+    @NotBlank
+    private String rua;
 }
