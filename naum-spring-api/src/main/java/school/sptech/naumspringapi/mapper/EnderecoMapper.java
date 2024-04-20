@@ -9,12 +9,12 @@ public class EnderecoMapper {
         if (dto == null) return null;
 
         Endereco endereco = new Endereco();
-        endereco.setBairro(dto.getBairro());
-        endereco.setCep(dto.getCep());
         endereco.setCidade(dto.getCidade());
-        endereco.setRua(dto.getRua());
+        endereco.setCep(dto.getCep());
         endereco.setNumero(dto.getNumero());
+        endereco.setBairro(dto.getBairro());
         endereco.setUf(dto.getUf());
+        endereco.setRua(dto.getRua());
 
         return endereco;
     }
@@ -23,12 +23,13 @@ public class EnderecoMapper {
         if (entity == null) return null;
 
         EnderecoListagemDto enderecoDto = new EnderecoListagemDto();
-        enderecoDto.setRua(entity.getRua());
-        enderecoDto.setBairro(entity.getBairro());
+        enderecoDto.setId(entity.getId());
+        enderecoDto.setCidade(entity.getCidade());
         enderecoDto.setCep(entity.getCep());
         enderecoDto.setNumero(entity.getNumero());
+        enderecoDto.setBairro(entity.getBairro());
         enderecoDto.setUf(entity.getUf());
-        enderecoDto.setCidade(entity.getCidade());
+        enderecoDto.setRua(entity.getRua());
 
         return enderecoDto;
     }

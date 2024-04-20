@@ -19,6 +19,9 @@ public class Barbearia {
     private String linkBarbearia;
     private boolean ativa;
     private String fotoBarbearia;
+
     @ManyToOne
     private Endereco endereco;
+
+
 }

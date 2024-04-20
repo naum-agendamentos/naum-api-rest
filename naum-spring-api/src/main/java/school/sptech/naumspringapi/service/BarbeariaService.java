@@ -6,9 +6,14 @@ import org.springframework.stereotype.Service;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
+import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
+import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
 import school.sptech.naumspringapi.entity.Barbearia;
+import school.sptech.naumspringapi.entity.Endereco;
 import school.sptech.naumspringapi.mapper.BarbeariaMapper;
+import school.sptech.naumspringapi.mapper.EnderecoMapper;
 import school.sptech.naumspringapi.repository.BarbeariaRepository;
+import school.sptech.naumspringapi.repository.EnderecoRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,35 +22,68 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BarbeariaService {
 
+    @Autowired
     private final BarbeariaRepository barbeariaRepository;
+
+    @Autowired
+    private final EnderecoService enderecoService;
+
 
     public BarbeariaListagemDto criarBarbearia(BarbeariaCriacaoDto barbeariaDto) {
         Barbearia barbearia = BarbeariaMapper.toEntity(barbeariaDto);
+
+        if (barbeariaDto.getEndereco() != null) {
+            Endereco endereco = enderecoService.cadastrarEndereco(barbeariaDto);
+            barbearia.setEndereco(endereco);
+        }
+
+        barbearia.setAtiva(true);
+        // Salva a barbearia no banco de dados
         Barbearia barbeariaSalva = barbeariaRepository.save(barbearia);
+
         return BarbeariaMapper.toDto(barbeariaSalva);
     }
 
     public List<BarbeariaListagemDto> listarBarbearia() {
-        List<Barbearia> barbearias = barbeariaRepository.findAll();
+        List<Barbearia> barbearias = barbeariaRepository.findByAtivaTrue();
         if (barbearias.isEmpty()) return null;
         return BarbeariaMapper.toDto(barbearias);
     }
 
-    public BarbeariaListagemDto atualizarBarbearia(BarbeariaCriacaoDto barbeariaAtt, int id) {
+    public BarbeariaListagemDto atualizarBarbearia(int id, BarbeariaCriacaoDto barbeariaAtualizada) {
         Optional<Barbearia> barbeariaAtualOpt = barbeariaRepository.findById(id);
 
-        if (barbeariaAtualOpt.isEmpty()) return null;
+        if (barbeariaAtualOpt.isEmpty()){
+            return null;
+        }
 
-        BarbeariaAtualizacaoDto attDto = BarbeariaMapper.toAttDto(barbeariaAtualOpt.get());
+        Barbearia barbearia = barbeariaAtualOpt.get();
 
-        if (barbeariaAtt.getNome() != null) barbeariaAtualOpt.get().setNome(attDto.getNome());
-        if (barbeariaAtt.getLinkBarbearia() != null) barbeariaAtualOpt.get().setLinkBarbearia(attDto.getLinkBarbearia());
-        if (barbeariaAtt.getFotoBarbearia() != null) barbeariaAtualOpt.get().setFotoBarbearia(attDto.getFotoBarbearia());
-        if (attDto.isAtiva() && !barbeariaAtt.isAtiva()) barbeariaAtualOpt.get().setAtiva(false);
+        // Atualiza os dados da barbearia
+        barbearia.setNome(barbeariaAtualizada.getNome());
+        barbearia.setLinkBarbearia(barbeariaAtualizada.getLinkBarbearia());
+        barbearia.setFotoBarbearia(barbeariaAtualizada.getFotoBarbearia());
 
-        Barbearia barbeariaProBanco = barbeariaAtualOpt.get();
-        Barbearia barbeariaSalva = barbeariaRepository.save(barbeariaProBanco);
+        if (barbeariaAtualizada.getEndereco() != null) {
+            Endereco endereco = enderecoService.atualizarEndereco(id, barbeariaAtualizada);
+            barbearia.setEndereco(endereco);
+        }
+
+        // Salva a barbearia, que deve manter a referência para o mesmo endereço já existente
+        Barbearia barbeariaSalva = barbeariaRepository.save(barbearia);
+
         return BarbeariaMapper.toDto(barbeariaSalva);
+    }
 
+    public BarbeariaAtualizacaoDto desativarBarbearia(int id){
+        Optional<Barbearia> barbeariaOpt = barbeariaRepository.findById(id);
+
+        if(barbeariaOpt.isEmpty()) return null;
+
+        barbeariaOpt.get().setAtiva(false);
+        barbeariaRepository.save(barbeariaOpt.get());
+
+        BarbeariaAtualizacaoDto barbeariaAtualizacaoDto = BarbeariaMapper.toAttDto(barbeariaOpt.get());
+        return barbeariaAtualizacaoDto;
     }
 }
