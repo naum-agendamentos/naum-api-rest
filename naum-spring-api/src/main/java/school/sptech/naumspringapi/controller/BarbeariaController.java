@@ -2,21 +2,12 @@ package school.sptech.naumspringapi.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
-import school.sptech.naumspringapi.entity.Endereco;
-import school.sptech.naumspringapi.mapper.BarbeariaMapper;
-import school.sptech.naumspringapi.entity.Barbearia;
-import school.sptech.naumspringapi.mapper.EnderecoMapper;
-import school.sptech.naumspringapi.repository.BarbeariaRepository;
 import school.sptech.naumspringapi.service.BarbeariaService;
-import school.sptech.naumspringapi.service.EnderecoService;
 
 import java.util.List;
 
@@ -30,7 +21,7 @@ public class BarbeariaController {
     @PostMapping
     public ResponseEntity<BarbeariaListagemDto> cadastrar(@RequestBody @Valid BarbeariaCriacaoDto novaBarbearia) {
         BarbeariaListagemDto barbeariaCriada = barbeariaService.criarBarbearia(novaBarbearia);
-        return ResponseEntity.ok(barbeariaCriada);
+        return ResponseEntity.status(201).body(barbeariaCriada);
     }
 
     @GetMapping

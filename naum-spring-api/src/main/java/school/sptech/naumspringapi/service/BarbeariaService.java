@@ -22,12 +22,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BarbeariaService {
 
-    @Autowired
     private final BarbeariaRepository barbeariaRepository;
-
-    @Autowired
     private final EnderecoService enderecoService;
-
 
     public BarbeariaListagemDto criarBarbearia(BarbeariaCriacaoDto barbeariaDto) {
         Barbearia barbearia = BarbeariaMapper.toEntity(barbeariaDto);

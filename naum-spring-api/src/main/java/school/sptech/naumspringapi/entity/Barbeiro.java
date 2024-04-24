@@ -16,7 +16,6 @@ public class Barbeiro {
     private boolean barbeiroAtivo;
     private byte[] foto;
     @OneToOne
-    @JoinColumn(name = "id")
     private Barbearia barbearia;
     private int fkPermissao;
 
