@@ -1,26 +1,29 @@
 package school.sptech.naumspringapi.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
 import school.sptech.naumspringapi.entity.Servico;
-import school.sptech.naumspringapi.repository.ServicoRepository;
+import school.sptech.naumspringapi.service.ServicoService;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/servicos")
 public class ServicoController {
 
-    @Autowired
-    private ServicoRepository serviceRepository;
+    private final ServicoService servicoService;
 
     @PostMapping
-    public ResponseEntity<Servico> criarServico(@RequestBody @Valid Servico novoServico) {
-        Servico servicoSalvo = serviceRepository.save(novoServico);
-        return ResponseEntity.status(201).body(servicoSalvo);
+    public ResponseEntity<ServicoListagemDto> criarServico(@RequestBody @Valid ServicoCriacaoDto novoServico, @RequestParam("idBarbearia") Integer idBarbearia) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(servicoService.criarServicoPorBarbearia(novoServico, idBarbearia));
     }
 
     @GetMapping

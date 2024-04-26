@@ -1,10 +1,12 @@
 package school.sptech.naumspringapi.dto.agendamentoDto;
 
 import lombok.Data;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
+import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.time.LocalDate;
 
 @Data
 public class AgendamentoListagemDto {

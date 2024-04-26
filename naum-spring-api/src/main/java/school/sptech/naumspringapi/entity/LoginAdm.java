@@ -1,11 +1,15 @@
 package school.sptech.naumspringapi.entity;
 
+import lombok.Setter;
+import lombok.Getter;
+import jakarta.persistence.Id;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 
 @Entity
+@Getter
+@Setter
 public class LoginAdm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

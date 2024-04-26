@@ -1,19 +1,15 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
+import school.sptech.naumspringapi.entity.Endereco;
+import school.sptech.naumspringapi.entity.Barbearia;
+import school.sptech.naumspringapi.mapper.BarbeariaMapper;
+import org.springframework.transaction.annotation.Transactional;
+import school.sptech.naumspringapi.repository.BarbeariaRepository;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
-import school.sptech.naumspringapi.entity.Barbearia;
-import school.sptech.naumspringapi.entity.Endereco;
-import school.sptech.naumspringapi.mapper.BarbeariaMapper;
-import school.sptech.naumspringapi.mapper.EnderecoMapper;
-import school.sptech.naumspringapi.repository.BarbeariaRepository;
-import school.sptech.naumspringapi.repository.EnderecoRepository;
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +21,7 @@ public class BarbeariaService {
     private final BarbeariaRepository barbeariaRepository;
     private final EnderecoService enderecoService;
 
+    @Transactional
     public BarbeariaListagemDto criarBarbearia(BarbeariaCriacaoDto barbeariaDto) {
         Barbearia barbearia = BarbeariaMapper.toEntity(barbeariaDto);
 
@@ -41,11 +38,12 @@ public class BarbeariaService {
     }
 
     public List<BarbeariaListagemDto> listarBarbearia() {
-        List<Barbearia> barbearias = barbeariaRepository.findByAtivaTrue();
+        List<Barbearia> barbearias = barbeariaRepository.findAllByAtivaTrue();
         if (barbearias.isEmpty()) return null;
         return BarbeariaMapper.toDto(barbearias);
     }
 
+    @Transactional
     public BarbeariaListagemDto atualizarBarbearia(int id, BarbeariaCriacaoDto barbeariaAtualizada) {
         Optional<Barbearia> barbeariaAtualOpt = barbeariaRepository.findById(id);
 
@@ -71,6 +69,7 @@ public class BarbeariaService {
         return BarbeariaMapper.toDto(barbeariaSalva);
     }
 
+    @Transactional
     public BarbeariaAtualizacaoDto desativarBarbearia(int id){
         Optional<Barbearia> barbeariaOpt = barbeariaRepository.findById(id);
 
@@ -81,5 +80,9 @@ public class BarbeariaService {
 
         BarbeariaAtualizacaoDto barbeariaAtualizacaoDto = BarbeariaMapper.toAttDto(barbeariaOpt.get());
         return barbeariaAtualizacaoDto;
+    }
+
+    public Barbearia buscarPorId(Integer idBarbearia) {
+        return barbeariaRepository.findById(idBarbearia).get();
     }
 }

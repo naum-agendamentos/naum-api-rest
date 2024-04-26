@@ -1,21 +1,20 @@
 package school.sptech.naumspringapi.dto.agendamentoDto;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import school.sptech.naumspringapi.entity.Barbearia;
-import school.sptech.naumspringapi.entity.Barbeiro;
-import school.sptech.naumspringapi.entity.Cliente;
+import jakarta.validation.constraints.NotNull;
 import school.sptech.naumspringapi.entity.Servico;
+import jakarta.validation.constraints.FutureOrPresent;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.time.LocalDate;
 
 @Data
 public class AgendamentoCriacaoDto {
-    @FutureOrPresent
-    @NotNull
+    @FutureOrPresent(message = "A data do agendamento deve ser presente ou futura")
+    @NotNull(message = "(Obrigatório) A 'data' do agendamento não pode estar nula")
     private LocalDate dataAgendamneto;
-    @NotNull
+    @NotNull(message = "(Obrigatório) O 'serviço' do agendamento não pode ser nulo")
+    @NotEmpty(message = "O agendamento deve conter pelo menos um 'serviço'")
     private List<Servico> servicos;
 }

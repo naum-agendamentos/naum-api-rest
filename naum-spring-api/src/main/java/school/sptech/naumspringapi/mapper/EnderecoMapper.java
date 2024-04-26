@@ -1,9 +1,11 @@
 package school.sptech.naumspringapi.mapper;
 
+import lombok.RequiredArgsConstructor;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
 import school.sptech.naumspringapi.entity.Endereco;
 
+@RequiredArgsConstructor
 public class EnderecoMapper {
     public static Endereco toEntity(EnderecoCriacaoDto dto) {
         if (dto == null) return null;

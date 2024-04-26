@@ -7,11 +7,11 @@ import lombok.Setter;
 @Setter
 public class EnderecoListagemDto {
     private int id;
-    private String cidade;
+    private String uf;
+    private String rua;
     private String cep;
     private String numero;
     private String bairro;
-    private String uf;
-    private String rua;
+    private String cidade;
 
 }

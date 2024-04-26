@@ -7,6 +7,8 @@ import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Cliente;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 public class AgendamentoMapper {
 
@@ -15,21 +17,23 @@ public class AgendamentoMapper {
         AgendamentoListagemDto dto = new AgendamentoListagemDto();
         dto.setId(entity.getId());
         dto.setDataAgendamento(entity.getDataAgendamento());
-        dto.setBarbeiro(BarbeiroMapper.toDto(entity.getBarbeiro()));
-        dto.setServicos(ServicoMapper.toDto(entity.getServico()));
         dto.setCliente(ClienteMapper.toDto(entity.getCliente()));
-
+        dto.setServicos(ServicoMapper.toDto(entity.getServico()));
+        dto.setBarbeiro(BarbeiroMapper.toDto(entity.getBarbeiro()));
         return dto;
     }
 
     public static Agendamento toEntity(AgendamentoCriacaoDto dto, Cliente cliente, Barbeiro barbeiro) {
         if (dto == null) return null;
         Agendamento entity = new Agendamento();
-        entity.setServico(dto.getServicos());
+        entity.setDataAgendamento(dto.getDataAgendamneto());
         entity.setCliente(cliente);
         entity.setBarbeiro(barbeiro);
-        entity.setDataAgendamento(dto.getDataAgendamneto());
-
+        entity.setServico(dto.getServicos());
         return entity;
+    }
+
+    public static List<AgendamentoListagemDto> toDto(List<Agendamento> entities) {
+        return entities.stream().map(AgendamentoMapper::toDto).toList();
     }
 }

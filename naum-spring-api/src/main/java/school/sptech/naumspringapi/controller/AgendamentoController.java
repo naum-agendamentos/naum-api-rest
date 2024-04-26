@@ -9,6 +9,7 @@ import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.service.AgendamentoService;
+import school.sptech.naumspringapi.service.BarbeiroService;
 
 import java.util.List;
 
@@ -27,7 +28,9 @@ public class AgendamentoController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<AgendamentoListagemDto>> listarAgendamentos() {
-        List<AgendamentoListagemDto> listagemDto = agendamentoService.listarAgendamentos();
+    public ResponseEntity<List<AgendamentoListagemDto>> listarAgendamentos(@RequestParam("idBarbeiro") Integer idBarbeiro) {
+        List<AgendamentoListagemDto> agendamentos = agendamentoService.listarAgendamentosPorBarbeiro(idBarbeiro);
+        if (agendamentos.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.OK).body(agendamentos);
     }
 }

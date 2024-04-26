@@ -1,23 +1,14 @@
 package school.sptech.naumspringapi.dto.loginAdmDto;
 
-import jakarta.persistence.ForeignKey;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
+@Data
 public class LoginAdmAtualizarSenhaDto {
-    @Size(min = 8)
+    @Size(min = 8, message = "A senha deve conter pelo menos 8 caracteres")
     @NotNull
     @NotBlank
     private String novaSenha;
-
-
-
-    public String getNovaSenha() {
-        return novaSenha;
-    }
-
-    public void setNovaSenha(String novaSenha) {
-        this.novaSenha = novaSenha;
-    }
 }
