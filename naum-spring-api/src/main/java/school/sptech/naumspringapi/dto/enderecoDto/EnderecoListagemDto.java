@@ -6,12 +6,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class EnderecoListagemDto {
-    private int id;
-    private String uf;
-    private String rua;
+    private Long id;
+    private String cidade;
     private String cep;
     private String numero;
     private String bairro;
-    private String cidade;
+    private String uf;
+    private String rua;
 
 }

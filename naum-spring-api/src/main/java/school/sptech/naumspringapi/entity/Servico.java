@@ -1,8 +1,8 @@
 package school.sptech.naumspringapi.entity;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.*;
 
 @Entity
 @Getter
@@ -11,7 +11,7 @@ public class Servico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String nomeServico;
     private double preco;
     @ManyToOne

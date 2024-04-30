@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class ClienteListagemDto {
-    private Integer id;
-    private String nome;
+    private Long id;
     private String email;
+    private String nome;
     private String telefone;
 }

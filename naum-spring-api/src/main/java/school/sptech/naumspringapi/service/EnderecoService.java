@@ -2,27 +2,33 @@ package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import school.sptech.naumspringapi.entity.Endereco;
-import school.sptech.naumspringapi.mapper.EnderecoMapper;
 import org.springframework.transaction.annotation.Transactional;
-import school.sptech.naumspringapi.repository.EnderecoRepository;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
+import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
+import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
+import school.sptech.naumspringapi.entity.Barbearia;
+import school.sptech.naumspringapi.entity.Endereco;
+import school.sptech.naumspringapi.mapper.BarbeariaMapper;
+import school.sptech.naumspringapi.mapper.EnderecoMapper;
+import school.sptech.naumspringapi.repository.EnderecoRepository;
 
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class EnderecoService {
+
     private final EnderecoRepository enderecoRepository;
 
     @Transactional
     public Endereco cadastrarEndereco(BarbeariaCriacaoDto barbeariaCriacaoDto) {
         Endereco endereco = EnderecoMapper.toEntity(barbeariaCriacaoDto.getEndereco());
-        return enderecoRepository.save(endereco);
+        Endereco enderecoSalvo = enderecoRepository.save(endereco);
+        return enderecoSalvo;
     }
 
     @Transactional
-    public Endereco atualizarEndereco(int id, BarbeariaCriacaoDto barbeariaCriacaoDto) {
+    public Endereco atualizarEndereco(Long id, BarbeariaCriacaoDto barbeariaCriacaoDto) {
         Optional<Endereco> enderecoOpt = enderecoRepository.findById(id);
 
         if(enderecoOpt.isEmpty()) return null;
@@ -35,6 +41,7 @@ public class EnderecoService {
         endereco.setBairro(barbeariaCriacaoDto.getEndereco().getBairro());
         endereco.setUf(barbeariaCriacaoDto.getEndereco().getUf());
         endereco.setRua(barbeariaCriacaoDto.getEndereco().getRua());
-        return enderecoRepository.save(endereco);
+        Endereco enderecoSalvo = enderecoRepository.save(endereco);
+        return enderecoSalvo;
     }
 }

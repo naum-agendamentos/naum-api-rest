@@ -1,6 +1,5 @@
 package school.sptech.naumspringapi.mapper;
 
-import lombok.RequiredArgsConstructor;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
@@ -9,7 +8,6 @@ import school.sptech.naumspringapi.entity.Endereco;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 public class BarbeariaMapper {
 
     public static Barbearia toEntity(BarbeariaCriacaoDto dto) {

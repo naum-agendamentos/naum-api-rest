@@ -8,6 +8,7 @@ import school.sptech.naumspringapi.entity.Servico;
 import java.util.List;
 
 @Repository
-public interface ServicoRepository extends JpaRepository<Servico, Integer> {
-    List<Servico> findByBarbearia(Barbearia barbearia);
+public interface ServicoRepository extends JpaRepository<Servico, Long> {
+    List<Servico> findAllByBarbearia(Barbearia barbearia);
+    Servico findByIdAndBarbearia(Long id, Barbearia barbearia);
 }

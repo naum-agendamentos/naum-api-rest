@@ -1,6 +1,11 @@
 package school.sptech.naumspringapi.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoAtualizacaoDto;
 import school.sptech.naumspringapi.entity.*;
 import org.springframework.stereotype.Service;
 import school.sptech.naumspringapi.mapper.AgendamentoMapper;
@@ -28,27 +33,35 @@ public class AgendamentoService {
         return AgendamentoMapper.toDto(agendamento);
     }
 
-    public List<AgendamentoListagemDto> listarAgendamentosPorBarbeiro(Integer idBarbeiro) {
+    public List<AgendamentoListagemDto> listarAgendamentosPorBarbeiro(Long idBarbeiro) {
         if (idBarbeiro == null) return null;
         Barbeiro barbeiro = barbeiroService.buscarPorId(idBarbeiro);
         return AgendamentoMapper.toDto(agendamentoRepository.findByBarbeiro(barbeiro));
     }
 
-    public List<AgendamentoListagemDto> listarAgendamentosPorCliente(Integer idCliente) {
+    public List<AgendamentoListagemDto> listarAgendamentosPorCliente(Long idCliente) {
         if (idCliente == null) return null;
         Cliente cliente = clienteService.buscarPorId(idCliente);
         return AgendamentoMapper.toDto(agendamentoRepository.findByCliente(cliente));
     }
 
-    public List<AgendamentoListagemDto> listarAgendamentosPorClienteAndData (LocalDate data, Integer idCliente) {
+    public List<AgendamentoListagemDto> listarAgendamentosPorClienteAndData (LocalDate data, Long idCliente) {
         if (data == null || idCliente == null) return null;
         Cliente cliente = clienteService.buscarPorId(idCliente);
-        return AgendamentoMapper.toDto(agendamentoRepository.findAllByDataAgendamentoAndCliente(data, cliente));
+        return AgendamentoMapper.toDto(agendamentoRepository.findAllByDataHoraAgendamentoAndCliente(data, cliente));
     }
 
-    public List<AgendamentoListagemDto> listarAgendamentosPorBarbeiroAndData(Integer idBarbeiro, LocalDate data) {
+    public List<AgendamentoListagemDto> listarAgendamentosPorBarbeiroAndData(Long idBarbeiro, LocalDate data) {
         if (data == null || idBarbeiro == null) return null;
         Barbeiro barbeiro = barbeiroService.buscarPorId(idBarbeiro);
-        return AgendamentoMapper.toDto(agendamentoRepository.findAllByDataAgendamentoAndBarbeiro(data, barbeiro));
+        return AgendamentoMapper.toDto(agendamentoRepository.findAllByDataHoraAgendamentoAndBarbeiro(data, barbeiro));
+    }
+
+    public AgendamentoListagemDto atualizarAgendamentoPorId(Long idAgendamento, AgendamentoAtualizacaoDto agendamento) {
+        if (idAgendamento == null || agendamento == null) return null;
+        Agendamento agendamentoAtual = agendamentoRepository.findById(idAgendamento).orElseThrow();
+        agendamentoAtual.setDataHoraAgendamento(agendamento.getDataHoraAgendamneto());
+        agendamentoAtual.setServico(agendamento.getServicos());
+        return AgendamentoMapper.toDto(agendamentoRepository.save(agendamentoAtual));
     }
 }

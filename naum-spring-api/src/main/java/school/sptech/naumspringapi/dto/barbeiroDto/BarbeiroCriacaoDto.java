@@ -1,9 +1,13 @@
 package school.sptech.naumspringapi.dto.barbeiroDto;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.format.annotation.NumberFormat;
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
+import school.sptech.naumspringapi.entity.Barbearia;
 
 @Data
 public class BarbeiroCriacaoDto {
@@ -16,18 +20,16 @@ public class BarbeiroCriacaoDto {
     private String email;
     @NotNull(message = "(Obrigatório) A 'senha' do barbeiro não pode ser nula")
     @NotBlank(message = "A 'senha' do barbeiro não pode estar em branco")
+    @Size(min = 6, message = "A 'senha' deve conter no mínimo 6 caracteres")
     private String senha;
     @NotNull(message = "(Obrigatório) O 'telefone' do barbeiro não pode ser nulo")
     @NotBlank(message = "O 'telefone' do barbeiro não pode estar em branco")
+    @Pattern(regexp="\\d{11}", message="Número de telefone inválido")
     private String telefone;
     @NotNull(message = "(Obrigatório) A 'descrição' do barbeiro não pode ser nula")
     @NotBlank(message = "A 'descrição' do barbeiro não pode estar em branco")
     private String descricao;
-    @NotNull(message = "(Obrigatório) O 'barbeiroAtivo' do barbeiro não pode ser nulo")
-    private boolean barbeiroAtivo;
     @NotNull(message = "(Obrigatório) A 'foto' do barbeiro não pode ser nula")
     @NotBlank(message = "A 'foto' do barbeiro não pode estar em branco")
     private String foto;
-    @NotNull(message = "(Obrigatório) O barbeiro deve ter alguma permissão atribuída, e não pode ser nula")
-    private int fkPermissao;
 }

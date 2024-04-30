@@ -1,11 +1,9 @@
 package school.sptech.naumspringapi.entity;
 
-import lombok.Setter;
+import jakarta.persistence.*;
 import lombok.Getter;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import lombok.Setter;
+import school.sptech.naumspringapi.domain.usuario.Usuario;
 
 @Entity
 @Getter
@@ -13,33 +11,10 @@ import jakarta.persistence.GenerationType;
 public class LoginAdm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String senha;
+    private Long id;
     private String email;
+    private String senha;
 
-
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+    @ManyToOne
+    private Usuario usuario;
 }

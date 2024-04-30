@@ -1,11 +1,11 @@
 package school.sptech.naumspringapi.entity;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -13,8 +13,8 @@ import java.time.LocalDate;
 public class Agendamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private LocalDate dataAgendamento;
+    private Long id;
+    private LocalDateTime dataHoraAgendamento;
     @ManyToOne
     private Barbeiro barbeiro;
     @ManyToOne

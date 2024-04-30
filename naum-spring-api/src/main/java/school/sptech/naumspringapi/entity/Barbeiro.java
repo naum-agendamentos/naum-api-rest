@@ -1,8 +1,10 @@
 package school.sptech.naumspringapi.entity;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.*;
+import school.sptech.naumspringapi.domain.usuario.Usuario;
+
 
 @Entity
 @Getter
@@ -10,7 +12,7 @@ import jakarta.persistence.*;
 public class Barbeiro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String nome;
     private String email;
     private String senha;
@@ -21,5 +23,10 @@ public class Barbeiro {
     @ManyToOne
     private Barbearia barbearia;
     private int fkPermissao;
+
+    @ManyToOne
+    private Usuario usuario;
+
+
 
 }

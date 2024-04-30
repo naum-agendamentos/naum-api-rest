@@ -16,7 +16,7 @@ public class AgendamentoMapper {
         if (entity == null) return null;
         AgendamentoListagemDto dto = new AgendamentoListagemDto();
         dto.setId(entity.getId());
-        dto.setDataAgendamento(entity.getDataAgendamento());
+        dto.setDataHoraAgendamento(entity.getDataHoraAgendamento());
         dto.setCliente(ClienteMapper.toDto(entity.getCliente()));
         dto.setServicos(ServicoMapper.toDto(entity.getServico()));
         dto.setBarbeiro(BarbeiroMapper.toDto(entity.getBarbeiro()));
@@ -26,7 +26,7 @@ public class AgendamentoMapper {
     public static Agendamento toEntity(AgendamentoCriacaoDto dto, Cliente cliente, Barbeiro barbeiro) {
         if (dto == null) return null;
         Agendamento entity = new Agendamento();
-        entity.setDataAgendamento(dto.getDataAgendamneto());
+        entity.setDataHoraAgendamento(dto.getDataHoraAgendamneto());
         entity.setCliente(cliente);
         entity.setBarbeiro(barbeiro);
         entity.setServico(dto.getServicos());

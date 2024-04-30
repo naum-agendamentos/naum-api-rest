@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import school.sptech.naumspringapi.entity.Cliente;
 
 @Repository
-public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 }

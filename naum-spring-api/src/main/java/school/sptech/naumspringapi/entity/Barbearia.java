@@ -1,8 +1,12 @@
 package school.sptech.naumspringapi.entity;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.*;
+import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
+import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
+
+import java.util.Collection;
 
 @Entity
 @Getter
@@ -10,7 +14,7 @@ import jakarta.persistence.*;
 public class Barbearia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String nome;
     private String linkBarbearia;
     private boolean ativa;

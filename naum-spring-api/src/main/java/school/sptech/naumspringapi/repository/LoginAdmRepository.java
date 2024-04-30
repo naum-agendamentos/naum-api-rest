@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import school.sptech.naumspringapi.entity.LoginAdm;
 
 @Repository
-public interface LoginAdmRepository extends JpaRepository<LoginAdm, Integer> {
+public interface LoginAdmRepository extends JpaRepository<LoginAdm, Long> {
 }

@@ -1,85 +1,75 @@
-//package school.sptech.naumspringapi.controller;
+package school.sptech.naumspringapi.controller;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroDesativacaoDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
+import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
+import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
+import school.sptech.naumspringapi.entity.Barbeiro;
+import school.sptech.naumspringapi.entity.Cliente;
+import school.sptech.naumspringapi.mapper.BarbeiroMapper;
+import school.sptech.naumspringapi.mapper.ClienteMapper;
+import school.sptech.naumspringapi.repository.ClienteRepository;
+import school.sptech.naumspringapi.service.BarbeiroService;
+import school.sptech.naumspringapi.service.ClienteService;
+import school.sptech.naumspringapi.service.usuario.UsuarioService;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+@RestController
+@RequestMapping("/clientes")
+public class ClienteController {
+
+    private final ClienteService clienteService;
+
+    @Operation(summary = "Cadastrar clientes", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping
+    public ResponseEntity<ClienteListagemDto> cadastrar(@RequestBody @Valid ClienteCriacaoDto novoCliente) {
+        Cliente clienteCriado = clienteService.criar(novoCliente);
+
+        ClienteListagemDto clienteListagemDto = ClienteMapper.toDto(clienteCriado);
+        return ResponseEntity.ok(clienteListagemDto);
+    }
+
+    @Operation(summary = "Listar clientes", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping
+    public ResponseEntity<List<ClienteListagemDto>> listarClientes() {
+        List<Cliente> clientes = clienteService.listarClientes();
+        if (clientes == null) return ResponseEntity.noContent().build();
+        List<ClienteListagemDto> clienteListagemDtos = ClienteMapper.toDto(clientes);
+        return ResponseEntity.ok(clienteListagemDtos);
+    }
+
+//    @GetMapping("/local")
+//    public ResponseEntity<List<BarbeiroListagemDto>> listarDaMinhaBarbearia() {
+//        List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbearia();
 //
-//import jakarta.validation.Valid;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//import school.sptech.naumspringapi.entity.Cliente;
-//import school.sptech.naumspringapi.mapper.ClienteMapper;
-//import school.sptech.naumspringapi.repository.ClienteRepository;
+//        List<BarbeiroListagemDto> dto = BarbeiroMapper.toDto(barbeiros);
 //
-//import java.util.List;
-//
-//@RestController
-//@RequestMapping("/clientes")
-//public class ClienteController {
-//
-//    @Autowired
-//    private ClienteRepository clienteRepository;
-//
-//    @PostMapping
-//    public ResponseEntity<ClienteDto> cadastrarCliente(@RequestBody @Valid ClienteCadastroDTO novoCliente) {
-//        if (clienteRepository.existsByEmailCliente(novoCliente.getEmailCliente())) {
-//            throw new EmailJaCadastradoException(novoCliente.getEmailCliente());
-//        }
-//
-//        novoCliente.setSenhaCliente(criptografarSenha(novoCliente.getSenhaCliente())); // Criptografe a senha
-//        Cliente cliente = ClienteMapper.toEntity(novoCliente);
-//        Cliente clienteSalvo = clienteRepository.save(cliente);
-//        ClienteDTO clienteDTO = ClienteMapper.toDTO(clienteSalvo);
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(clienteDTO); // Retorne o status 201 Criado
+//        if (dto == null) return ResponseEntity.noContent().build();
+//        return ResponseEntity.ok(dto);
 //    }
-//
-//    @GetMapping
-//    public ResponseEntity<List<ClienteDto>> listarClientes() {
-//        List<Cliente> lista = clienteRepository.findAll();
-//
-//        if (lista.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // Retorne o status 204 sem conteúdo
-//        }
-//
-//        List<ClienteDTO> listaDTO = ClienteMapper.toDTO(lista);
-//        return ResponseEntity.status(HttpStatus.OK).body(listaDTO); // Retorne o status 200 OK
-//    }
-//
-//    @GetMapping("/buscar/nome/{nome}")
-//    public ResponseEntity<ClienteDTO> buscarClientePorNome(@PathVariable String nomeCliente) {
-//        List<Cliente> clientesEncontrados = clienteRepository.findByNomeClienteContainingIgnoreCase(nomeCliente);
-//
-//        if (clientesEncontrados.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // Retorne o status 404 Não encontrado
-//        }
-//
-//        Cliente cliente = clientesEncontrados.get(0); // Assumindo que se encontrou apenas um cliente
-//        ClienteDTO clienteDTO = ClienteMapper.toDTO(cliente);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(clienteDTO); // Retorne o status 200 OK
-//    }
-//
-//    @PutMapping("/atualizar/{id}")
-//    public ResponseEntity<ClienteDto> atualizarCliente(@PathVariable Long idCliente, @RequestBody @Valid ClienteCadastroDTO clienteAtualizadoDTO) {
-//        Optional<Cliente> clienteOptional = clienteRepository.findByIdCliente(idCliente);
-//
-//        if (clienteOptional.isEmpty()) {
-//            throw new ClienteNotFoundException(idCliente);
-//        }
-//
-//        Cliente cliente = clienteOptional.get();
-//        ClienteMapper.toEntityUpdate(clienteAtualizadoDTO, cliente);
-//
-//        Cliente clienteAtualizado = clienteRepository.save(cliente);
-//        ClienteDTO clienteDTO = ClienteMapper.toDTO(clienteAtualizado);
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(clienteDTO); // Retorne o status 200 OK
-//    }
-//
-//    @DeleteMapping("/deletar/{id}")
-//    public ResponseEntity<Void> deletarCliente(@PathVariable Long idCliente) {
-//        clienteRepository.deleteByIdCliente(idCliente);
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build(); // Retorne o status 204 sem conteúdo
-//    }
-//}
+
+
+    @Operation(summary = "Atualizar cliente", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteListagemDto> atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteCriacaoDto novoCliente) {
+        Cliente clienteAtualizado = clienteService.atualizarCliente(id, novoCliente);
+
+        if (clienteAtualizado == null) return ResponseEntity.notFound().build();
+
+        ClienteListagemDto clienteListagemDto = ClienteMapper.toDto(clienteAtualizado);
+
+        return ResponseEntity.ok(clienteListagemDto);
+    }
+
+}

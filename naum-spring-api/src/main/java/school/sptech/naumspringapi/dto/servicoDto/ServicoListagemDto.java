@@ -5,7 +5,7 @@ import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
 
 @Data
 public class ServicoListagemDto {
-    private int id;
+    private Long id;
     private String nomeServico;
     private Double preco;
     private BarbeariaListagemDto barbearia;

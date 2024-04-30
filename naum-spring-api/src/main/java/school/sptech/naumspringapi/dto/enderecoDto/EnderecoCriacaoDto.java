@@ -1,9 +1,9 @@
 package school.sptech.naumspringapi.dto.enderecoDto;
 
-import lombok.Data;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @Data
 public class EnderecoCriacaoDto {

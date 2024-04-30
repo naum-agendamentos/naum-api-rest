@@ -8,6 +8,6 @@ import school.sptech.naumspringapi.entity.Barbearia;
 import java.util.List;
 
 @Repository
-public interface BarbeariaRepository extends JpaRepository<Barbearia, Integer> {
-    List<Barbearia> findAllByAtivaTrue();
+public interface BarbeariaRepository extends JpaRepository<Barbearia, Long> {
+    List<Barbearia> findByAtivaTrue();
 }
