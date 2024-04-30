@@ -10,12 +10,11 @@ import lombok.Setter;
 public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String cidade;
     private String cep;
     private String numero;
     private String bairro;
     private String uf;
     private String rua;
-
 }

@@ -2,6 +2,7 @@ package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
@@ -16,15 +17,18 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class EnderecoService {
+
     private final EnderecoRepository enderecoRepository;
 
+    @Transactional
     public Endereco cadastrarEndereco(BarbeariaCriacaoDto barbeariaCriacaoDto) {
         Endereco endereco = EnderecoMapper.toEntity(barbeariaCriacaoDto.getEndereco());
         Endereco enderecoSalvo = enderecoRepository.save(endereco);
         return enderecoSalvo;
     }
 
-    public Endereco atualizarEndereco(int id, BarbeariaCriacaoDto barbeariaCriacaoDto) {
+    @Transactional
+    public Endereco atualizarEndereco(Long id, BarbeariaCriacaoDto barbeariaCriacaoDto) {
         Optional<Endereco> enderecoOpt = enderecoRepository.findById(id);
 
         if(enderecoOpt.isEmpty()) return null;

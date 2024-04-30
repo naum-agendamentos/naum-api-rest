@@ -7,23 +7,24 @@ import lombok.Data;
 
 @Data
 public class EnderecoCriacaoDto {
-    @NotNull
-    @NotBlank
+    @NotNull(message = "(Obrigatório) A 'cidade' do endereço não pode ser nula")
+    @NotBlank(message = "A 'cidade' do endereço não pode estar em branco")
     private String cidade;
-    @NotNull
-    @NotBlank
-    @Size(min = 8, max = 8)
+    @NotNull(message = "(Obrigatório) O 'CEP' do endereço não pode ser nulo")
+    @NotBlank(message = "O 'CEP' do endereço não pode estar em branco")
+    @Size(min = 8, max = 8, message = "O tamanho do 'CEP' deve ser exatamente 8")
     private String cep;
-    @NotNull
+    @NotNull(message = "(Obrigatório) O 'número' do endereço não pode ser nulo")
+    @NotBlank(message = "O 'número' do endereço não pode estar em branco")
     private String numero;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "(Obrigatório) O 'bairro' do endereço não pode ser nulo")
+    @NotBlank(message = "O 'CEP' do endereço não pode estar em branco")
     private String bairro;
-    @NotNull
-    @NotBlank
-    @Size(min = 2, max = 2)
+    @NotNull(message = "(Obrigatório) A 'UF' do endereço não pode ser nula")
+    @NotBlank(message = "O 'UF' do endereço não pode estar em branco")
+    @Size(min = 2, max = 2, message = "O tamanho da 'UF' deve ser exatamente 2")
     private String uf;
-    @NotNull
-    @NotBlank
+    @NotNull(message = "(Obrigatório) A 'rua' do endereço não pode ser nula")
+    @NotBlank(message = "O 'rua' do endereço não pode estar em branco")
     private String rua;
 }

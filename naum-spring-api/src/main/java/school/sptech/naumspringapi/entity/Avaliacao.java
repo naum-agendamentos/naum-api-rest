@@ -1,34 +1,20 @@
 package school.sptech.naumspringapi.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Avaliacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private int qtdEstrela;
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne
     private Cliente cliente;
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne
     private Barbearia barbearia;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getQtdEstrela() {
-        return qtdEstrela;
-    }
-
-    public void setQtdEstrela(int qtdEstrela) {
-        this.qtdEstrela = qtdEstrela;
-    }
 }

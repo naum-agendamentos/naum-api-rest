@@ -3,6 +3,7 @@ package school.sptech.naumspringapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
@@ -22,13 +23,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BarbeariaService {
 
-    @Autowired
     private final BarbeariaRepository barbeariaRepository;
-
-    @Autowired
     private final EnderecoService enderecoService;
 
-
+    @Transactional
     public BarbeariaListagemDto criarBarbearia(BarbeariaCriacaoDto barbeariaDto) {
         Barbearia barbearia = BarbeariaMapper.toEntity(barbeariaDto);
 
@@ -50,7 +48,8 @@ public class BarbeariaService {
         return BarbeariaMapper.toDto(barbearias);
     }
 
-    public BarbeariaListagemDto atualizarBarbearia(int id, BarbeariaCriacaoDto barbeariaAtualizada) {
+    @Transactional
+    public BarbeariaListagemDto atualizarBarbearia(Long id, BarbeariaCriacaoDto barbeariaAtualizada) {
         Optional<Barbearia> barbeariaAtualOpt = barbeariaRepository.findById(id);
 
         if (barbeariaAtualOpt.isEmpty()){
@@ -75,7 +74,7 @@ public class BarbeariaService {
         return BarbeariaMapper.toDto(barbeariaSalva);
     }
 
-    public BarbeariaAtualizacaoDto desativarBarbearia(int id){
+    public BarbeariaAtualizacaoDto desativarBarbearia(Long id){
         Optional<Barbearia> barbeariaOpt = barbeariaRepository.findById(id);
 
         if(barbeariaOpt.isEmpty()) return null;
@@ -85,5 +84,9 @@ public class BarbeariaService {
 
         BarbeariaAtualizacaoDto barbeariaAtualizacaoDto = BarbeariaMapper.toAttDto(barbeariaOpt.get());
         return barbeariaAtualizacaoDto;
+    }
+
+    public Barbearia buscarPorId(Long idBarbearia) {
+        return barbeariaRepository.findById(idBarbearia).get();
     }
 }

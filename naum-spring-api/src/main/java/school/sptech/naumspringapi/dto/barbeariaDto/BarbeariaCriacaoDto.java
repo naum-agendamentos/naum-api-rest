@@ -10,16 +10,16 @@ import school.sptech.naumspringapi.entity.Endereco;
 
 @Data
 public class BarbeariaCriacaoDto {
-    @NotNull
-    @NotBlank
+    @NotNull(message = "(Obrigatório) O 'nome' da barbearia não pode ser nula")
+    @NotBlank(message = "O 'nome' da barbearia não pode estar em branco")
     private String nome;
-    @URL
-    @NotNull
-    @NotBlank
+    @URL(message = "A URL deve ser válida")
+    @NotBlank(message = "O 'linkBarbearia' da barbearia não pode estar em branco")
+    @NotNull(message = "(Obrigatório) O 'linkBarbearia' da barbearia não pode ser nulo")
     private String linkBarbearia;
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "A 'fotoBarbearia' da barbearia não pode estar em branco")
+    @NotNull(message = "(Obrigatório) A 'fotoBarbearia' da barbearia não pode ser nula")
     private String fotoBarbearia;
-    @NotNull
+    @NotNull(message = "(Obrigatório) O 'endereço' da barbearia não pode ser nulo")
     private EnderecoCriacaoDto endereco;
 }
