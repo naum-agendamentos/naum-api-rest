@@ -36,21 +36,21 @@ public class ServicoController {
     }
 
     @Operation(summary = "Buscar serviço por ID", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/{id}")
+    @GetMapping("/{idServico}")
     public ResponseEntity<ServicoListagemDto> listarServicoPorId(@PathVariable Long idServico, @RequestParam("idBarbearia") Long idBarbearia) {
         return ResponseEntity.ok(servicoService.buscarServicoPorId(idBarbearia, idServico));
     }
 
     @Operation(summary = "Atualizar serviço por ID", security = @SecurityRequirement(name = "bearerAuth"))
-    @PutMapping("/{id}")
+    @PutMapping("/{idServico}")
     public ResponseEntity<ServicoListagemDto> atualizarServico(@PathVariable Long idServico, @RequestBody @Valid ServicoAtualizacaoDto servicoAtualizado) {
         return ResponseEntity.status(HttpStatus.OK).body(servicoService.atualizarServicoPorId(idServico, servicoAtualizado));
     }
 
     @Operation(summary = "Atualizar serviço por ID", security = @SecurityRequirement(name = "bearerAuth"))
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluirServico(@PathVariable Long id) {
-        servicoService.excluirServico(id);
+    @DeleteMapping("/{idServico}")
+    public ResponseEntity<Void> excluirServico(@PathVariable Long idServico) {
+        servicoService.excluirServico(idServico);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

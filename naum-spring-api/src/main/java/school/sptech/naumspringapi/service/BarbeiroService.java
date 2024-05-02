@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.BarbeiroRepository;
 import school.sptech.naumspringapi.service.usuario.UsuarioService;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import school.sptech.naumspringapi.service.usuario.dto.UsuarioCriacaoDto;
 import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioDetalhesDto;
@@ -146,5 +147,9 @@ public class BarbeiroService {
             return false;
         }
         return true;
+    }
+
+    public BarbeiroListagemDto buscarBarbeiroPorIdDto(Long idBarbeiro) {
+        return BarbeiroMapper.toDto(barbeiroRepository.findByIdAndBarbeiroAtivoTrue(idBarbeiro));
     }
 }

@@ -1,5 +1,7 @@
 package school.sptech.naumspringapi.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ public class LoginAdmController {
 
     private final LoginAdmService loginAdmService;
 
+    @Operation(summary = "Atualizar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping()
     public ResponseEntity<LoginAdmAtualizacaoDto> atualizarLoginAdm(@RequestBody @Valid LoginAdmAtualizacaoDto novoLogin) {
         LoginAdm loginAdmAtualizado = loginAdmService.atualizarLoginAdm(novoLogin);

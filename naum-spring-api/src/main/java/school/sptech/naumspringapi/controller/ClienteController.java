@@ -48,6 +48,7 @@ public class ClienteController {
         return ResponseEntity.ok(clienteListagemDto);
     }
 
+    @Operation(summary = "Atualizar cliente", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/{idCliente}")
     public ResponseEntity<Void> deletarCliente(@PathVariable Long idCliente) {
         return ResponseEntity.status(HttpStatus.OK).body(clienteService.excluirCliente(idCliente));

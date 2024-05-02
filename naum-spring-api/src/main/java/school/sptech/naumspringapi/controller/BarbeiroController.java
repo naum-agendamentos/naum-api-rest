@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.naumspringapi.entity.Barbeiro;
@@ -47,6 +48,12 @@ public class BarbeiroController {
 
         if (dto == null) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(dto);
+    }
+
+    @Operation(summary = "Atualizar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/{idBarbeiro}")
+    public ResponseEntity<BarbeiroListagemDto> buscarBarbeiroPorId(@PathVariable Long idBarbeiro) {
+        return ResponseEntity.status(HttpStatus.OK).body(barbeiroService.buscarBarbeiroPorIdDto(idBarbeiro));
     }
 
     @Operation(summary = "Atualizar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
