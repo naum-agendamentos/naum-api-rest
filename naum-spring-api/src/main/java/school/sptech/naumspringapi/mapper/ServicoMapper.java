@@ -1,10 +1,10 @@
 package school.sptech.naumspringapi.mapper;
 
 import lombok.RequiredArgsConstructor;
+import school.sptech.naumspringapi.entity.Servico;
+import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
-import school.sptech.naumspringapi.entity.Barbearia;
-import school.sptech.naumspringapi.entity.Servico;
 
 import java.util.List;
 

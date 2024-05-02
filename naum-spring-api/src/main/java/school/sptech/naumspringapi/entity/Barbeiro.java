@@ -1,10 +1,9 @@
 package school.sptech.naumspringapi.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.*;
 import school.sptech.naumspringapi.domain.usuario.Usuario;
-
 
 @Entity
 @Getter
@@ -18,11 +17,11 @@ public class Barbeiro {
     private String senha;
     private String telefone;
     private String descricao;
-    private boolean barbeiroAtivo;
+    private Boolean barbeiroAtivo;
     private String foto;
     @ManyToOne
     private Barbearia barbearia;
-    private int fkPermissao;
+    private Integer fkPermissao;
 
     @ManyToOne
     private Usuario usuario;

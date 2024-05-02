@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.DecimalMin;
 
 @Data
-public class ServicoCriacaoDto {
+public class ServicoAtualizacaoDto {
     @NotNull(message = "(Obrigatório) O 'preço' do serviço não pode ser nulo")
     @DecimalMin(value = "0.01", message = "O valor deve ser maior que zero")
     private Double preco;

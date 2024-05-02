@@ -2,15 +2,11 @@ package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
-import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.entity.Endereco;
-import school.sptech.naumspringapi.mapper.BarbeariaMapper;
 import school.sptech.naumspringapi.mapper.EnderecoMapper;
+import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.EnderecoRepository;
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 
 import java.util.Optional;
 

@@ -1,10 +1,8 @@
 package school.sptech.naumspringapi.dto.enderecoDto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class EnderecoListagemDto {
     private Long id;
     private String cidade;

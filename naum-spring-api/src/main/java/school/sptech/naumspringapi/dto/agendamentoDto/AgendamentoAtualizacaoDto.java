@@ -1,13 +1,13 @@
 package school.sptech.naumspringapi.dto.agendamentoDto;
 
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import school.sptech.naumspringapi.entity.Servico;
+import jakarta.validation.constraints.FutureOrPresent;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 public class AgendamentoAtualizacaoDto {

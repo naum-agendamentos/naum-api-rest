@@ -1,8 +1,8 @@
 package school.sptech.naumspringapi.mapper;
 
+import school.sptech.naumspringapi.entity.Endereco;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
-import school.sptech.naumspringapi.entity.Endereco;
 
 public class EnderecoMapper {
     public static Endereco toEntity(EnderecoCriacaoDto dto) {

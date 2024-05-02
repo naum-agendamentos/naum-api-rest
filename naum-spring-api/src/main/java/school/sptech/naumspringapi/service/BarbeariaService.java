@@ -1,20 +1,15 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import school.sptech.naumspringapi.entity.Endereco;
+import school.sptech.naumspringapi.entity.Barbearia;
+import school.sptech.naumspringapi.mapper.BarbeariaMapper;
 import org.springframework.transaction.annotation.Transactional;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
+import school.sptech.naumspringapi.repository.BarbeariaRepository;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
-import school.sptech.naumspringapi.entity.Barbearia;
-import school.sptech.naumspringapi.entity.Endereco;
-import school.sptech.naumspringapi.mapper.BarbeariaMapper;
-import school.sptech.naumspringapi.mapper.EnderecoMapper;
-import school.sptech.naumspringapi.repository.BarbeariaRepository;
-import school.sptech.naumspringapi.repository.EnderecoRepository;
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 
 import java.util.List;
 import java.util.Optional;

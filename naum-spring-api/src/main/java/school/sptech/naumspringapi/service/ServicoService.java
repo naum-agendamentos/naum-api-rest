@@ -3,14 +3,17 @@ package school.sptech.naumspringapi.service;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
-import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
+import school.sptech.naumspringapi.entity.Servico;
 import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.mapper.ServicoMapper;
+import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.ServicoRepository;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoAtualizacaoDto;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +41,18 @@ public class ServicoService {
         if (idBarbearia == null || idServico == null) return null;
         servicoRepository.findByIdAndBarbearia(idServico, barbeariaService.buscarPorId(idBarbearia));
         return ServicoMapper.toDto(servicoRepository.findById(idServico).get());
+    }
+
+    public ServicoListagemDto atualizarServicoPorId(Long idServico, ServicoAtualizacaoDto servicoDto) {
+        if (Objects.isNull(servicoDto)) return null;
+        Servico servicoAtual = servicoRepository.findById(idServico).get();
+        servicoAtual.setNomeServico(servicoDto.getNomeServico());
+        servicoAtual.setPreco(servicoDto.getPreco());
+        return ServicoMapper.toDto(servicoRepository.save(servicoAtual));
+    }
+
+    @Transactional
+    public void excluirServico(Long idServico) {
+        servicoRepository.delete(servicoRepository.findById(idServico).orElseThrow());
     }
 }

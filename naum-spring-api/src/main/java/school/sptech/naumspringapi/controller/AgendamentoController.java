@@ -1,21 +1,21 @@
 package school.sptech.naumspringapi.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoAtualizacaoDto;
+import school.sptech.naumspringapi.entity.Cliente;
+import school.sptech.naumspringapi.entity.Barbeiro;
+import school.sptech.naumspringapi.service.AgendamentoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoCriacaoDto;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
-import school.sptech.naumspringapi.entity.Barbeiro;
-import school.sptech.naumspringapi.entity.Cliente;
-import school.sptech.naumspringapi.service.AgendamentoService;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoAtualizacaoDto;
 
 
 import java.util.List;
@@ -65,5 +65,17 @@ public class AgendamentoController {
     @PutMapping("/{idAgendamento}")
     public ResponseEntity<AgendamentoListagemDto> atualizarAgendamento(Long idAgendamento, @RequestBody AgendamentoAtualizacaoDto agendamentoDto) {
         return ResponseEntity.status(HttpStatus.OK).body(agendamentoService.atualizarAgendamentoPorId(idAgendamento, agendamentoDto));
+    }
+
+    @ApiOperation("Buscar um agendamento pelo ID.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
+            @ApiResponse(code = 404, message = "Agendamento não encontrado.")
+    })
+    @Operation(summary = "Buscar um agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @DeleteMapping
+    public ResponseEntity<AgendamentoListagemDto> deletarAgendamento(Long idAgendamento) {
+        agendamentoService.delearAgendamento(idAgendamento);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

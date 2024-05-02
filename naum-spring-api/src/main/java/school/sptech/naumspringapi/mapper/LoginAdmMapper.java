@@ -1,7 +1,7 @@
 package school.sptech.naumspringapi.mapper;
 
-import school.sptech.naumspringapi.dto.loginAdmDto.LoginAdmAtualizacaoDto;
 import school.sptech.naumspringapi.entity.LoginAdm;
+import school.sptech.naumspringapi.dto.loginAdmDto.LoginAdmAtualizacaoDto;
 
 public class LoginAdmMapper {
     public static LoginAdm toEntity(LoginAdmAtualizacaoDto dto) {

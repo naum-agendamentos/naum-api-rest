@@ -1,20 +1,18 @@
 package school.sptech.naumspringapi.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.service.ServicoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
-import school.sptech.naumspringapi.entity.Servico;
-import school.sptech.naumspringapi.repository.ServicoRepository;
-import school.sptech.naumspringapi.service.ServicoService;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoAtualizacaoDto;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -43,13 +41,16 @@ public class ServicoController {
         return ResponseEntity.ok(servicoService.buscarServicoPorId(idBarbearia, idServico));
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<Servico> atualizarServico(@PathVariable Integer id, @RequestBody Servico servicoAtualizado) {
-//
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> excluirServico(@PathVariable Long id) {
-//
-//    }
+    @Operation(summary = "Atualizar serviço por ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/{id}")
+    public ResponseEntity<ServicoListagemDto> atualizarServico(@PathVariable Long idServico, @RequestBody @Valid ServicoAtualizacaoDto servicoAtualizado) {
+        return ResponseEntity.status(HttpStatus.OK).body(servicoService.atualizarServicoPorId(idServico, servicoAtualizado));
+    }
+
+    @Operation(summary = "Atualizar serviço por ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluirServico(@PathVariable Long id) {
+        servicoService.excluirServico(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

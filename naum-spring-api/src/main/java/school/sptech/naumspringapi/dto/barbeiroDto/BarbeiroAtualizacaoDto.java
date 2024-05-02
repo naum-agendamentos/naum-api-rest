@@ -4,7 +4,7 @@ import lombok.Data;
 import jakarta.validation.constraints.*;
 
 @Data
-public class BarbeiroCriacaoDto {
+public class BarbeiroAtualizacaoDto {
     @NotNull(message = "(Obrigatório) O 'nome' do barbeiro não pode ser nulo")
     @NotBlank(message = "O 'nome' do barbeiro não pode estar em branco")
     private String nome;

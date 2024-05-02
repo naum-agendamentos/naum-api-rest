@@ -1,12 +1,11 @@
 package school.sptech.naumspringapi.mapper;
 
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroDesativacaoDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
-import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.entity.Barbeiro;
+import school.sptech.naumspringapi.entity.Barbearia;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroDesativacaoDto;
 
 import java.util.List;
 
@@ -51,13 +50,7 @@ public class BarbeiroMapper {
 
         BarbeiroDesativacaoDto dto = new BarbeiroDesativacaoDto();
         dto.setId(entity.getId());
-        dto.setNome(entity.getNome());
-        dto.setEmail(entity.getEmail());
-        dto.setTelefone(entity.getTelefone());
-        dto.setFoto(entity.getFoto());
-        BarbeariaListagemDto dtoBarbearia = BarbeariaMapper.toDto(entity.getBarbearia());
-        dto.setBarbearia(dtoBarbearia);
-        dto.setBarbeiroAtivo(entity.isBarbeiroAtivo());
+        dto.setBarbeiroAtivo(entity.getBarbeiroAtivo());
 
         return dto;
     }

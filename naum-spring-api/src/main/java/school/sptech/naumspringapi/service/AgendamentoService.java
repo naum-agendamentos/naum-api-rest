@@ -1,11 +1,6 @@
 package school.sptech.naumspringapi.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoAtualizacaoDto;
 import school.sptech.naumspringapi.entity.*;
 import org.springframework.stereotype.Service;
 import school.sptech.naumspringapi.mapper.AgendamentoMapper;
@@ -13,9 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.AgendamentoRepository;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoCriacaoDto;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoAtualizacaoDto;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.time.LocalDate;
 
 
 @Service
@@ -63,5 +59,9 @@ public class AgendamentoService {
         agendamentoAtual.setDataHoraAgendamento(agendamento.getDataHoraAgendamneto());
         agendamentoAtual.setServico(agendamento.getServicos());
         return AgendamentoMapper.toDto(agendamentoRepository.save(agendamentoAtual));
+    }
+
+    public void delearAgendamento(Long idAgendamento) {
+        agendamentoRepository.delete(agendamentoRepository.findById(idAgendamento).orElseThrow());
     }
 }

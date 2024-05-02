@@ -1,13 +1,8 @@
 package school.sptech.naumspringapi.mapper;
 
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
+import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
-import school.sptech.naumspringapi.entity.Barbearia;
-import school.sptech.naumspringapi.entity.Barbeiro;
-import school.sptech.naumspringapi.entity.Cliente;
 
 import java.util.List;
 

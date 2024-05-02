@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 
 @Data
-public class EnderecoCriacaoDto {
+public class EnderecoAtualizacaoDto {
     @NotNull(message = "(Obrigatório) A 'cidade' do endereço não pode ser nula")
     @NotBlank(message = "A 'cidade' do endereço não pode estar em branco")
     private String cidade;

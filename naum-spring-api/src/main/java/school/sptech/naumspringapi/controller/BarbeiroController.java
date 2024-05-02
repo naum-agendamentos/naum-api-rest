@@ -1,27 +1,21 @@
 package school.sptech.naumspringapi.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.naumspringapi.domain.usuario.Usuario;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroDesativacaoDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.service.BarbeiroService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.service.usuario.UsuarioService;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroDesativacaoDto;
 import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioLoginDto;
 import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioTokenDto;
-import school.sptech.naumspringapi.service.usuario.dto.UsuarioCriacaoDto;
 
 import java.util.List;
 
@@ -43,17 +37,9 @@ public class BarbeiroController {
         return ResponseEntity.ok(barbeiroListagemDto);
     }
 
-    @Operation(summary = "Listar barbeiros", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping
-    public ResponseEntity<List<BarbeiroListagemDto>> listarBarbeiros() {
-        List<Barbeiro> barbeiros = barbeiroService.listarBarbeiros();
-        if (barbeiros == null) return ResponseEntity.noContent().build();
-        List<BarbeiroListagemDto> barbeiroListagemDtos = BarbeiroMapper.toDto(barbeiros);
-        return ResponseEntity.ok(barbeiroListagemDtos);
-    }
 
     @Operation(summary = "Listar barbeiros de uma barbearia", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/local")
+    @GetMapping
     public ResponseEntity<List<BarbeiroListagemDto>> listarDaMinhaBarbearia() {
         List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbearia();
 
@@ -86,11 +72,12 @@ public class BarbeiroController {
         BarbeiroDesativacaoDto dtoDesativacao = BarbeiroMapper.toDtoDesativacao(barbeiroDesativado);
         return ResponseEntity.status(200).body(dtoDesativacao);
     }
-//
-//    @PostMapping("/login")
-//    public ResponseEntity<BarbeiroListagemDto> login(@RequestBody UsuarioLoginDto usuarioLoginDto) {
-//        UsuarioTokenDto autenticar = this.usuarioService.autenticar(usuarioLoginDto);
-//        BarbeiroListagemDto barbeiro = barbeiroService.login(autenticar.getUserId());
-//        return ResponseEntity.ok(barbeiro);
-//    }
+
+    @Operation(summary = "Logar barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping("/login")
+    public ResponseEntity<BarbeiroListagemDto> login(@RequestBody UsuarioLoginDto usuarioLoginDto) {
+        UsuarioTokenDto autenticar = this.usuarioService.autenticar(usuarioLoginDto);
+        Barbeiro barbeiro = barbeiroService.login(autenticar.getUserId());
+        return ResponseEntity.ok(BarbeiroMapper.toDto(barbeiro));
+    }
 }

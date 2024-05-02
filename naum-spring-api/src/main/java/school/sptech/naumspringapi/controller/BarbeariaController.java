@@ -1,16 +1,16 @@
 package school.sptech.naumspringapi.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.naumspringapi.service.BarbeariaService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;

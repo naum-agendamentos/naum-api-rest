@@ -2,15 +2,15 @@ package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoAtualizacaoDto;
-import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.entity.Barbearia;
+import school.sptech.naumspringapi.entity.Avaliacao;
 import school.sptech.naumspringapi.mapper.AvaliacaoMapper;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.AvaliacaoRepository;
 import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoCriacaoDto;
 import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoListagemDto;
+import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoAtualizacaoDto;
 
 import java.util.List;
 
@@ -61,8 +61,15 @@ public class AvaliacaoService {
         else return null;
     }
 
-//    @Transactional
-//    public AvaliacaoListagemDto atualizarAvaliacao(Long idAvaliacao, AvaliacaoAtualizacaoDto avaliacaoAtualizacaoDto) {
-//        avaliacaoRepository.findById(idAvaliacao);
-//    }
+    @Transactional
+    public AvaliacaoListagemDto atualizarAvaliacao(Long idAvaliacao, AvaliacaoAtualizacaoDto avaliacaoAtualizacaoDto) {
+        Avaliacao avaliacaoAtual = avaliacaoRepository.findById(idAvaliacao).orElseThrow();
+        avaliacaoAtual.setQtdEstrela(avaliacaoAtualizacaoDto.getQtdEstrela());
+        return AvaliacaoMapper.toDto(avaliacaoRepository.save(avaliacaoAtual));
+    }
+
+    @Transactional
+    public void deletarAvaliacao(Long idAvaliacao) {
+        avaliacaoRepository.delete(avaliacaoRepository.findById(idAvaliacao).orElseThrow());
+    }
 }

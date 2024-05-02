@@ -1,11 +1,11 @@
 package school.sptech.naumspringapi.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter

@@ -1,12 +1,8 @@
 package school.sptech.naumspringapi.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
-import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
-
-import java.util.Collection;
+import jakarta.persistence.*;
 
 @Entity
 @Getter
@@ -17,7 +13,7 @@ public class Barbearia {
     private Long id;
     private String nome;
     private String linkBarbearia;
-    private boolean ativa;
+    private Boolean ativa;
     private String fotoBarbearia;
 
     @ManyToOne

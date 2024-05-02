@@ -4,7 +4,7 @@ import lombok.Data;
 import jakarta.validation.constraints.*;
 
 @Data
-public class ClienteCriacaoDto {
+public class ClienteAtualizacaoDto {
     @NotNull(message = "(Obrigatório) O 'email' do cliente não pode ser nulo")
     @NotBlank(message = "O 'email' do cliente não pode estar em branco")
     @Email(message = "O 'email' deve ser válido")

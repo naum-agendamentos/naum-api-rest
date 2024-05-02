@@ -1,10 +1,10 @@
 package school.sptech.naumspringapi.mapper;
 
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
+import school.sptech.naumspringapi.entity.Endereco;
+import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
-import school.sptech.naumspringapi.entity.Barbearia;
-import school.sptech.naumspringapi.entity.Endereco;
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class BarbeariaMapper {
         dto.setNome(entity.getNome());
         dto.setFotoBarbearia(entity.getFotoBarbearia());
         dto.setLinkBarbearia(entity.getLinkBarbearia());
-        dto.setAtiva(entity.isAtiva());
+        dto.setAtiva(entity.getAtiva());
 
         return dto;
     }
