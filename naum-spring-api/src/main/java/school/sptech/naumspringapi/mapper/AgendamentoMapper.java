@@ -1,6 +1,6 @@
 package school.sptech.naumspringapi.mapper;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Agendamento;
@@ -9,7 +9,7 @@ import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@Component
 public class AgendamentoMapper {
 
     public static AgendamentoListagemDto toDto(Agendamento entity) {

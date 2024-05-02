@@ -40,7 +40,7 @@ public class BarbeariaController {
     @ApiOperation("Lista todas as barbearias cadastradas.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Barbearias listadas com sucesso!"),
-            @ApiResponse(code = 404, message = "Não existem barbearias cadastradas."),
+            @ApiResponse(code = 204, message = "Não existem barbearias cadastradas."),
     })
     @Operation(summary = "Listar barbearias", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
@@ -68,7 +68,7 @@ public class BarbeariaController {
 
     @ApiOperation("Desativar uma barbearia por ID.")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Barbearia desativada com sucesso!"),
+            @ApiResponse(code = 200, message = "Barbearia desativada com sucesso!"),
             @ApiResponse(code = 400, message = "Dados inválidos."),
             @ApiResponse(code = 404, message = "Barbearia não encontrada."),
     })

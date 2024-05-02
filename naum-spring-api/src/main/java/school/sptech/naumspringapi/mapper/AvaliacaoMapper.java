@@ -1,6 +1,6 @@
 package school.sptech.naumspringapi.mapper;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.entity.Avaliacao;
@@ -9,7 +9,7 @@ import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoListagemDto;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@Component
 public class AvaliacaoMapper {
 
     public static Avaliacao toEntity(AvaliacaoCriacaoDto avaliacaoDto, Cliente cliente, Barbearia barbearia) {

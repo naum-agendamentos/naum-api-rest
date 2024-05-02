@@ -3,9 +3,13 @@ package school.sptech.naumspringapi.controller;
 import jakarta.validation.Valid;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiOperation;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
@@ -15,8 +19,6 @@ import school.sptech.naumspringapi.service.usuario.UsuarioService;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroDesativacaoDto;
-import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioLoginDto;
-import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioTokenDto;
 
 import java.util.List;
 
@@ -27,8 +29,12 @@ import java.util.List;
 public class BarbeiroController {
 
     private final BarbeiroService barbeiroService;
-    private final UsuarioService usuarioService;
 
+    @ApiOperation("Cadastrar um barbeiro novo.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Barbeiro cadastrado com sucesso!"),
+            @ApiResponse(code = 400, message = "Dados inválidos.")
+    })
     @Operation(summary = "Cadastrar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
     public ResponseEntity<BarbeiroListagemDto> cadastrar(@RequestBody @Valid BarbeiroCriacaoDto novoBarbeiro){
@@ -38,24 +44,34 @@ public class BarbeiroController {
         return ResponseEntity.ok(barbeiroListagemDto);
     }
 
-
+    @ApiOperation("Listar barbeiros de uma barbearia.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Barbeiros listados com sucesso!"),
+            @ApiResponse(code = 204, message = "Não existem barbeiros cadastrados.")
+    })
     @Operation(summary = "Listar barbeiros de uma barbearia", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
-    public ResponseEntity<List<BarbeiroListagemDto>> listarDaMinhaBarbearia() {
-        List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbearia();
-
-        List<BarbeiroListagemDto> dto = BarbeiroMapper.toDto(barbeiros);
-
-        if (dto == null) return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(dto);
+    public ResponseEntity<List<BarbeiroListagemDto>> listarDaMinhaBarbearia(@RequestParam("idBarbearia") Long idBarbearia) {
+        return ResponseEntity.status(HttpStatus.OK).body(barbeiroService.listaBarbeirosPorBarbearia(idBarbearia));
     }
 
+    @ApiOperation("Buscar barbeiro por ID.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Barbeiro econtrado com sucesso!"),
+            @ApiResponse(code = 404, message = "Barbeiro não encontrado.")
+    })
     @Operation(summary = "Busca um barbeiro por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{idBarbeiro}")
     public ResponseEntity<BarbeiroListagemDto> buscarBarbeiroPorId(@PathVariable Long idBarbeiro) {
         return ResponseEntity.status(HttpStatus.OK).body(barbeiroService.buscarBarbeiroPorIdDto(idBarbeiro));
     }
 
+    @ApiOperation("Atualizar um barbeiro por ID.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Barbeiro atualizado com sucesso!"),
+            @ApiResponse(code = 400, message = "Dados inválidos"),
+            @ApiResponse(code = 404, message = "Barbeiro não encontrado.")
+    })
     @Operation(summary = "Atualizar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<BarbeiroListagemDto> atualizarBarbeiro(@PathVariable Long id, @RequestBody @Valid BarbeiroCriacaoDto novoBarbeiro) {
@@ -68,6 +84,11 @@ public class BarbeiroController {
         return ResponseEntity.ok(barbeiroListagemDto);
     }
 
+    @ApiOperation("Desativar barbeiro por ID.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Barbeiro desativado com sucesso!"),
+            @ApiResponse(code = 404, message = "Barbeiro não encontrado.")
+    })
     @Operation(summary = "Desativar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/desativar/{id}")
     public ResponseEntity<BarbeiroDesativacaoDto> desativarBarbeiro(@PathVariable Long id){
@@ -78,13 +99,5 @@ public class BarbeiroController {
         }
         BarbeiroDesativacaoDto dtoDesativacao = BarbeiroMapper.toDtoDesativacao(barbeiroDesativado);
         return ResponseEntity.status(200).body(dtoDesativacao);
-    }
-
-    @Operation(summary = "Logar barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
-    @PostMapping("/login")
-    public ResponseEntity<BarbeiroListagemDto> login(@RequestBody UsuarioLoginDto usuarioLoginDto) {
-        UsuarioTokenDto autenticar = this.usuarioService.autenticar(usuarioLoginDto);
-        Barbeiro barbeiro = barbeiroService.login(autenticar.getUserId());
-        return ResponseEntity.ok(BarbeiroMapper.toDto(barbeiro));
     }
 }

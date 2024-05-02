@@ -1,9 +1,11 @@
 package school.sptech.naumspringapi.mapper;
 
+import org.springframework.stereotype.Component;
 import school.sptech.naumspringapi.entity.Endereco;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
 
+@Component
 public class EnderecoMapper {
     public static Endereco toEntity(EnderecoCriacaoDto dto) {
         if (dto == null) return null;

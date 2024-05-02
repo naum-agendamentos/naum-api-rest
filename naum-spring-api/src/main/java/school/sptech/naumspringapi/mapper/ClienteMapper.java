@@ -1,11 +1,13 @@
 package school.sptech.naumspringapi.mapper;
 
+import org.springframework.stereotype.Component;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
 
 import java.util.List;
 
+@Component
 public class ClienteMapper {
 
     public static Cliente toEntity(ClienteCriacaoDto dto) {

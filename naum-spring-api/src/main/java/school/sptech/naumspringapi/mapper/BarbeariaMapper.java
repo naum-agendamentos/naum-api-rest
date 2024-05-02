@@ -1,5 +1,6 @@
 package school.sptech.naumspringapi.mapper;
 
+import org.springframework.stereotype.Component;
 import school.sptech.naumspringapi.entity.Endereco;
 import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
@@ -8,6 +9,7 @@ import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 
 import java.util.List;
 
+@Component
 public class BarbeariaMapper {
 
     public static Barbearia toEntity(BarbeariaCriacaoDto dto) {

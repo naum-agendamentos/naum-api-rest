@@ -1,8 +1,10 @@
 package school.sptech.naumspringapi.mapper;
 
+import org.springframework.stereotype.Component;
 import school.sptech.naumspringapi.entity.LoginAdm;
 import school.sptech.naumspringapi.dto.loginAdmDto.LoginAdmAtualizacaoDto;
 
+@Component
 public class LoginAdmMapper {
     public static LoginAdm toEntity(LoginAdmAtualizacaoDto dto) {
         if(dto == null) return null;

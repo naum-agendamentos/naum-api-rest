@@ -8,10 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 
 @Data
 public class LoginAdmAtualizacaoDto {
-    @Email
+    @Email(message = "O 'email' deve ser válido.")
     private String email;
-    @NotNull
-    @NotBlank
-    @Size(min = 6, message = "A senha deve conter pelo menos 6 caracteres")
+    @NotNull(message = "A 'senha' não pode ser nula.")
+    @NotBlank(message = "A 'senha' não pode estar em branco.")
+    @Size(min = 6, message = "A 'senha' deve conter pelo menos 6 caracteres.")
     private String senha;
 }

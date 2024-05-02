@@ -1,6 +1,6 @@
 package school.sptech.naumspringapi.mapper;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import school.sptech.naumspringapi.entity.Servico;
 import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
@@ -8,7 +8,7 @@ import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@Component
 public class ServicoMapper {
 
     public static ServicoListagemDto toDto(Servico entity) {

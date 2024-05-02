@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class AgendamentoAtualizacaoDto {
-    @FutureOrPresent(message = "A data do agendamento deve ser presente ou futura")
-    @NotNull(message = "(Obrigatório) A 'data' do agendamento não pode estar nula")
+    @FutureOrPresent(message = "A data do agendamento deve ser presente ou futura.")
+    @NotNull(message = "(Obrigatório) A 'data' do agendamento não pode estar nula.")
     private LocalDateTime dataHoraAgendamneto;
-    @NotNull(message = "(Obrigatório) O 'serviço' do agendamento não pode ser nulo")
-    @NotEmpty(message = "O agendamento deve conter pelo menos um 'serviço'")
+    @NotNull(message = "(Obrigatório) O 'serviço' do agendamento não pode ser nulo.")
+    @NotEmpty(message = "O agendamento deve conter pelo menos um 'serviço'.")
     private List<Servico> servicos;
 }

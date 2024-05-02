@@ -10,6 +10,7 @@ import school.sptech.naumspringapi.domain.usuario.Usuario;
 import org.springframework.web.server.ResponseStatusException;
 import school.sptech.naumspringapi.domain.usuario.UsuarioTipo;
 import org.springframework.transaction.annotation.Transactional;
+import school.sptech.naumspringapi.repository.BarbeariaRepository;
 import school.sptech.naumspringapi.repository.BarbeiroRepository;
 import school.sptech.naumspringapi.service.usuario.UsuarioService;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
@@ -27,6 +28,7 @@ public class BarbeiroService {
 
     private final BarbeiroRepository barbeiroRepository;
     private final UsuarioService usuarioService;
+    private final BarbeariaRepository barbeariaRepository;
 
 
     // MÉTODO CRIAÇÃO DO BARBEIRO
@@ -64,11 +66,12 @@ public class BarbeiroService {
         return barbeiroRepository.findByIdAndBarbeiroAtivoTrue(id);
     }
 
-    public List<Barbeiro> listaBarbeirosPorBarbearia() {
-        UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        Barbearia barbearia = login(usuarioLogado.getId()).getBarbearia();
-
-        return barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId());
+    public List<BarbeiroListagemDto> listaBarbeirosPorBarbearia(Long idBarbearia) {
+//        UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        Barbearia barbearia = login(usuarioLogado.getId()).getBarbearia();
+//
+//        return barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId());
+        return BarbeiroMapper.toDto(barbeiroRepository.findAllByBarbeariaAndBarbeiroAtivo(barbeariaRepository.findById(idBarbearia).get(), true));
     }
 
     public List<Barbeiro> listarBarbeiros() {

@@ -12,6 +12,7 @@ import school.sptech.naumspringapi.repository.ClienteRepository;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.service.usuario.UsuarioService;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
+import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
 import school.sptech.naumspringapi.service.usuario.dto.UsuarioCriacaoDto;
 
 import java.util.List;
@@ -84,5 +85,9 @@ public class ClienteService {
     public Void excluirCliente(Long idCliente) {
         clienteRepository.deleteById(idCliente);
         return null;
+    }
+
+    public ClienteListagemDto buscarClientePorIdDto(Long idCliente) {
+        return ClienteMapper.toDto(clienteRepository.findById(idCliente).orElseThrow());
     }
 }

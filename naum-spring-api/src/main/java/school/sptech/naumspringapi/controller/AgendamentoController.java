@@ -36,7 +36,7 @@ public class AgendamentoController {
     })
     @Operation(summary = "Criar um agendamento", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
-    public ResponseEntity<AgendamentoListagemDto> Agendar(@RequestBody AgendamentoCriacaoDto agendamentoDto, @RequestParam("barbeiro, cliente") Barbeiro barbeiro, Cliente cliente) {
+    public ResponseEntity<AgendamentoListagemDto> Agendar(@RequestBody AgendamentoCriacaoDto agendamentoDto, @RequestParam("barbeiro") Barbeiro barbeiro, @RequestParam("cliente") Cliente cliente) {
         AgendamentoListagemDto agendamento = agendamentoService.criarAgendamento(agendamentoDto, barbeiro, cliente);
         if (agendamento == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         return ResponseEntity.status(HttpStatus.CREATED).body(agendamento);
