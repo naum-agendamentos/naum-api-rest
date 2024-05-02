@@ -50,7 +50,7 @@ public class BarbeiroController {
         return ResponseEntity.ok(dto);
     }
 
-    @Operation(summary = "Atualizar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Busca um barbeiro por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{idBarbeiro}")
     public ResponseEntity<BarbeiroListagemDto> buscarBarbeiroPorId(@PathVariable Long idBarbeiro) {
         return ResponseEntity.status(HttpStatus.OK).body(barbeiroService.buscarBarbeiroPorIdDto(idBarbeiro));
