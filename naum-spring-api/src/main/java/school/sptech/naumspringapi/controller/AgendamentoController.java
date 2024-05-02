@@ -56,7 +56,7 @@ public class AgendamentoController {
         return ResponseEntity.status(HttpStatus.OK).body(agendamentos);
     }
 
-    @ApiOperation("Buscar um agendamento pelo ID.")
+    @ApiOperation("Atualizar um agendamento pelo ID.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
             @ApiResponse(code = 404, message = "Agendamento não encontrado.")
@@ -67,7 +67,7 @@ public class AgendamentoController {
         return ResponseEntity.status(HttpStatus.OK).body(agendamentoService.atualizarAgendamentoPorId(idAgendamento, agendamentoDto));
     }
 
-    @ApiOperation("Buscar um agendamento pelo ID.")
+    @ApiOperation("Deletar um agendamento pelo ID.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
             @ApiResponse(code = 404, message = "Agendamento não encontrado.")

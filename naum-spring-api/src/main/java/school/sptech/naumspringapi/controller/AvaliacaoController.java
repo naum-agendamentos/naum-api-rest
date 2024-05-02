@@ -28,19 +28,21 @@ public class AvaliacaoController {
     }
 
     @Operation(summary = "Listar avaliações", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/idBarbearia")
+    @GetMapping("/{idBarbearia}")
     public ResponseEntity<List<AvaliacaoListagemDto>> listarAvaliacoes(@RequestParam("idCliente") Long idCliente, @PathVariable Long idBarbearia, @RequestBody Integer estrela) {
         List<AvaliacaoListagemDto> avaliacaoResponse = avaliacaoService.listarAvaliacaoDinamica(estrela, idBarbearia, idCliente);
         if (avaliacaoResponse == null) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(avaliacaoResponse);
     }
 
+    @Operation(summary = "Listar avaliações", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{idAvaliacao}")
     public ResponseEntity<AvaliacaoListagemDto> atualizarAvaliacao(@PathVariable Long idAvaliacao, @RequestBody @Valid AvaliacaoAtualizacaoDto avaliacaoAtualizacaoDto) {
         AvaliacaoListagemDto avaliacaoAtualizada = avaliacaoService.atualizarAvaliacao(idAvaliacao, avaliacaoAtualizacaoDto);
         return ResponseEntity.status(HttpStatus.OK).body(avaliacaoAtualizada);
     }
 
+    @Operation(summary = "Listar avaliações", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/deletarAvaliacao/{id}")
     public ResponseEntity<Void> deletarAvaliacao(@PathVariable Long id) {
         avaliacaoService.deletarAvaliacao(id);
