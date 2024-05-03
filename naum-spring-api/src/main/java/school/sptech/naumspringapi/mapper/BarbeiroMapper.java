@@ -36,6 +36,7 @@ public class BarbeiroMapper {
         dto.setNome(entity.getNome());
         dto.setEmail(entity.getEmail());
         dto.setTelefone(entity.getTelefone());
+        dto.setDescricao(entity.getDescricao());
         dto.setFoto(entity.getFoto());
         BarbeariaListagemDto dtoBarbearia = BarbeariaMapper.toDto(entity.getBarbearia());
         dto.setBarbearia(dtoBarbearia);

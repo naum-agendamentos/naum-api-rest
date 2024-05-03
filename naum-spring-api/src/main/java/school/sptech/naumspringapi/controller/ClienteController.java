@@ -9,8 +9,6 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.naumspringapi.entity.Cliente;
-import school.sptech.naumspringapi.mapper.ClienteMapper;
 import school.sptech.naumspringapi.service.ClienteService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
@@ -33,9 +31,7 @@ public class ClienteController {
     @Operation(summary = "Cadastrar clientes", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
     public ResponseEntity<ClienteListagemDto> cadastrar(@RequestBody @Valid ClienteCriacaoDto novoCliente) {
-        Cliente clienteCriado = clienteService.criar(novoCliente);
-        ClienteListagemDto clienteListagemDto = ClienteMapper.toDto(clienteCriado);
-        return ResponseEntity.ok(clienteListagemDto);
+        return ResponseEntity.ok(clienteService.criar(novoCliente));
     }
 
     @ApiOperation("Listar clientes.")
@@ -46,10 +42,9 @@ public class ClienteController {
     @Operation(summary = "Listar clientes", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<List<ClienteListagemDto>> listarClientes() {
-        List<Cliente> clientes = clienteService.listarClientes();
-        if (clientes == null) return ResponseEntity.noContent().build();
-        List<ClienteListagemDto> clienteListagemDtos = ClienteMapper.toDto(clientes);
-        return ResponseEntity.ok(clienteListagemDtos);
+        List<ClienteListagemDto> clientes = clienteService.listarClientes();
+        if (clientes.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(clientes);
     }
 
     @ApiOperation("Buscar cliente por ID.")
@@ -72,10 +67,7 @@ public class ClienteController {
     @Operation(summary = "Atualizar cliente por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<ClienteListagemDto> atualizarCliente(@PathVariable Long id, @RequestBody @Valid ClienteCriacaoDto novoCliente) {
-        Cliente clienteAtualizado = clienteService.atualizarCliente(id, novoCliente);
-        if (clienteAtualizado == null) return ResponseEntity.notFound().build();
-        ClienteListagemDto clienteListagemDto = ClienteMapper.toDto(clienteAtualizado);
-        return ResponseEntity.ok(clienteListagemDto);
+        return ResponseEntity.ok(clienteService.atualizarCliente(id, novoCliente));
     }
 
     @ApiOperation("Deletar cliente por ID.")
@@ -86,6 +78,6 @@ public class ClienteController {
     @Operation(summary = "Deletar cliente por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/{idCliente}")
     public ResponseEntity<Void> deletarCliente(@PathVariable Long idCliente) {
-        return ResponseEntity.status(HttpStatus.OK).body(clienteService.excluirCliente(idCliente));
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

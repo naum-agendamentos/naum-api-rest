@@ -16,6 +16,7 @@ import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 
 import java.util.List;
+import java.util.Objects;
 
 @Api(tags = "BarbeariaController", description = "Controller da barbearia.")
 @RequiredArgsConstructor
@@ -46,7 +47,7 @@ public class BarbeariaController {
     @GetMapping
     public ResponseEntity<List<BarbeariaListagemDto>> listarBarbearias() {
         List<BarbeariaListagemDto> barbeariaListagem = barbeariaService.listarBarbearia();
-        if (barbeariaListagem == null) return ResponseEntity.noContent().build();
+        if (Objects.isNull(barbeariaListagem)) return ResponseEntity.noContent().build();
         return ResponseEntity.ok(barbeariaListagem);
     }
 
