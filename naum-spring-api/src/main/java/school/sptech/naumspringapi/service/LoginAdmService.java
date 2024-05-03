@@ -23,25 +23,29 @@ public class LoginAdmService {
 
     @Transactional
     public LoginAdm atualizarLoginAdm(LoginAdmAtualizacaoDto novoLogin) {
+        try {
 
-        LoginAdm entity = LoginAdmMapper.toEntity(novoLogin);
-        entity.setId(Long.valueOf(1));
+            LoginAdm entity = LoginAdmMapper.toEntity(novoLogin);
+            entity.setId(Long.valueOf(1));
 
-        UsuarioCriacaoDto usuarioCriacaoDto = new UsuarioCriacaoDto();
-        usuarioCriacaoDto.setEmail(novoLogin.getEmail());
-        usuarioCriacaoDto.setSenha(novoLogin.getSenha());
-        usuarioCriacaoDto.setTipo(UsuarioTipo.ADMIN);
+            UsuarioCriacaoDto usuarioCriacaoDto = new UsuarioCriacaoDto();
+            usuarioCriacaoDto.setEmail(novoLogin.getEmail());
+            usuarioCriacaoDto.setSenha(novoLogin.getSenha());
+            usuarioCriacaoDto.setTipo(UsuarioTipo.ADMIN);
 
-        Usuario usuarioAtualizado = usuarioService.atualizar(Long.valueOf(1), usuarioCriacaoDto);
+            Usuario usuarioAtualizado = usuarioService.atualizar(Long.valueOf(1), usuarioCriacaoDto);
 
-        if(usuarioAtualizado == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi achado um login desse ADM");
+            if (usuarioAtualizado == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi achado um login desse ADM");
+            }
+
+            entity.setUsuario(usuarioAtualizado);
+
+            LoginAdm loginAdm = loginAdmRepository.save(entity);
+
+            return loginAdm;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao atualizar loginAdm", e);
         }
-
-        entity.setUsuario(usuarioAtualizado);
-
-        LoginAdm loginAdm = loginAdmRepository.save(entity);
-
-        return loginAdm;
     }
 }

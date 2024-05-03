@@ -9,6 +9,7 @@ public class BarbeiroListagemDto {
     private String nome;
     private String email;
     private String telefone;
+    private String descricao;
     private String foto;
     private BarbeariaListagemDto barbearia;
 }
