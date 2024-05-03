@@ -80,10 +80,10 @@ public class BarbeiroService {
 
     public List<BarbeiroListagemDto> listaBarbeirosPorBarbearia() {
         try {
-        UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        Barbearia barbearia = login(usuarioLogado.getId()).getBarbearia();
+            UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Barbearia barbearia = login(usuarioLogado.getId()).getBarbearia();
 
-        return BarbeiroMapper.toDto(barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId()));
+            return BarbeiroMapper.toDto(barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId()));
 
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
