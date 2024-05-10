@@ -6,12 +6,13 @@ import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class ClienteMapper {
 
     public static Cliente toEntity(ClienteCriacaoDto dto) {
-        if (dto == null) return null;
+        if (Objects.isNull(dto)) return null;
 
         Cliente cliente = new Cliente();
         cliente.setEmail(dto.getEmail());
@@ -23,7 +24,7 @@ public class ClienteMapper {
     }
 
     public static ClienteListagemDto toDto(Cliente entity) {
-        if (entity == null) return null;
+        if (Objects.isNull(entity)) return null;
 
         ClienteListagemDto dto = new ClienteListagemDto();
         dto.setId(entity.getId());

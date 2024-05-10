@@ -7,12 +7,13 @@ import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class ServicoMapper {
 
     public static ServicoListagemDto toDto(Servico entity) {
-        if (entity == null) return null;
+        if (Objects.isNull(entity)) return null;
         ServicoListagemDto dto = new ServicoListagemDto();
         dto.setId(entity.getId());
         dto.setNomeServico(entity.getNomeServico());
@@ -22,7 +23,7 @@ public class ServicoMapper {
     }
 
     public static Servico toEntity(ServicoCriacaoDto dto, Barbearia barbearia) {
-        if (dto == null) return null;
+        if (Objects.isNull(dto)) return null;
         Servico entity = new Servico();
         entity.setNomeServico(dto.getNomeServico());
         entity.setPreco(dto.getPreco());

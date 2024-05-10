@@ -1,19 +1,15 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import school.sptech.naumspringapi.entity.Servico;
-import jakarta.persistence.EntityNotFoundException;
-import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.mapper.ServicoMapper;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.ServicoRepository;
+import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
-import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoAtualizacaoDto;
+import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
 import java.util.List;
 import java.util.Objects;
@@ -22,67 +18,35 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ServicoService {
 
-    private final ServicoRepository servicoRepository;
     private final BarbeariaService barbeariaService;
+    private final ServicoRepository servicoRepository;
 
-    public List<ServicoListagemDto> listarServicosPorBarbearia(Long idBarbearia) {
-        return ServicoMapper.toDto(servicoRepository.findAllByBarbearia(barbeariaService.buscarPorId(idBarbearia)));
+    public List<Servico> listarServicosPorBarbearia(Long idBarbearia) {
+        if (Objects.isNull(idBarbearia)) throw new EntidadeImprocessavelException("idBarbearia");
+        return servicoRepository.findAllByBarbearia(barbeariaService.buscarPorId(idBarbearia));
     }
 
     @Transactional
-    public ServicoListagemDto criarServicoPorBarbearia(ServicoCriacaoDto servicoDto, Long idBarbearia) {
-        try {
-            if (Objects.isNull(servicoDto) || Objects.isNull(idBarbearia)) throw new BadRequestException();
-            Barbearia barbearia = barbeariaService.buscarPorId(idBarbearia);
-            return ServicoMapper.toDto(servicoRepository.save(ServicoMapper.toEntity(servicoDto, barbearia)));
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao criar serviço", e);
-        }
+    public Servico criarServicoPorBarbearia(ServicoCriacaoDto servicoDto, Long idBarbearia) {
+        if (Objects.isNull(servicoDto) || Objects.isNull(idBarbearia)) throw new EntidadeImprocessavelException("Serviço ou idBarbearia");
+        return servicoRepository.save(ServicoMapper.toEntity(servicoDto, barbeariaService.buscarPorId(idBarbearia)));
     }
 
-    public ServicoListagemDto buscarServicoPorId(Long idBarbearia, Long idServico) {
-        try {
-            if (Objects.isNull(idBarbearia) || Objects.isNull(idServico)) throw new BadRequestException();
-            Servico servico = servicoRepository.findByIdAndBarbearia(idServico, barbeariaService.buscarPorId(idBarbearia));
-            return ServicoMapper.toDto(servico);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao buscar serviço", e);
-        }
+    public Servico buscarServicoPorId(Long idBarbearia, Long idServico) {
+        if (Objects.isNull(idBarbearia) || Objects.isNull(idServico)) throw new EntidadeImprocessavelException("idBarbearia ou idServico");
+        return servicoRepository.findByIdAndBarbearia(idServico, barbeariaService.buscarPorId(idBarbearia));
     }
 
-    public ServicoListagemDto atualizarServicoPorId(Long idServico, ServicoAtualizacaoDto servicoDto) {
-        try {
-            if (Objects.isNull(servicoDto)) throw new BadRequestException();
-            Servico servicoAtual = servicoRepository.findById(idServico).orElse(null);
-            if (Objects.isNull(servicoAtual)) throw new EntityNotFoundException();
-            servicoAtual.setNomeServico(servicoDto.getNomeServico());
-            servicoAtual.setPreco(servicoDto.getPreco());
-            return ServicoMapper.toDto(servicoRepository.save(servicoAtual));
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao atualizar serviço", e);
-        }
+    public Servico atualizarServicoPorId(Long idServico, ServicoAtualizacaoDto servicoDto) {
+        if (Objects.isNull(servicoDto) || Objects.isNull(idServico)) throw new EntidadeImprocessavelException("Serviço ou idServico");
+        Servico servicoAtual = servicoRepository.findById(idServico).orElseThrow(() -> new NaoEncontradoException("Serviço"));
+        servicoAtual.setNomeServico(servicoDto.getNomeServico());
+        servicoAtual.setPreco(servicoDto.getPreco());
+        return servicoRepository.save(servicoAtual);
     }
 
     @Transactional
     public void excluirServico(Long idServico) {
-        try {
-            servicoRepository.delete(servicoRepository.findById(idServico).orElseThrow());
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao atualizar serviço", e);
-        }
+        servicoRepository.delete(servicoRepository.findById(idServico).orElseThrow(() -> new NaoEncontradoException("Servico")));
     }
 }

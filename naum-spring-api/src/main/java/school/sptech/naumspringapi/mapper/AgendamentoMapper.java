@@ -8,12 +8,13 @@ import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoCriacaoDto;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AgendamentoMapper {
 
     public static AgendamentoListagemDto toDto(Agendamento entity) {
-        if (entity == null) return null;
+        if (Objects.isNull(entity)) return null;
         AgendamentoListagemDto dto = new AgendamentoListagemDto();
         dto.setId(entity.getId());
         dto.setDataHoraAgendamento(entity.getDataHoraAgendamento());
@@ -24,7 +25,7 @@ public class AgendamentoMapper {
     }
 
     public static Agendamento toEntity(AgendamentoCriacaoDto dto, Cliente cliente, Barbeiro barbeiro) {
-        if (dto == null) return null;
+        if (Objects.isNull(dto)) return null;
         Agendamento entity = new Agendamento();
         entity.setDataHoraAgendamento(dto.getDataHoraAgendamneto());
         entity.setCliente(cliente);

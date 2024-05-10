@@ -1,17 +1,14 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
-import jakarta.persistence.EntityNotFoundException;
 import school.sptech.naumspringapi.entity.Endereco;
 import school.sptech.naumspringapi.mapper.EnderecoMapper;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
-import school.sptech.naumspringapi.repository.BarbeiroRepository;
 import school.sptech.naumspringapi.repository.EnderecoRepository;
+import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaCriacaoDto;
+import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
 import java.util.Objects;
 
@@ -20,43 +17,25 @@ import java.util.Objects;
 public class EnderecoService {
 
     private final EnderecoRepository enderecoRepository;
-    private final BarbeiroRepository barbeiroRepository;
 
     @Transactional
     public Endereco cadastrarEndereco(BarbeariaCriacaoDto barbeariaCriacaoDto) {
-        try {
-            if (Objects.isNull(barbeariaCriacaoDto)) throw new BadRequestException();
-            Endereco endereco = EnderecoMapper.toEntity(barbeariaCriacaoDto.getEndereco());
-            return enderecoRepository.save(endereco);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar agendamentos", e);
-        }
+        if (Objects.isNull(barbeariaCriacaoDto)) throw new EntidadeImprocessavelException("Barbearia");
+        Endereco endereco = EnderecoMapper.toEntity(barbeariaCriacaoDto.getEndereco());
+        return enderecoRepository.save(endereco);
     }
 
     @Transactional
     public Endereco atualizarEndereco(Long id, BarbeariaCriacaoDto barbeariaCriacaoDto) {
-        try {
-            if (Objects.isNull(barbeariaCriacaoDto) || Objects.isNull(id)) throw new BadRequestException();
-            Endereco endereco = enderecoRepository.findById(id).orElse(null);
-            if (Objects.isNull(endereco)) throw new EntityNotFoundException();
+        if (Objects.isNull(barbeariaCriacaoDto) || Objects.isNull(id)) throw new EntidadeImprocessavelException("Id ou barbearia");
+        Endereco endereco = enderecoRepository.findById(id).orElseThrow(() -> new NaoEncontradoException("Endereco"));
 
-            endereco.setCidade(barbeariaCriacaoDto.getEndereco().getCidade());
-            endereco.setCep(barbeariaCriacaoDto.getEndereco().getCep());
-            endereco.setNumero(barbeariaCriacaoDto.getEndereco().getNumero());
-            endereco.setBairro(barbeariaCriacaoDto.getEndereco().getBairro());
-            endereco.setUf(barbeariaCriacaoDto.getEndereco().getUf());
-            endereco.setRua(barbeariaCriacaoDto.getEndereco().getRua());
-            return enderecoRepository.save(endereco);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar agendamentos", e);
-        }
+        endereco.setCidade(barbeariaCriacaoDto.getEndereco().getCidade());
+        endereco.setCep(barbeariaCriacaoDto.getEndereco().getCep());
+        endereco.setNumero(barbeariaCriacaoDto.getEndereco().getNumero());
+        endereco.setBairro(barbeariaCriacaoDto.getEndereco().getBairro());
+        endereco.setUf(barbeariaCriacaoDto.getEndereco().getUf());
+        endereco.setRua(barbeariaCriacaoDto.getEndereco().getRua());
+        return enderecoRepository.save(endereco);
     }
 }

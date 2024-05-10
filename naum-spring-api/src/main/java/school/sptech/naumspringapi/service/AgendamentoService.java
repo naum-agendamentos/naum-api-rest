@@ -1,17 +1,14 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import school.sptech.naumspringapi.entity.*;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
-import jakarta.persistence.EntityNotFoundException;
 import school.sptech.naumspringapi.mapper.AgendamentoMapper;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
+import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.repository.AgendamentoRepository;
+import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoCriacaoDto;
-import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoAtualizacaoDto;
 
 import java.util.List;
@@ -28,104 +25,47 @@ public class AgendamentoService {
     private final AgendamentoRepository agendamentoRepository;
 
     @Transactional
-    public AgendamentoListagemDto criarAgendamento(AgendamentoCriacaoDto agendamentoCriacaoDto, Barbeiro barbeiro, Cliente cliente) {
-        try {
-            if (Objects.isNull(barbeiro) || Objects.isNull(cliente)) throw new BadRequestException();
-            Agendamento agendamento = agendamentoRepository.save(AgendamentoMapper.toEntity(agendamentoCriacaoDto, cliente, barbeiro));
-            return AgendamentoMapper.toDto(agendamento);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao criar agendamento", e);
-        }
+    public Agendamento criarAgendamento(AgendamentoCriacaoDto agendamentoCriacaoDto, Barbeiro barbeiro, Cliente cliente) {
+            if (Objects.isNull(barbeiro) || Objects.isNull(cliente)) throw new EntidadeImprocessavelException("barbeiro ou cliente");
+            return agendamentoRepository.save(AgendamentoMapper.toEntity(agendamentoCriacaoDto, cliente, barbeiro));
     }
 
-    public List<AgendamentoListagemDto> listarAgendamentosPorBarbeiro(Long idBarbeiro) {
-        try {
-            if (Objects.isNull(idBarbeiro)) throw new BadRequestException();
-            Barbeiro barbeiro = barbeiroService.buscarPorId(idBarbeiro);
-            return AgendamentoMapper.toDto(agendamentoRepository.findByBarbeiro(barbeiro));
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar agendamentos", e);
-        }
+    public List<Agendamento> listarAgendamentosPorBarbeiro(Long idBarbeiro) {
+        if (Objects.isNull(idBarbeiro)) throw new EntidadeImprocessavelException("idBarbeiro");
+        Barbeiro barbeiro = barbeiroService.buscarPorId(idBarbeiro);
+        return agendamentoRepository.findByBarbeiro(barbeiro);
     }
 
-    public List<AgendamentoListagemDto> listarAgendamentosPorCliente(Long idCliente) {
-        try {
-            if (Objects.isNull(idCliente)) throw new BadRequestException();
-            Cliente cliente = clienteService.buscarPorId(idCliente);
-            return AgendamentoMapper.toDto(agendamentoRepository.findByCliente(cliente));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar agendamentos", e);
-        }
+    public List<Agendamento> listarAgendamentosPorCliente(Long idCliente) {
+        if (Objects.isNull(idCliente)) throw new EntidadeImprocessavelException("idCliente");
+        Cliente cliente = clienteService.buscarPorId(idCliente);
+        return agendamentoRepository.findByCliente(cliente);
     }
 
-    public List<AgendamentoListagemDto> listarAgendamentosPorClienteAndData (LocalDate data, Long idCliente) {
-        try {
-            if (Objects.isNull(data) || Objects.isNull(idCliente)) throw new BadRequestException();
-            Cliente cliente = clienteService.buscarPorId(idCliente);
-            return AgendamentoMapper.toDto(agendamentoRepository.findAllByDataHoraAgendamentoAndCliente(data, cliente));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar agendamentos", e);
-        }
+    public List<Agendamento> listarAgendamentosPorClienteAndData (LocalDate data, Long idCliente) {
+        if (Objects.isNull(data) || Objects.isNull(idCliente)) throw new EntidadeImprocessavelException("data ou idCliente");
+        Cliente cliente = clienteService.buscarPorId(idCliente);
+        return agendamentoRepository.findAllByDataHoraAgendamentoAndCliente(data, cliente);
     }
 
-    public List<AgendamentoListagemDto> listarAgendamentosPorBarbeiroAndData(Long idBarbeiro, LocalDate data) {
-        try {
-            if (Objects.isNull(data) || Objects.isNull(idBarbeiro)) throw new BadRequestException();
-            Barbeiro barbeiro = barbeiroService.buscarPorId(idBarbeiro);
-            return AgendamentoMapper.toDto(agendamentoRepository.findAllByDataHoraAgendamentoAndBarbeiro(data, barbeiro));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar agendamentos", e);
-        }
+    public List<Agendamento> listarAgendamentosPorBarbeiroAndData(Long idBarbeiro, LocalDate data) {
+        if (Objects.isNull(data) || Objects.isNull(idBarbeiro)) throw new EntidadeImprocessavelException("data ou idBarbeiro");
+        Barbeiro barbeiro = barbeiroService.buscarPorId(idBarbeiro);
+        return agendamentoRepository.findAllByDataHoraAgendamentoAndBarbeiro(data, barbeiro);
     }
 
-    public AgendamentoListagemDto atualizarAgendamentoPorId(Long idAgendamento, AgendamentoAtualizacaoDto agendamento) {
-        try {
-            if (Objects.isNull(idAgendamento) || Objects.isNull(agendamento)) throw new BadRequestException();
-            Agendamento agendamentoAtual = agendamentoRepository.findById(idAgendamento).orElse(null);
-            if (Objects.isNull(agendamentoAtual)) throw new EntityNotFoundException();
-            agendamentoAtual.setDataHoraAgendamento(agendamento.getDataHoraAgendamneto());
-            agendamentoAtual.setServico(agendamento.getServicos());
-            return AgendamentoMapper.toDto(agendamentoRepository.save(agendamentoAtual));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao atualizar agendamento", e);
-        }
+    public Agendamento atualizarAgendamentoPorId(Long idAgendamento, AgendamentoAtualizacaoDto agendamento) {
+        if (Objects.isNull(idAgendamento) || Objects.isNull(agendamento)) throw new EntidadeImprocessavelException("idAgendamento");
+        Agendamento agendamentoAtual = agendamentoRepository.findById(idAgendamento).orElseThrow(() -> new NaoEncontradoException("agendamento"));
+        agendamentoAtual.setDataHoraAgendamento(agendamento.getDataHoraAgendamneto());
+        agendamentoAtual.setServico(agendamento.getServicos());
+        return agendamentoRepository.save(agendamentoAtual);
     }
 
     @Transactional
     public void delearAgendamento(Long idAgendamento) {
-        try {
-            if (Objects.isNull(idAgendamento)) throw new BadRequestException();
-            Agendamento agendamento = agendamentoRepository.findById(idAgendamento).orElse(null);
-            if (Objects.isNull(agendamento)) throw new EntityNotFoundException();
-            agendamentoRepository.delete(agendamento);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao deletar agendamento", e);
-        }
+        if (Objects.isNull(idAgendamento)) throw new EntidadeImprocessavelException("idAgendamento");
+        Agendamento agendamento = agendamentoRepository.findById(idAgendamento).orElseThrow(() -> new NaoEncontradoException("agendamento"));
+        agendamentoRepository.delete(agendamento);
     }
 }
