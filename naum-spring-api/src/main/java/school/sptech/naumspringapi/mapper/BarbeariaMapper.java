@@ -8,12 +8,13 @@ import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
 import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaAtualizacaoDto;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class BarbeariaMapper {
 
     public static Barbearia toEntity(BarbeariaCriacaoDto dto) {
-        if (dto == null) return null;
+        if (Objects.isNull(dto)) return null;
 
         Barbearia barbearia = new Barbearia();
         barbearia.setNome(dto.getNome());
@@ -30,7 +31,7 @@ public class BarbeariaMapper {
     }
 
     public static BarbeariaListagemDto toDto(Barbearia entity) {
-        if (entity == null) return null;
+        if (Objects.isNull(entity)) return null;
 
         BarbeariaListagemDto dto = new BarbeariaListagemDto();
         dto.setId(entity.getId());
@@ -51,7 +52,7 @@ public class BarbeariaMapper {
     }
 
     public static BarbeariaAtualizacaoDto toAttDto(Barbearia entity) {
-        if (entity == null) return null;
+        if (Objects.isNull(entity)) return null;
 
         BarbeariaAtualizacaoDto dto = new BarbeariaAtualizacaoDto();
         dto.setNome(entity.getNome());

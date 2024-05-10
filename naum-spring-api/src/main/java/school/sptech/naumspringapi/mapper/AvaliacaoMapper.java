@@ -8,12 +8,13 @@ import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoCriacaoDto;
 import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoListagemDto;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class AvaliacaoMapper {
 
     public static Avaliacao toEntity(AvaliacaoCriacaoDto avaliacaoDto, Cliente cliente, Barbearia barbearia) {
-        if (avaliacaoDto == null || cliente == null || barbearia == null) return null;
+        if (Objects.isNull(avaliacaoDto) || Objects.isNull(cliente) || Objects.isNull(barbearia)) return null;
         Avaliacao avaliacao = new Avaliacao();
         avaliacao.setBarbearia(barbearia);
         avaliacao.setCliente(cliente);
@@ -23,7 +24,7 @@ public class AvaliacaoMapper {
     }
 
     public static AvaliacaoListagemDto toDto(Avaliacao avaliacao) {
-        if (avaliacao == null) return null;
+        if (Objects.isNull(avaliacao)) return null;
         AvaliacaoListagemDto dto = new AvaliacaoListagemDto();
         dto.setQtdEstrela(avaliacao.getQtdEstrela());
         dto.setId(avaliacao.getId());

@@ -10,14 +10,16 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.entity.Barbeiro;
+import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.service.BarbeiroService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroDesativacaoDto;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 
 @Api(tags = "BarbeiroController", description = "Controller do barbeiro")
 @RequiredArgsConstructor
@@ -30,12 +32,14 @@ public class BarbeiroController {
     @ApiOperation("Cadastrar um barbeiro novo.")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Barbeiro cadastrado com sucesso!"),
-            @ApiResponse(code = 400, message = "Dados inválidos.")
+            @ApiResponse(code = 422, message = "Dados inválidos.")
     })
     @Operation(summary = "Cadastrar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
     public ResponseEntity<BarbeiroListagemDto> cadastrar(@RequestBody @Valid BarbeiroCriacaoDto novoBarbeiro){
-        return ResponseEntity.ok(barbeiroService.criarBarbeiro(novoBarbeiro));
+        Barbeiro barbeiro = barbeiroService.criarBarbeiro(novoBarbeiro);
+        URI uri = URI.create("/barbeiros/" + barbeiro.getId());
+        return ResponseEntity.created(uri).body(BarbeiroMapper.toDto(barbeiro));
     }
 
     @ApiOperation("Listar barbeiros de uma barbearia.")
@@ -46,9 +50,9 @@ public class BarbeiroController {
     @Operation(summary = "Listar barbeiros de uma barbearia", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<List<BarbeiroListagemDto>> listarDaMinhaBarbearia() {
-        List<BarbeiroListagemDto> barbeiros = barbeiroService.listaBarbeirosPorBarbearia();
+        List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbearia();
         if (barbeiros.isEmpty()) return ResponseEntity.noContent().build();
-        return ResponseEntity.status(HttpStatus.OK).body(barbeiros);
+        return ResponseEntity.status(HttpStatus.OK).body(BarbeiroMapper.toDto(barbeiros));
     }
 
     @ApiOperation("Buscar barbeiro por ID.")
@@ -59,7 +63,7 @@ public class BarbeiroController {
     @Operation(summary = "Busca um barbeiro por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{idBarbeiro}")
     public ResponseEntity<BarbeiroListagemDto> buscarBarbeiroPorId(@PathVariable Long idBarbeiro) {
-        return ResponseEntity.status(HttpStatus.OK).body(barbeiroService.buscarBarbeiroPorIdDto(idBarbeiro));
+        return ResponseEntity.status(HttpStatus.OK).body(BarbeiroMapper.toDto(barbeiroService.buscarPorId(idBarbeiro)));
     }
 
     @ApiOperation("Atualizar um barbeiro por ID.")
@@ -71,9 +75,7 @@ public class BarbeiroController {
     @Operation(summary = "Atualizar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<BarbeiroListagemDto> atualizarBarbeiro(@PathVariable Long id, @RequestBody @Valid BarbeiroCriacaoDto novoBarbeiro) {
-        BarbeiroListagemDto barbeiroAtualizado = barbeiroService.atualizarBarbeiro(id, novoBarbeiro);
-        if (Objects.isNull(barbeiroAtualizado)) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(barbeiroAtualizado);
+        return ResponseEntity.ok(BarbeiroMapper.toDto(barbeiroService.atualizarBarbeiro(id, novoBarbeiro)));
     }
 
     @ApiOperation("Desativar barbeiro por ID.")
@@ -84,8 +86,6 @@ public class BarbeiroController {
     @Operation(summary = "Desativar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/desativar/{id}")
     public ResponseEntity<BarbeiroDesativacaoDto> desativarBarbeiro(@PathVariable Long id){
-        BarbeiroDesativacaoDto barbeiroDesativado = barbeiroService.desativarBarbeiro(id);
-        if(Objects.isNull(barbeiroDesativado)) return ResponseEntity.status(404).build();
-        return ResponseEntity.status(200).body(barbeiroDesativado);
+        return ResponseEntity.status(200).body(BarbeiroMapper.toDtoDesativacao(barbeiroService.desativarBarbeiro(id)));
     }
 }

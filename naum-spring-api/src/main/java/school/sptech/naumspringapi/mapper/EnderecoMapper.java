@@ -5,10 +5,12 @@ import school.sptech.naumspringapi.entity.Endereco;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoCriacaoDto;
 import school.sptech.naumspringapi.dto.enderecoDto.EnderecoListagemDto;
 
+import java.util.Objects;
+
 @Component
 public class EnderecoMapper {
     public static Endereco toEntity(EnderecoCriacaoDto dto) {
-        if (dto == null) return null;
+        if (Objects.isNull(dto)) return null;
 
         Endereco endereco = new Endereco();
         endereco.setCidade(dto.getCidade());
@@ -22,7 +24,7 @@ public class EnderecoMapper {
     }
 
     public static EnderecoListagemDto toDto(Endereco entity) {
-        if (entity == null) return null;
+        if (Objects.isNull(entity)) return null;
 
         EnderecoListagemDto enderecoDto = new EnderecoListagemDto();
         enderecoDto.setId(entity.getId());

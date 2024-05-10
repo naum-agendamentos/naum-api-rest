@@ -1,26 +1,22 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
-import jakarta.persistence.EntityNotFoundException;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
-import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.entity.Barbeiro;
+import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.domain.usuario.Usuario;
-import org.springframework.web.server.ResponseStatusException;
 import school.sptech.naumspringapi.domain.usuario.UsuarioTipo;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.BarbeiroRepository;
-import school.sptech.naumspringapi.repository.BarbeariaRepository;
 import school.sptech.naumspringapi.service.usuario.UsuarioService;
+import school.sptech.naumspringapi.exception.IndisponivelException;
+import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import school.sptech.naumspringapi.service.usuario.dto.UsuarioCriacaoDto;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroDesativacaoDto;
+import school.sptech.naumspringapi.exception.RequisicaoInvalidaException;
+import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioDetalhesDto;
 
 import java.util.List;
@@ -30,131 +26,92 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class BarbeiroService {
 
-    private final BarbeiroRepository barbeiroRepository;
     private final UsuarioService usuarioService;
-    private final BarbeariaRepository barbeariaRepository;
+    private final BarbeiroRepository barbeiroRepository;
 
 
     // MÉTODO CRIAÇÃO DO BARBEIRO
     @Transactional
-    public BarbeiroListagemDto criarBarbeiro(BarbeiroCriacaoDto barbeiroCriacaoDto){
-        try {
-            if (Objects.isNull(barbeiroCriacaoDto)) throw new BadRequestException();
-            // OBTENDO O USUÁRIO LOGADO PARA PASSAR A MESMA BARBEARIA DE QUEM TA LOGADO PARA O NOVO BARBEIRO
-            UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Barbeiro barbeiroLogado = login(usuarioLogado.getId());
+    public Barbeiro criarBarbeiro(BarbeiroCriacaoDto barbeiroCriacaoDto){
+        if (Objects.isNull(barbeiroCriacaoDto)) throw new EntidadeImprocessavelException("Barbeiro");
+        // OBTENDO O USUÁRIO LOGADO PARA PASSAR A MESMA BARBEARIA DE QUEM TA LOGADO PARA O NOVO BARBEIRO
+        UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Barbeiro barbeiroLogado = login(usuarioLogado.getId());
 
-            if (Objects.isNull(barbeiroLogado) && Objects.isNull(barbeiroLogado.getBarbearia())) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (Objects.isNull(barbeiroLogado) && Objects.isNull(barbeiroLogado.getBarbearia())) throw new NaoEncontradoException("Barbeiro");
 
-            // CONVERTE PARA ENTIDADE A DTO PASSANDO A MESMA BARBEARIA DE QUEM ESTA LOGADO
-            Barbeiro entity = BarbeiroMapper.toEntity(barbeiroCriacaoDto, barbeiroLogado.getBarbearia());
+        // CONVERTE PARA ENTIDADE A DTO PASSANDO A MESMA BARBEARIA DE QUEM ESTA LOGADO
+        Barbeiro entity = BarbeiroMapper.toEntity(barbeiroCriacaoDto, barbeiroLogado.getBarbearia());
 
-            // CRIANDO UMA INSTÂNCIA DE USUARIO PARA PEGAR O MESMO NOME, EMAIL E SENHA PASSADO PELA DTO E CRIANDO UM USUÁRIO
-            UsuarioCriacaoDto usuarioCriacaoDto = new UsuarioCriacaoDto();
-            usuarioCriacaoDto.setNome(barbeiroCriacaoDto.getNome());
-            usuarioCriacaoDto.setEmail(barbeiroCriacaoDto.getEmail());
-            usuarioCriacaoDto.setSenha(barbeiroCriacaoDto.getSenha());
-            usuarioCriacaoDto.setTipo(UsuarioTipo.BARBEIRO);
-            Usuario usuarioCriado = usuarioService.criar(usuarioCriacaoDto);
+        // CRIANDO UMA INSTÂNCIA DE USUARIO PARA PEGAR O MESMO NOME, EMAIL E SENHA PASSADO PELA DTO E CRIANDO UM USUÁRIO
+        UsuarioCriacaoDto usuarioCriacaoDto = new UsuarioCriacaoDto();
+        usuarioCriacaoDto.setNome(barbeiroCriacaoDto.getNome());
+        usuarioCriacaoDto.setEmail(barbeiroCriacaoDto.getEmail());
+        usuarioCriacaoDto.setSenha(barbeiroCriacaoDto.getSenha());
+        usuarioCriacaoDto.setTipo(UsuarioTipo.BARBEIRO);
+        Usuario usuarioCriado = usuarioService.criar(usuarioCriacaoDto);
 
-            // ALTERANDO O CAMPO DE USUÁRIO DA ENTIDADE PASSANDO O USUARIO CRIADO
-            entity.setUsuario(usuarioCriado);
-            // SETANDO O BARBEIRO COMO ATIVO
-            entity.setBarbeiroAtivo(true);
+        // ALTERANDO O CAMPO DE USUÁRIO DA ENTIDADE PASSANDO O USUARIO CRIADO
+        entity.setUsuario(usuarioCriado);
+        // SETANDO O BARBEIRO COMO ATIVO
+        entity.setBarbeiroAtivo(true);
 
-            return BarbeiroMapper.toDto(barbeiroRepository.save(entity));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao cadastrar barbeiro", e);
-        }
+        return barbeiroRepository.save(entity);
     }
 
     public Barbeiro buscarPorId(Long id) {
         Barbeiro barbeiro = barbeiroRepository.findByIdAndBarbeiroAtivoTrue(id);
-        if (Objects.isNull(barbeiro)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (Objects.isNull(barbeiro)) throw new NaoEncontradoException("Barbeiro");
         return barbeiro;
     }
 
-    public List<BarbeiroListagemDto> listaBarbeirosPorBarbearia() {
-        try {
-            UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Barbearia barbearia = login(usuarioLogado.getId()).getBarbearia();
-
-            return BarbeiroMapper.toDto(barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId()));
-
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar barbeiros", e);
-        }
+    public List<Barbeiro> listaBarbeirosPorBarbearia() {
+        UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Barbearia barbearia = login(usuarioLogado.getId()).getBarbearia();
+        return barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId());
     }
 
-    public List<BarbeiroListagemDto> listarBarbeiros() {
-        try {
-            List<Barbeiro> barbeiros = barbeiroRepository.findByBarbeiroAtivoTrue();
-            if (barbeiros.isEmpty()) return null;
-            return BarbeiroMapper.toDto(barbeiros);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar avaliação", e);
-        }
+    public List<Barbeiro> listarBarbeiros() {
+        return barbeiroRepository.findByBarbeiroAtivoTrue();
     }
-
 
     // MÉTODO DE ATUALIZAR BARBEIRO, SOMENTE SE ELE ESTIVER ATIVO
     @Transactional
-    public BarbeiroListagemDto atualizarBarbeiro(Long id, BarbeiroCriacaoDto barbeiroAtualizado) {
-        try {
-            Barbeiro barbeiroAtual = barbeiroRepository.findById(id).orElse(null);
-            if (Objects.isNull(barbeiroAtual)) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-            if (!verificarBarbeiroAtivo(barbeiroAtual)) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "O usuário já foi excluído.");
+    public Barbeiro atualizarBarbeiro(Long id, BarbeiroCriacaoDto barbeiroAtualizado) {
+        Barbeiro barbeiroAtual = barbeiroRepository.findById(id).orElseThrow(() -> new NaoEncontradoException("Barbeiro"));
+        if (!verificarBarbeiroAtivo(barbeiroAtual)) throw new IndisponivelException("Usuário");
 
-            UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            Barbeiro barbeiroLogado = login(usuarioLogado.getId());
+        UsuarioDetalhesDto usuarioLogado = (UsuarioDetalhesDto) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Barbeiro barbeiroLogado = login(usuarioLogado.getId());
 
-            if (Objects.isNull(barbeiroLogado) && Objects.isNull(barbeiroLogado.getBarbearia())) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if (Objects.isNull(barbeiroLogado) && Objects.isNull(barbeiroLogado.getBarbearia())) throw new NaoEncontradoException("Barbeiro");
 
-            Barbeiro entity = BarbeiroMapper.toEntity(barbeiroAtualizado, barbeiroLogado.getBarbearia());
-            entity.setId(barbeiroAtual.getId());
+        Barbeiro entity = BarbeiroMapper.toEntity(barbeiroAtualizado, barbeiroLogado.getBarbearia());
+        entity.setId(barbeiroAtual.getId());
 
-            UsuarioCriacaoDto usuarioCriacaoDto = new UsuarioCriacaoDto();
-            usuarioCriacaoDto.setNome(barbeiroAtualizado.getNome());
-            usuarioCriacaoDto.setEmail(barbeiroAtualizado.getEmail());
-            usuarioCriacaoDto.setSenha(barbeiroAtualizado.getSenha());
-            usuarioCriacaoDto.setTipo(UsuarioTipo.BARBEIRO);
+        UsuarioCriacaoDto usuarioCriacaoDto = new UsuarioCriacaoDto();
+        usuarioCriacaoDto.setNome(barbeiroAtualizado.getNome());
+        usuarioCriacaoDto.setEmail(barbeiroAtualizado.getEmail());
+        usuarioCriacaoDto.setSenha(barbeiroAtualizado.getSenha());
+        usuarioCriacaoDto.setTipo(UsuarioTipo.BARBEIRO);
 
-            Usuario usuarioAtualizado = usuarioService.atualizar(barbeiroAtual.getId(), usuarioCriacaoDto);
+        Usuario usuarioAtualizado = usuarioService.atualizar(barbeiroAtual.getId(), usuarioCriacaoDto);
 
-            if (Objects.isNull(usuarioAtualizado)) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Não foi achado um login desse barbeiro");
+        if (Objects.isNull(usuarioAtualizado)) throw new RequisicaoInvalidaException("BarbeiroService");
 
-            entity.setUsuario(usuarioAtualizado);
-            entity.setBarbeiroAtivo(true);
+        entity.setUsuario(usuarioAtualizado);
+        entity.setBarbeiroAtivo(true);
 
-            return BarbeiroMapper.toDto(barbeiroRepository.save(entity));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar avaliação", e);
-        }
+        return barbeiroRepository.save(entity);
     }
 
     // MÉTODO DE DESATIVAR BARBEIRO
     @Transactional
-    public BarbeiroDesativacaoDto desativarBarbeiro(Long id){
-        try {
-            Barbeiro barbeiroAtual = barbeiroRepository.findById(id).orElse(null);
-            if (Objects.isNull(barbeiroAtual)) throw new BadRequestException();
-            barbeiroAtual.setBarbeiroAtivo(false);
-            return BarbeiroMapper.toDtoDesativacao(barbeiroRepository.save(barbeiroAtual));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar avaliação", e);
-        }
+    public Barbeiro desativarBarbeiro(Long id){
+        if (Objects.isNull(id)) throw new EntidadeImprocessavelException("idBarbeiro");
+        Barbeiro barbeiroAtual = barbeiroRepository.findById(id).orElseThrow(() -> new NaoEncontradoException("Barbeiro"));
+        barbeiroAtual.setBarbeiroAtivo(false);
+        return barbeiroRepository.save(barbeiroAtual);
     }
 
     public Barbeiro login(Long usuarioId) {
@@ -164,9 +121,5 @@ public class BarbeiroService {
 
     public boolean verificarBarbeiroAtivo(Barbeiro barbeiro){
         return barbeiro.getBarbeiroAtivo();
-    }
-
-    public BarbeiroListagemDto buscarBarbeiroPorIdDto(Long idBarbeiro) {
-        return BarbeiroMapper.toDto(barbeiroRepository.findByIdAndBarbeiroAtivoTrue(idBarbeiro));
     }
 }

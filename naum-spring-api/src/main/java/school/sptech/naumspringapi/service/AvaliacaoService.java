@@ -1,19 +1,17 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import school.sptech.naumspringapi.entity.Cliente;
-import jakarta.persistence.EntityNotFoundException;
 import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.entity.Avaliacao;
 import school.sptech.naumspringapi.mapper.AvaliacaoMapper;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.AvaliacaoRepository;
+import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoCriacaoDto;
-import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoListagemDto;
+import school.sptech.naumspringapi.exception.RequisicaoInvalidaException;
+import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 import school.sptech.naumspringapi.dto.avaliacaoDto.AvaliacaoAtualizacaoDto;
 
 import java.util.List;
@@ -23,126 +21,64 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AvaliacaoService {
 
-    private final AvaliacaoRepository avaliacaoRepository;
-    private final BarbeariaService barbeariaService;
     private final ClienteService clienteService;
+    private final BarbeariaService barbeariaService;
+    private final AvaliacaoRepository avaliacaoRepository;
 
     @Transactional
-    public AvaliacaoListagemDto criarAvaliacao (AvaliacaoCriacaoDto avaliacao, Long clienteId, Long barbeariaId) {
-        try {
-            if (Objects.isNull(avaliacao) || Objects.isNull(clienteId) || Objects.isNull(barbeariaId)) throw new BadRequestException();
-            Cliente cliente = clienteService.buscarPorId(clienteId);
+    public Avaliacao criarAvaliacao (AvaliacaoCriacaoDto avaliacao, Long clienteId, Long barbeariaId) {
+        if (Objects.isNull(avaliacao) || Objects.isNull(clienteId) || Objects.isNull(barbeariaId)) throw new EntidadeImprocessavelException("Avaliação");
+        Cliente cliente = clienteService.buscarPorId(clienteId);
+        Barbearia barbearia = barbeariaService.buscarPorId(barbeariaId);
+        return avaliacaoRepository.save(AvaliacaoMapper.toEntity(avaliacao, cliente, barbearia));
+    }
+
+    public List<Avaliacao> listarAvaliacoesPorBarbearia (Long barbeariaId) {
+        if (Objects.isNull(barbeariaId)) throw new EntidadeImprocessavelException("Avaliação");
+        Barbearia barbaeria = barbeariaService.buscarPorId(barbeariaId);
+        return avaliacaoRepository.findAllByBarbearia(barbaeria);
+    }
+
+    public List<Avaliacao> listarAvaliacoesPorCliente (Long clienteId) {
+        if (Objects.isNull(clienteId)) throw new EntidadeImprocessavelException("Avaliação");
+        Cliente cliente = clienteService.buscarPorId(clienteId);
+        return avaliacaoRepository.findAllByCliente(cliente);
+    }
+
+    public List<Avaliacao> listarAvaliacoesPorEstrela (Integer estrela) {
+        if (Objects.isNull(estrela)) throw new EntidadeImprocessavelException("Avaliação");
+        return avaliacaoRepository.findAllByQtdEstrela(estrela);
+    }
+
+    public List<Avaliacao> listarAvaliacoesPorEstrelaAndBarbearia(Integer estrela, Long barbeariaId) {
+            if (Objects.isNull(estrela) || Objects.isNull(barbeariaId)) throw new EntidadeImprocessavelException("Avaliação");
             Barbearia barbearia = barbeariaService.buscarPorId(barbeariaId);
-            return AvaliacaoMapper.toDto(avaliacaoRepository.save(AvaliacaoMapper.toEntity(avaliacao, cliente, barbearia)));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao criar avaliação", e);
-        }
+            return avaliacaoRepository.findAllByBarbeariaAndQtdEstrela(barbearia, estrela);
     }
 
-    public List<AvaliacaoListagemDto> listarAvaliacoesPorBarbearia (Long barbeariaId) {
-        try {
-            if (Objects.isNull(barbeariaId)) throw new BadRequestException();
-            Barbearia barbaeria = barbeariaService.buscarPorId(barbeariaId);
-            return AvaliacaoMapper.toDto(avaliacaoRepository.findAllByBarbearia(barbaeria));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar avaliações", e);
-        }
-    }
-
-    public List<AvaliacaoListagemDto> listarAvaliacoesPorCliente (Long clienteId) {
-        try {
-            if (Objects.isNull(clienteId)) throw new BadRequestException();
-            Cliente cliente = clienteService.buscarPorId(clienteId);
-            return AvaliacaoMapper.toDto(avaliacaoRepository.findAllByCliente(cliente));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar avaliações", e);
-        }
-    }
-
-    public List<AvaliacaoListagemDto> listarAvaliacoesPorEstrela (Integer estrela) {
-        try {
-            if (Objects.isNull(estrela)) throw new BadRequestException();
-            return AvaliacaoMapper.toDto(avaliacaoRepository.findAllByQtdEstrela(estrela));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar avaliações", e);
-        }
-    }
-
-    public List<AvaliacaoListagemDto> listarAvaliacoesPorEstrelaAndBarbearia(Integer estrela, Long barbeariaId) {
-        try {
-            if (Objects.isNull(estrela) || Objects.isNull(barbeariaId)) throw new BadRequestException();
-            Barbearia barbearia = barbeariaService.buscarPorId(barbeariaId);
-            return AvaliacaoMapper.toDto(avaliacaoRepository.findAllByBarbeariaAndQtdEstrela(barbearia, estrela));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar avaliações", e);
-        }
-    }
-
-    public List<AvaliacaoListagemDto> listarAvaliacaoDinamica(Integer estrela, Long barbeariaId, Long clienteId) {
-        try {
-            if (Objects.isNull(estrela) && Objects.isNull(clienteId))
-                return AvaliacaoMapper.toDto(avaliacaoRepository.findAllByBarbearia(barbeariaService.buscarPorId(barbeariaId)));
-            else if (Objects.isNull(estrela) && Objects.isNull(barbeariaId))
-                return AvaliacaoMapper.toDto(avaliacaoRepository.findAllByCliente(clienteService.buscarPorId(clienteId)));
-            else if (Objects.isNull(clienteId))
-                return AvaliacaoMapper.toDto(avaliacaoRepository.findAllByBarbeariaAndQtdEstrela(barbeariaService.buscarPorId(barbeariaId), estrela));
-            else if (Objects.isNull(barbeariaId))
-                return AvaliacaoMapper.toDto(avaliacaoRepository.findAllByClienteAndQtdEstrela(clienteService.buscarPorId(clienteId), estrela));
-            else throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Erro ao listar avaliação");
-        }  catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao listar avaliações", e);
-        }
+    public List<Avaliacao> listarAvaliacaoDinamica(Integer estrela, Long barbeariaId, Long clienteId) {
+        if (Objects.isNull(estrela) && Objects.isNull(clienteId))
+            return avaliacaoRepository.findAllByBarbearia(barbeariaService.buscarPorId(barbeariaId));
+        else if (Objects.isNull(estrela) && Objects.isNull(barbeariaId))
+            return avaliacaoRepository.findAllByCliente(clienteService.buscarPorId(clienteId));
+        else if (Objects.isNull(clienteId))
+            return avaliacaoRepository.findAllByBarbeariaAndQtdEstrela(barbeariaService.buscarPorId(barbeariaId), estrela);
+        else if (Objects.isNull(barbeariaId))
+            return avaliacaoRepository.findAllByClienteAndQtdEstrela(clienteService.buscarPorId(clienteId), estrela);
+        else throw new RequisicaoInvalidaException("Avaliações");
     }
 
     @Transactional
-    public AvaliacaoListagemDto atualizarAvaliacao(Long idAvaliacao, AvaliacaoAtualizacaoDto avaliacaoAtualizacaoDto) {
-        try {
-            if (Objects.isNull(idAvaliacao)) throw new BadRequestException();
-            Avaliacao avaliacaoAtual = avaliacaoRepository.findById(idAvaliacao).orElseThrow();
-            avaliacaoAtual.setQtdEstrela(avaliacaoAtualizacaoDto.getQtdEstrela());
-            return AvaliacaoMapper.toDto(avaliacaoRepository.save(avaliacaoAtual));
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao atualizar avaliação", e);
-        }
+    public Avaliacao atualizarAvaliacao(Long idAvaliacao, AvaliacaoAtualizacaoDto avaliacaoAtualizacaoDto) {
+        if (Objects.isNull(idAvaliacao)) throw new EntidadeImprocessavelException("Avaliação");
+        Avaliacao avaliacaoAtual = avaliacaoRepository.findById(idAvaliacao).orElseThrow(() -> new NaoEncontradoException("Avaliação"));
+        avaliacaoAtual.setQtdEstrela(avaliacaoAtualizacaoDto.getQtdEstrela());
+        return avaliacaoRepository.save(avaliacaoAtual);
     }
 
     @Transactional
     public void deletarAvaliacao(Long idAvaliacao) {
-        try {
-            if (Objects.isNull(idAvaliacao)) throw new BadRequestException();
-            avaliacaoRepository.delete(avaliacaoRepository.findById(idAvaliacao).orElseThrow());
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Entidade não encontrada", e);
-        } catch (BadRequestException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Requisição inválida", e);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao deletar avaliação", e);
-        }
+        if (Objects.isNull(idAvaliacao)) throw new EntidadeImprocessavelException("Avaliação");
+        avaliacaoRepository.delete(avaliacaoRepository.findById(idAvaliacao).orElseThrow(() -> new NaoEncontradoException("Avaliação")));
     }
 }
