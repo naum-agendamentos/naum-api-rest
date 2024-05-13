@@ -27,7 +27,6 @@ public class BarbeariaService {
     public Barbearia criarBarbearia(BarbeariaCriacaoDto barbeariaDto) {
         if (Objects.isNull(barbeariaDto)) throw new EntidadeImprocessavelException("Barbearia");
         Barbearia barbearia = BarbeariaMapper.toEntity(barbeariaDto);
-        if(barbeariaRepository.findByLinkBarbeariaAndAtivaTrue(barbearia.getLinkBarbearia())) throw new ConflitoException("Link Barbearia");
         if (!Objects.isNull(barbeariaDto.getEndereco())) {
             Endereco endereco = enderecoService.cadastrarEndereco(barbeariaDto);
             barbearia.setEndereco(endereco);

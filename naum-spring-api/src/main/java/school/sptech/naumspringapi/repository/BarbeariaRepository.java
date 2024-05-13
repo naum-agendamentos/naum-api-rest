@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface BarbeariaRepository extends JpaRepository<Barbearia, Long> {
     List<Barbearia> findByAtivaTrue();
-    boolean findByLinkBarbeariaAndAtivaTrue(String linkBarbearia);
 }
