@@ -19,7 +19,6 @@ public class AgendamentoMapper {
         dto.setId(entity.getId());
         dto.setDataHoraAgendamento(entity.getDataHoraAgendamento());
         dto.setCliente(ClienteMapper.toDto(entity.getCliente()));
-        dto.setServicos(ServicoMapper.toDto(entity.getServico()));
         dto.setBarbeiro(BarbeiroMapper.toDto(entity.getBarbeiro()));
         return dto;
     }
@@ -30,7 +29,6 @@ public class AgendamentoMapper {
         entity.setDataHoraAgendamento(dto.getDataHoraAgendamneto());
         entity.setCliente(cliente);
         entity.setBarbeiro(barbeiro);
-        entity.setServico(dto.getServicos());
         return entity;
     }
 

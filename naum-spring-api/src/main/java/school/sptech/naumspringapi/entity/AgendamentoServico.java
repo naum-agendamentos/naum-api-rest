@@ -4,18 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Getter
 @Setter
-public class Agendamento {
+public class AgendamentoServico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private LocalDateTime dataHoraAgendamento;
+    private Long idAgendamentoServico;
     @ManyToOne
-    private Barbeiro barbeiro;
+    private Agendamento agendamento;
     @ManyToOne
-    private Cliente cliente;
+    private Servico servico;
 }
