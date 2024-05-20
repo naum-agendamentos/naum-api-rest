@@ -8,5 +8,6 @@ public class ServicoListagemDto {
     private Long id;
     private String nomeServico;
     private Double preco;
+    private Integer tempoServico;
     private BarbeariaListagemDto barbearia;
 }

@@ -18,6 +18,7 @@ public class ServicoMapper {
         dto.setId(entity.getId());
         dto.setNomeServico(entity.getNomeServico());
         dto.setPreco(entity.getPreco());
+        dto.setTempoServico(entity.getTempoServico());
         dto.setBarbearia(BarbeariaMapper.toDto(entity.getBarbearia()));
         return dto;
     }
@@ -27,6 +28,7 @@ public class ServicoMapper {
         Servico entity = new Servico();
         entity.setNomeServico(dto.getNomeServico());
         entity.setPreco(dto.getPreco());
+        entity.setTempoServico(dto.getTempoServico());
         entity.setBarbearia(barbearia);
         return entity;
     }

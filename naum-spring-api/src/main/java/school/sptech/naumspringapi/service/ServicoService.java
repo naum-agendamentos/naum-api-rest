@@ -42,6 +42,7 @@ public class ServicoService {
         Servico servicoAtual = servicoRepository.findById(idServico).orElseThrow(() -> new NaoEncontradoException("Serviço"));
         servicoAtual.setNomeServico(servicoDto.getNomeServico());
         servicoAtual.setPreco(servicoDto.getPreco());
+        servicoAtual.setTempoServico(servicoAtual.getTempoServico());
         return servicoRepository.save(servicoAtual);
     }
 

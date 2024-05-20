@@ -13,7 +13,8 @@ public class Servico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nomeServico;
-    private double preco;
+    private Double preco;
+    private Integer tempoServico;
     @ManyToOne
     private Barbearia barbearia;
 }
