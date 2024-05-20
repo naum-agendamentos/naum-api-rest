@@ -52,15 +52,15 @@ public class ClienteController {
         return ResponseEntity.ok(ClienteMapper.toDto(clientes));
     }
 
-    @ApiOperation("Buscar cliente por ID.")
+    @ApiOperation("Buscar cliente por UserId.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Cliente encontrado com sucesso!"),
             @ApiResponse(code = 404, message = "Cliente não encontrado.")
     })
     @Operation(summary = "Buscar cliente por ID", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/{idCliente}")
-    public ResponseEntity<ClienteListagemDto> buscarClientePorId(@PathVariable Long idCliente) {
-        return ResponseEntity.status(HttpStatus.OK).body(ClienteMapper.toDto(clienteService.buscarPorId(idCliente)));
+    @GetMapping("/usuario")
+    public ResponseEntity<ClienteListagemDto> buscarClientePorId(@RequestParam("idUsuario") Long idUsuario) {
+        return ResponseEntity.status(HttpStatus.OK).body(ClienteMapper.toDto(clienteService.buscarPorId(idUsuario)));
     }
 
     @ApiOperation("Atualizar um novo cliente.")

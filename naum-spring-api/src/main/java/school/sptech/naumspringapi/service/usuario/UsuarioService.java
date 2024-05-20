@@ -16,11 +16,13 @@ import school.sptech.naumspringapi.domain.usuario.repository.UsuarioRepository;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.entity.LoginAdm;
+import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.repository.BarbeiroRepository;
 import school.sptech.naumspringapi.repository.ClienteRepository;
 import school.sptech.naumspringapi.repository.LoginAdmRepository;
 import school.sptech.naumspringapi.service.BarbeiroService;
 import school.sptech.naumspringapi.service.ClienteService;
+import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioDetalhesDto;
 import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioLoginDto;
 import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioTokenDto;
 import school.sptech.naumspringapi.service.usuario.dto.UsuarioCriacaoDto;
@@ -165,5 +167,10 @@ public class UsuarioService {
         final String token = gerenciadorTokenJwt.generateToken(authentication);
 
         return UsuarioMapper.of(usuarioAutenticado, token);
+    }
+
+    public Usuario buscarUsuarioPorId(Long idUsuario) {
+        return this.usuarioRepository.findById(idUsuario).orElseThrow(
+                () -> new NaoEncontradoException("usuario"));
     }
 }

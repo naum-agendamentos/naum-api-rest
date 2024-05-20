@@ -16,7 +16,7 @@ INSERT INTO Barbeiro (nome, email, senha, telefone, descricao, barbeiro_ativo, f
 insert into Usuario
     (nome, email, senha, tipo)
 values
-    (null, 'adm@gmail.com', '$2a$10$0/TKTGxdREbWaWjWYhwf6e9P1fPOAMMNqEnZgOG95jnSkHSfkkIrC', 2);
+    (null, 'adm@gmail.com', '$2a$10$0/TKTGxdREbWaWjWYhwf6e9P1fPOAMMNqEnZgOG95jnSkHSfkkIrC', 1);
 
 INSERT INTO Login_Adm (email, senha, usuario_id) VALUES
 ('adm@gmail.com', '$2a$10$0/TKTGxdREbWaWjWYhwf6e9P1fPOAMMNqEnZgOG95jnSkHSfkkIrC', 2);

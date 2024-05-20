@@ -47,6 +47,11 @@ public class ClienteService {
         return clienteRepository.findById(id).orElseThrow(() -> new NaoEncontradoException("Cliente"));
     }
 
+    public Cliente buscarPorUsuario(Long idUsuario) {
+        Usuario usuario = usuarioService.buscarUsuarioPorId(idUsuario);
+        return clienteRepository.findByUsuario(usuario);
+    }
+
     public List<Cliente> listarClientes() {
         return clienteRepository.findAll();
     }
