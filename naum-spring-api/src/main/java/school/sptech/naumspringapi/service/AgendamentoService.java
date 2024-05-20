@@ -54,13 +54,13 @@ public class AgendamentoService {
         return agendamentoRepository.findAllByDataHoraAgendamentoAndBarbeiro(data, barbeiro);
     }
 
-    public Agendamento atualizarAgendamentoPorId(Long idAgendamento, AgendamentoAtualizacaoDto agendamento) {
-        if (Objects.isNull(idAgendamento) || Objects.isNull(agendamento)) throw new EntidadeImprocessavelException("idAgendamento");
-        Agendamento agendamentoAtual = agendamentoRepository.findById(idAgendamento).orElseThrow(() -> new NaoEncontradoException("agendamento"));
-        agendamentoAtual.setDataHoraAgendamento(agendamento.getDataHoraAgendamneto());
-        agendamentoAtual.setServico(agendamento.getServicos());
-        return agendamentoRepository.save(agendamentoAtual);
-    }
+//    public Agendamento atualizarAgendamentoPorId(Long idAgendamento, AgendamentoAtualizacaoDto agendamento) {
+//        if (Objects.isNull(idAgendamento) || Objects.isNull(agendamento)) throw new EntidadeImprocessavelException("idAgendamento");
+//        Agendamento agendamentoAtual = agendamentoRepository.findById(idAgendamento).orElseThrow(() -> new NaoEncontradoException("agendamento"));
+//        agendamentoAtual.setDataHoraAgendamento(agendamento.getDataHoraAgendamneto());
+//        agendamentoAtual.setServico(agendamento.getServicos());
+//        return agendamentoRepository.save(agendamentoAtual);
+//    }
 
     @Transactional
     public void delearAgendamento(Long idAgendamento) {

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.*;
 public class BarbeiroCriacaoDto {
     @NotNull(message = "(Obrigatório) O 'nome' do barbeiro não pode ser nulo.")
     @NotBlank(message = "O 'nome' do barbeiro não pode estar em branco.")
+    @Pattern(regexp = "^[^0-9]*$", message = "O nome não deve conter números")
     private String nome;
     @Email(message = "O 'email' do barbeiro deve ser válido.")
     @NotNull(message = "(Obrigatório) O 'email' do barbeiro não pode ser nulo.")

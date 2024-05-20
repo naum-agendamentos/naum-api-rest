@@ -64,17 +64,17 @@ public class AgendamentoController {
             @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
             @ApiResponse(code = 404, message = "Agendamento não encontrado.")
     })
-    @Operation(summary = "Buscar um agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
-    @PutMapping("/{idAgendamento}")
-    public ResponseEntity<AgendamentoListagemDto> atualizarAgendamento(Long idAgendamento, @RequestBody AgendamentoAtualizacaoDto agendamentoDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(AgendamentoMapper.toDto(agendamentoService.atualizarAgendamentoPorId(idAgendamento, agendamentoDto)));
-    }
+//    @Operation(summary = "Buscar um agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
+//    @PutMapping("/{idAgendamento}")
+//    public ResponseEntity<AgendamentoListagemDto> atualizarAgendamento(Long idAgendamento, @RequestBody AgendamentoAtualizacaoDto agendamentoDto) {
+//        return ResponseEntity.status(HttpStatus.OK).body(AgendamentoMapper.toDto(agendamentoService.atualizarAgendamentoPorId(idAgendamento, agendamentoDto)));
+//    }
 
-    @ApiOperation("Deletar um agendamento pelo ID.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
-            @ApiResponse(code = 404, message = "Agendamento não encontrado.")
-    })
+//    @ApiOperation("Deletar um agendamento pelo ID.")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
+//            @ApiResponse(code = 404, message = "Agendamento não encontrado.")
+//    })
     @Operation(summary = "Buscar um agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping
     public ResponseEntity<Void> deletarAgendamento(Long idAgendamento) {
