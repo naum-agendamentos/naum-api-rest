@@ -9,8 +9,10 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.mapper.ClienteMapper;
+import school.sptech.naumspringapi.service.AgendamentoService;
 import school.sptech.naumspringapi.service.ClienteService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
@@ -25,6 +27,8 @@ import java.util.List;
 public class ClienteController {
 
     private final ClienteService clienteService;
+
+    private final AgendamentoService agendamentoService;
 
     @ApiOperation("Cadastrar um novo cliente.")
     @ApiResponses(value = {
@@ -85,4 +89,10 @@ public class ClienteController {
     public ResponseEntity<Void> deletarCliente(@PathVariable Long idCliente) {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @GetMapping("/{clienteId}/agendamentos")
+    public List<Agendamento> listarAgendamentosPorCliente(@PathVariable Long clienteId) {
+        return agendamentoService.listarPorCliente(clienteId);
+    }
+
 }

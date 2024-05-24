@@ -6,6 +6,7 @@ import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Agendamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.time.LocalDate;
 
@@ -13,7 +14,6 @@ import java.time.LocalDate;
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
     List<Agendamento> findByCliente(Cliente cliente);
     List<Agendamento> findByBarbeiro(Barbeiro barbeiro);
-    List<Agendamento> findAllByDataHoraAgendamentoAndCliente(LocalDate dataAgendamento, Cliente cliente);
-    List<Agendamento> findAllByDataHoraAgendamentoAndBarbeiro(LocalDate dataAgendamento, Barbeiro barbeiro);
-
+    List<Agendamento> findByBarbeiroId(Long barbeiroId);
+    List<Agendamento> findByClienteId(Long clienteId);
 }

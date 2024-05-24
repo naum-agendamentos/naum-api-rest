@@ -17,4 +17,5 @@ public class Servico {
     private Integer tempoServico;
     @ManyToOne
     private Barbearia barbearia;
+
 }

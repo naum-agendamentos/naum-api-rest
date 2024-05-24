@@ -10,8 +10,10 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
+import school.sptech.naumspringapi.service.AgendamentoService;
 import school.sptech.naumspringapi.service.BarbeiroService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
@@ -28,6 +30,8 @@ import java.util.List;
 public class BarbeiroController {
 
     private final BarbeiroService barbeiroService;
+
+    private final AgendamentoService agendamentoService;
 
     @ApiOperation("Cadastrar um barbeiro novo.")
     @ApiResponses(value = {
@@ -87,5 +91,10 @@ public class BarbeiroController {
     @PutMapping("/desativar/{id}")
     public ResponseEntity<BarbeiroDesativacaoDto> desativarBarbeiro(@PathVariable Long id){
         return ResponseEntity.status(200).body(BarbeiroMapper.toDtoDesativacao(barbeiroService.desativarBarbeiro(id)));
+    }
+
+    @GetMapping("/{barbeiroId}/agendamentos")
+    public List<Agendamento> listarAgendamentosPorBarbeiro(@PathVariable Long barbeiroId) {
+        return agendamentoService.listarPorBarbeiro(barbeiroId);
     }
 }

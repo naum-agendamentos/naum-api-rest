@@ -5,6 +5,8 @@ import lombok.Setter;
 import jakarta.persistence.*;
 import school.sptech.naumspringapi.domain.usuario.Usuario;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -20,4 +22,7 @@ public class Cliente {
 
     @ManyToOne
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Agendamento> agendamentos;
 }
