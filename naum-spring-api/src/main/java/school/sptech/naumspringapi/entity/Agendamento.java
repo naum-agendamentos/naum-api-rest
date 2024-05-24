@@ -17,6 +17,7 @@ public class Agendamento {
     private Long id;
     private LocalDate dataAgendamento;
     private LocalTime horaAgendamento;
+    private Integer duracaoServico;
     @ManyToOne
     private Barbeiro barbeiro;
     @ManyToOne

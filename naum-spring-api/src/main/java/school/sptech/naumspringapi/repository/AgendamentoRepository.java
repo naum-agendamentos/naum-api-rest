@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
     List<Agendamento> findByCliente(Cliente cliente);
     List<Agendamento> findByBarbeiro(Barbeiro barbeiro);
-    List<Agendamento> findAllByDataHoraAgendamentoAndCliente(LocalDate dataAgendamento, Cliente cliente);
-    List<Agendamento> findAllByDataHoraAgendamentoAndBarbeiro(LocalDate dataAgendamento, Barbeiro barbeiro);
+    List<Agendamento> findAllByDataAgendamentoAndCliente(LocalDate dataAgendamento, Cliente cliente);
+    List<Agendamento> findAllByDataAgendamentoGreaterThanEqualAndBarbeiro(LocalDate dataAgendamento, Barbeiro barbeiro);
 
 }

@@ -1,5 +1,6 @@
 package school.sptech.naumspringapi.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoListagemDto;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Agendamento;
@@ -39,9 +41,9 @@ public class AgendamentoController {
     })
     @Operation(summary = "Criar um agendamento", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
-    public ResponseEntity<AgendamentoListagemDto> Agendar(@RequestBody AgendamentoCriacaoDto agendamentoDto, @RequestParam("barbeiro") Barbeiro barbeiro, @RequestParam("cliente") Cliente cliente) {
-        Agendamento agendamento = agendamentoService.criarAgendamento(agendamentoDto, barbeiro, cliente);
-        URI uri = URI.create("/clientes/" + cliente.getId() + "/agendamentos");
+    public ResponseEntity<AgendamentoListagemDto> Agendar(@RequestBody @Valid AgendamentoCriacaoDto agendamentoDto, @RequestBody List<ServicoListagemDto> servicos, @RequestParam("barbeiroId") Long barbeiroId, @RequestParam("clienteId") Long clienteId) {
+        Agendamento agendamento = agendamentoService.criarAgendamento(agendamentoDto, barbeiroId, clienteId, servicos);
+        URI uri = URI.create("/clientes/" + clienteId + "/agendamentos");
         return ResponseEntity.created(uri).body(AgendamentoMapper.toDto(agendamento));
     }
 
@@ -54,7 +56,7 @@ public class AgendamentoController {
     @Operation(summary = "Listar agendamentos", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<List<AgendamentoListagemDto>> listarAgendamentos(@RequestParam("idBarbeiro") Long idBarbeiro) {
-        List<Agendamento> agendamentos = agendamentoService.listarAgendamentosPorBarbeiro(idBarbeiro);
+        List<AgendamentoListagemDto> agendamentos = agendamentoService.listarAgendamentosPorBarbeiro(idBarbeiro);
         if (agendamentos.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         return ResponseEntity.status(HttpStatus.OK).body(AgendamentoMapper.toDto(agendamentos));
     }

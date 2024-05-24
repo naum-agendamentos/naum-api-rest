@@ -6,6 +6,6 @@ import school.sptech.naumspringapi.entity.Servico;
 @Data
 public class AgendamentoServicoAtualizacaoDto {
     private Long idAgendamentoServico;
-    private AgendamentoAtualizacaoDto agendamentoAtualizacaoDto;
-    private Servico servico;
+    private Long agendamentoId;
+    private Long servicoId;
 }
