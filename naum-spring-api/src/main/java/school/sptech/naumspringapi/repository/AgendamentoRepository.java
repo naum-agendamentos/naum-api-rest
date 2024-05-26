@@ -12,8 +12,8 @@ import java.time.LocalDate;
 
 @Repository
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
-    List<Agendamento> findByCliente(Cliente cliente);
-    List<Agendamento> findByBarbeiro(Barbeiro barbeiro);
+//    List<Agendamento> findByCliente(Cliente cliente);
+//    List<Agendamento> findByBarbeiro(Barbeiro barbeiro);
     List<Agendamento> findByBarbeiroId(Long barbeiroId);
     List<Agendamento> findByClienteId(Long clienteId);
 }

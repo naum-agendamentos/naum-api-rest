@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Agendamento;
+import school.sptech.naumspringapi.mapper.AgendamentoMapper;
 import school.sptech.naumspringapi.service.AgendamentoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoCriacaoDto;
@@ -23,6 +24,7 @@ import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoAtualizacaoDto;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Api(tags = "AgendamentoController", description = "Controller de Agendamentos.")
 @RestController
@@ -30,23 +32,47 @@ import java.util.List;
 @RequestMapping("/agendamentos")
 public class AgendamentoController {
 
-    @Autowired
-    private AgendamentoService agendamentoService;
+    private final AgendamentoService agendamentoService;
 
+    @ApiOperation(value = "Criar um agendamento.", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Agendamento criado com sucesso!"),
+            @ApiResponse(code = 422, message = "Dados inválidos."),
+            @ApiResponse(code = 404, message = "Barbeiro ou cliente não encontrados.")
+    })
+    @Operation(summary = "Criar um agendamento", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping
-    public Agendamento criarAgendamento(@RequestParam Long barbeiroId, @RequestParam Long clienteId, @RequestParam List<Long> servicoIds, @RequestParam LocalDateTime inicio) {
-        return agendamentoService.criarAgendamento(barbeiroId, clienteId, servicoIds, inicio);
+    public ResponseEntity<AgendamentoListagemDto> criarAgendamento(@RequestParam Long barbeiroId, @RequestParam Long clienteId, @RequestParam List<Long> servicoIds, @RequestParam LocalDateTime inicio) {
+        Agendamento agendamento = agendamentoService.criarAgendamento(barbeiroId, clienteId, servicoIds, inicio);
+        URI uri = URI.create("/agendamentos/" + agendamento.getId());
+        return ResponseEntity.created(uri).body(AgendamentoMapper.toDto(agendamento));
     }
 
+    @ApiOperation(value = "Buscar um agendamento pelo ID.", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
+            @ApiResponse(code = 404, message = "Agendamento não encontrado.")
+    })
+    @Operation(summary = "Buscar um agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{id}")
-    public Agendamento buscarAgendamento(@PathVariable Long id) {
-        return agendamentoService.buscarPorId(id);
+    public ResponseEntity<AgendamentoListagemDto> buscarAgendamento(@PathVariable Long id) {
+        return ResponseEntity.ok(AgendamentoMapper.toDto(agendamentoService.buscarPorId(id)));
     }
 
+    @ApiOperation(value = "Listar os agendamentos por barbeiro.", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agendamentos encontrados com sucesso!"),
+            @ApiResponse(code = 204, message = "Não existem agendamentos para retornar."),
+            @ApiResponse(code = 404, message = "Barbeiro não encontrado.")
+    })
+    @Operation(summary = "Listar agendamentos por babeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/barbeiro/{barbeiroId}")
-    public List<Agendamento> listarAgendamentosPorBarbeiro(@PathVariable Long barbeiroId) {
-        return agendamentoService.listarPorBarbeiro(barbeiroId);
+    public ResponseEntity<List<AgendamentoListagemDto>> listarAgendamentosPorBarbeiro(@PathVariable Long barbeiroId) {
+        List<Agendamento> agendamentos = agendamentoService.listarPorBarbeiro(barbeiroId);
+        if (agendamentos.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(AgendamentoMapper.toDto(agendamentos));
     }
+
 
 //    private final AgendamentoService agendamentoService;
 //

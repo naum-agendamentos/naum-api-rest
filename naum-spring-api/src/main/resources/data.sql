@@ -20,3 +20,10 @@ values
 
 INSERT INTO Login_Adm (email, senha, usuario_id) VALUES
 ('adm@gmail.com', '$2a$10$0/TKTGxdREbWaWjWYhwf6e9P1fPOAMMNqEnZgOG95jnSkHSfkkIrC', 2);
+
+INSERT INTO Servico VALUES
+    (1, 'corte simples', 20.00, 30, 1);
+
+-- Inserir dados na tabela agendamento
+INSERT INTO Agendamento (id, barbeiro_id, cliente_id, inicio, fim, valor_total)
+VALUES (1, 1, 1, '2024-05-25 14:30:00', '2024-05-25 15:00:00', 50.00);

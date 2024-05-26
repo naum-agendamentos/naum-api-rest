@@ -1,6 +1,7 @@
 package school.sptech.naumspringapi.mapper;
 
 import org.springframework.stereotype.Component;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
@@ -56,6 +57,17 @@ public class BarbeiroMapper {
         dto.setId(entity.getId());
         dto.setBarbeiroAtivo(entity.getBarbeiroAtivo());
 
+        return dto;
+    }
+
+    public static AgendamentoListagemDto.BarbeiroListagemDto toBarbeiroAgendadoDto(Barbeiro entity) {
+        if (Objects.isNull(entity)) return null;
+        AgendamentoListagemDto.BarbeiroListagemDto dto = new AgendamentoListagemDto.BarbeiroListagemDto();
+        dto.setId(entity.getId());
+        dto.setEmail(entity.getEmail());
+        dto.setNome(entity.getNome());
+        dto.setTelefone(entity.getTelefone());
+        dto.setFoto(entity.getFoto());
         return dto;
     }
 }

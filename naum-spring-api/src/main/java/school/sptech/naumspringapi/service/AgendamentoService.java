@@ -26,33 +26,23 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class AgendamentoService {
-    @Autowired
-    private AgendamentoRepository agendamentoRepository;
 
-    @Autowired
-    private BarbeiroRepository barbeiroRepository;
-
-    @Autowired
-    private ClienteRepository clienteRepository;
-
-    @Autowired
-    private ServicoRepository servicoRepository;
+    private final AgendamentoRepository agendamentoRepository;
+    private final ServicoRepository servicoRepository;
+    private final BarbeiroService barbeiroService;
+    private final ClienteService clienteService;
 
     @Transactional
     public Agendamento criarAgendamento(Long barbeiroId, Long clienteId, List<Long> servicoIds, LocalDateTime inicio) {
-        Barbeiro barbeiro = barbeiroRepository.findById(barbeiroId)
-                .orElseThrow(() -> new IllegalArgumentException("Barbeiro não encontrado"));
-        Cliente cliente = clienteRepository.findById(clienteId)
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado"));
+        Barbeiro barbeiro = barbeiroService.buscarPorId(barbeiroId);
+        Cliente cliente = clienteService.buscarPorId(clienteId);
 
         // Verificar se todos os IDs de serviço são válidos
         Set<Long> servicosValidos = servicoIds.stream()
-                .filter(id -> servicoRepository.existsById(id))
+                .filter(servicoRepository::existsById)
                 .collect(Collectors.toSet());
 
-        if (servicosValidos.size() != servicoIds.size()) {
-            throw new IllegalArgumentException("Um ou mais IDs de serviço são inválidos.");
-        }
+        if (servicosValidos.size() != servicoIds.size()) throw new EntidadeImprocessavelException("Serviço (Um ou mais IDs de serviço são inválidos.)");
 
         // Calcular a data de fim com base na duração dos serviços
         List<Servico> servicos = servicoRepository.findAllById(servicosValidos);
@@ -87,7 +77,7 @@ public class AgendamentoService {
 
     public Agendamento buscarPorId(Long id) {
         return agendamentoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Agendamento não encontrado"));
+                .orElseThrow(() -> new NaoEncontradoException("Agendamento"));
     }
 
     public List<Agendamento> listarPorBarbeiro(Long barbeiroId) {

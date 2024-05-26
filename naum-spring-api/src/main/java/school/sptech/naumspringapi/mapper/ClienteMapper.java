@@ -1,6 +1,7 @@
 package school.sptech.naumspringapi.mapper;
 
 import org.springframework.stereotype.Component;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
@@ -37,5 +38,15 @@ public class ClienteMapper {
 
     public static List<ClienteListagemDto> toDto(List<Cliente> entities) {
         return entities.stream().map(ClienteMapper::toDto).toList();
+    }
+
+    public static AgendamentoListagemDto.ClienteListagemDto toClienteAgendamentoDto(Cliente entity) {
+        if (Objects.isNull(entity)) return null;
+        AgendamentoListagemDto.ClienteListagemDto dto = new AgendamentoListagemDto.ClienteListagemDto();
+        dto.setId(entity.getId());
+        dto.setNome(entity.getNome());
+        dto.setEmail(entity.getEmail());
+        dto.setTelefone(entity.getTelefone());
+        return dto;
     }
 }
