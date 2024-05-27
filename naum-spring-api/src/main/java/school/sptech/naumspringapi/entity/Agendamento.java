@@ -31,6 +31,6 @@ public class Agendamento {
 
     private LocalDateTime inicio;
     private LocalDateTime fim;
-    private double valorTotal; // Novo atributo
+    private Double valorTotal; // Novo atributo
 
 }

@@ -11,7 +11,6 @@ public class ClienteCriacaoDto {
     private String email;
     @NotNull(message = "(Obrigatório) O 'nome' do cliente não pode ser nulo.")
     @NotBlank(message = "O 'nome' do cliente não pode estar em branco.")
-    @Pattern(regexp = "^[^0-9]*$", message = "O nome não deve conter números")
     private String nome;
     @NotNull(message = "(Obrigatório) O 'telefone' do cliente não pode ser nulo.")
     @NotBlank(message = "O 'telefone' do cliente não pode estar em branco.")

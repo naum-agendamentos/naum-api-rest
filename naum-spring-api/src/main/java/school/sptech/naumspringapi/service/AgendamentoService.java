@@ -42,7 +42,8 @@ public class AgendamentoService {
                 .filter(servicoRepository::existsById)
                 .collect(Collectors.toSet());
 
-        if (servicosValidos.size() != servicoIds.size()) throw new EntidadeImprocessavelException("Serviço (Um ou mais IDs de serviço são inválidos.)");
+        if (servicosValidos.size() != servicoIds.size())
+            throw new EntidadeImprocessavelException("Serviço (Um ou mais IDs de serviço são inválidos.)");
 
         // Calcular a data de fim com base na duração dos serviços
         List<Servico> servicos = servicoRepository.findAllById(servicosValidos);

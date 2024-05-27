@@ -9,10 +9,14 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
 import school.sptech.naumspringapi.entity.Agendamento;
+import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Cliente;
+import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.mapper.ClienteMapper;
 import school.sptech.naumspringapi.service.AgendamentoService;
+import school.sptech.naumspringapi.service.BarbeiroService;
 import school.sptech.naumspringapi.service.ClienteService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
@@ -27,7 +31,7 @@ import java.util.List;
 public class ClienteController {
 
     private final ClienteService clienteService;
-
+    private final BarbeiroService barbeiroService;
     private final AgendamentoService agendamentoService;
 
     @ApiOperation("Cadastrar um novo cliente.")
@@ -64,7 +68,7 @@ public class ClienteController {
     @Operation(summary = "Buscar cliente por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/usuario")
     public ResponseEntity<ClienteListagemDto> buscarClientePorId(@RequestParam("idUsuario") Long idUsuario) {
-        return ResponseEntity.status(HttpStatus.OK).body(ClienteMapper.toDto(clienteService.buscarPorId(idUsuario)));
+        return ResponseEntity.status(HttpStatus.OK).body(ClienteMapper.toDto(clienteService.buscarPorUsuario(idUsuario)));
     }
 
     @ApiOperation("Atualizar um novo cliente.")
@@ -93,6 +97,17 @@ public class ClienteController {
     @GetMapping("/{clienteId}/agendamentos")
     public List<Agendamento> listarAgendamentosPorCliente(@PathVariable Long clienteId) {
         return agendamentoService.listarPorCliente(clienteId);
+    }
+
+    @ApiOperation("Buscar barbeiros para clientes.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Barbeiros buscados com sucesso!"),
+            @ApiResponse(code = 204, message = "Sem barbeiros para retornar"),
+    })
+    @Operation(summary = "Buscar barbeiros por barbearia para clientes", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/berbeiros")
+    public ResponseEntity<List<BarbeiroListagemDto>> listarBarbeirosParaCliente(@PathVariable Long barbeariaId) {
+        return ResponseEntity.ok(BarbeiroMapper.toDto(barbeiroService.listaBarbeirosPorBarbearia()));
     }
 
 }

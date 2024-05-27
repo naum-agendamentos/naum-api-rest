@@ -71,6 +71,10 @@ public class BarbeiroService {
         return barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId());
     }
 
+    public List<Barbeiro> listaBarbeirosPorBarbearia(Long idBarbearia) {
+        return barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(idBarbearia);
+    }
+
     public List<Barbeiro> listarBarbeiros() {
         return barbeiroRepository.findByBarbeiroAtivoTrue();
     }
@@ -101,6 +105,7 @@ public class BarbeiroService {
 
         entity.setUsuario(usuarioAtualizado);
         entity.setBarbeiroAtivo(true);
+        entity.setAgendamentos(barbeiroAtual.getAgendamentos());
 
         return barbeiroRepository.save(entity);
     }

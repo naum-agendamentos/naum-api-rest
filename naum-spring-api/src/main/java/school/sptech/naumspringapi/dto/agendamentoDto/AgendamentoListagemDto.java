@@ -1,8 +1,10 @@
 package school.sptech.naumspringapi.dto.agendamentoDto;
 
 import lombok.Data;
+import school.sptech.naumspringapi.entity.Servico;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class AgendamentoListagemDto {
@@ -10,6 +12,8 @@ public class AgendamentoListagemDto {
     private LocalDateTime dataHoraAgendamento;
     private ClienteListagemDto cliente;
     private BarbeiroListagemDto barbeiro;
+    private Double valorTotal;
+    private List<Servico> servicos;
 
     @Data
     public static class ClienteListagemDto {
@@ -26,5 +30,13 @@ public class AgendamentoListagemDto {
         private String email;
         private String telefone;
         private String foto;
+    }
+
+    @Data
+    public static class ServicoListagemDto {
+        private Long id;
+        private String nome;
+        private Double preco;
+        private Integer tempoServico;
     }
 }
