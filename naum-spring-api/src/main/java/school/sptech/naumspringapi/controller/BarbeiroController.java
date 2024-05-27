@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
@@ -93,8 +94,14 @@ public class BarbeiroController {
         return ResponseEntity.status(200).body(BarbeiroMapper.toDtoDesativacao(barbeiroService.desativarBarbeiro(id)));
     }
 
-    @GetMapping("/{barbeiroId}/agendamentos")
-    public List<Agendamento> listarAgendamentosPorBarbeiro(@PathVariable Long barbeiroId) {
-        return agendamentoService.listarPorBarbeiro(barbeiroId);
+    @ApiOperation("Reativar barbeiro por ID.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Barbeiro Reativado com sucesso!"),
+            @ApiResponse(code = 404, message = "Barbeiro não encontrado.")
+    })
+    @Operation(summary = "Reativar um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/reativar/{idBarbeiro}")
+    public ResponseEntity<BarbeiroDesativacaoDto> reativarBarbeiro(@PathVariable Long idBarbeiro){
+        return ResponseEntity.status(200).body(BarbeiroMapper.toDtoDesativacao(barbeiroService.reativarBarbeiro(idBarbeiro)));
     }
 }

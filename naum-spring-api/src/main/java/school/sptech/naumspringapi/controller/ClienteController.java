@@ -106,7 +106,7 @@ public class ClienteController {
     })
     @Operation(summary = "Buscar barbeiros por barbearia para clientes", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/berbeiros")
-    public ResponseEntity<List<BarbeiroListagemDto>> listarBarbeirosParaCliente(@PathVariable Long barbeariaId) {
+    public ResponseEntity<List<BarbeiroListagemDto>> listarBarbeirosParaCliente() {
         return ResponseEntity.ok(BarbeiroMapper.toDto(barbeiroService.listaBarbeirosPorBarbearia()));
     }
 

@@ -127,4 +127,13 @@ public class BarbeiroService {
     public boolean verificarBarbeiroAtivo(Barbeiro barbeiro){
         return barbeiro.getBarbeiroAtivo();
     }
+
+    @Transactional
+    public Barbeiro reativarBarbeiro(Long id){
+        if (Objects.isNull(id)) throw new EntidadeImprocessavelException("idBarbeiro");
+        Barbeiro barbeiroAtual = barbeiroRepository.findById(id).orElseThrow(() -> new NaoEncontradoException("Barbeiro"));
+        if(barbeiroAtual.getBarbeiroAtivo()) throw new RequisicaoInvalidaException("Barbeiro");
+        barbeiroAtual.setBarbeiroAtivo(true);
+        return barbeiroRepository.save(barbeiroAtual);
+    }
 }

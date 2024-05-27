@@ -2,6 +2,7 @@ package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Servico;
 import school.sptech.naumspringapi.mapper.ServicoMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoAtualizacaoDto;
 import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,6 +26,22 @@ public class ServicoService {
     public List<Servico> listarServicosPorBarbearia(Long idBarbearia) {
         if (Objects.isNull(idBarbearia)) throw new EntidadeImprocessavelException("idBarbearia");
         return servicoRepository.findAllByBarbearia(barbeariaService.buscarPorId(idBarbearia));
+    }
+
+    public List<Servico> buscarServicosPorIds(List<Long> idServicos) {
+        List<Servico> servicos = new ArrayList<>();
+        for (Long idServico : idServicos) {
+            servicos.add(servicoRepository.findById(idServico).orElseThrow(() -> new NaoEncontradoException("Serviço")));
+        }
+        return servicos;
+    }
+
+    public List<List<Servico>> buscarServicosPorAgendamentos(List<Agendamento> agendamentos) {
+        List<List<Servico>> servicos = new ArrayList<>();
+        for (Agendamento agendamento : agendamentos) {
+            servicos.add(buscarServicosPorIds(agendamento.getServicosIds()));
+        }
+        return servicos;
     }
 
     @Transactional
