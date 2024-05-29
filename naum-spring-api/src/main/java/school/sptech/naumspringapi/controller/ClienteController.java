@@ -9,10 +9,13 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemDto;
 import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Cliente;
+import school.sptech.naumspringapi.entity.Servico;
+import school.sptech.naumspringapi.mapper.AgendamentoMapper;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.mapper.ClienteMapper;
 import school.sptech.naumspringapi.service.AgendamentoService;
@@ -21,9 +24,12 @@ import school.sptech.naumspringapi.service.ClienteService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteCriacaoDto;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
+import school.sptech.naumspringapi.service.ServicoService;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @RestController
@@ -33,6 +39,7 @@ public class ClienteController {
     private final ClienteService clienteService;
     private final BarbeiroService barbeiroService;
     private final AgendamentoService agendamentoService;
+    private final ServicoService servicoService;
 
     @ApiOperation("Cadastrar um novo cliente.")
     @ApiResponses(value = {
@@ -94,9 +101,22 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @ApiOperation("Buscar agendamentos por cliente.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agendamentos listados com sucesso!"),
+            @ApiResponse(code = 204, message = "Sem agendamentos para retornar"),
+    })
+    @Operation(summary = "Buscar agendamentos por cliente", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{clienteId}/agendamentos")
-    public List<Agendamento> listarAgendamentosPorCliente(@PathVariable Long clienteId) {
-        return agendamentoService.listarPorCliente(clienteId);
+    public ResponseEntity<List<AgendamentoListagemDto>> listarAgendamentosPorCliente(@PathVariable Long clienteId) {
+        List<Agendamento> agendamentos = agendamentoService.listarPorCliente(clienteId);
+        if (agendamentos.isEmpty()) return ResponseEntity.noContent().build();
+        List<List<Servico>> listasDeServicos = servicoService.buscarServicosPorAgendamentos(agendamentos);
+        List<AgendamentoListagemDto> agendamentoListagemDtos = new ArrayList<>();
+        for (int i = 0; i < agendamentos.size(); i++) {
+            agendamentoListagemDtos.add(AgendamentoMapper.toDto(agendamentos.get(i), listasDeServicos.get(i)));
+        }
+        return ResponseEntity.ok(agendamentoListagemDtos);
     }
 
     @ApiOperation("Buscar barbeiros para clientes.")

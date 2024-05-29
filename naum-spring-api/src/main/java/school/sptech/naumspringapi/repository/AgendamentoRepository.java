@@ -1,5 +1,7 @@
 package school.sptech.naumspringapi.repository;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.entity.Barbeiro;
@@ -12,8 +14,13 @@ import java.time.LocalDate;
 
 @Repository
 public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> {
-//    List<Agendamento> findByCliente(Cliente cliente);
-//    List<Agendamento> findByBarbeiro(Barbeiro barbeiro);
     List<Agendamento> findByBarbeiroId(Long barbeiroId);
     List<Agendamento> findByClienteId(Long clienteId);
+    @Query("SELECT DISTINCT a FROM Agendamento a JOIN a.servicosIds s " +
+            "WHERE s IN :servicosId AND a.inicio >= :startDate AND a.inicio <= :endDate")
+    List<Agendamento> findByServicosIdsContainingAndDateRange(@Param("servicosId") List<Long> servicosId,
+                                                              @Param("startDate") LocalDateTime startDate,
+                                                              @Param("endDate") LocalDateTime endDate);
+    List<Agendamento> findByInicioEquals(LocalDateTime data);
+
 }

@@ -85,57 +85,29 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentoListagemDtos);
     }
 
+    @ApiOperation(value = "Atualizar um agendamento por ID.", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agendamento atualizado com sucesso!"),
+            @ApiResponse(code = 404, message = "Agendamento não encontrado.")
+    })
+    @Operation(summary = "Atualizar agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/{idAgendamento}")
+    public ResponseEntity<AgendamentoListagemDto> atualizarAgendamento(@PathVariable Long idAgendamento, @RequestParam Long barbeiroId, @RequestParam Long clienteId, @RequestParam List<Long> servicoIds, @RequestParam LocalDateTime inicio){
+        Agendamento agendamento = agendamentoService.atualizarAgendamento(idAgendamento, barbeiroId, clienteId, servicoIds, inicio);
+        List<Servico> servicos = servicoService.buscarServicosPorIds(agendamento.getServicosIds());
+        return ResponseEntity.ok(AgendamentoMapper.toDto(agendamento, servicos));
+    }
 
-//    private final AgendamentoService agendamentoService;
-//
-//    @ApiOperation("Criar um agendamento.")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 201, message = "Agendamento criado com sucesso!"),
-//            @ApiResponse(code = 422, message = "Dados inválidos."),
-//            @ApiResponse(code = 404, message = "Barbeiro ou cliente não encontrados.")
-//    })
-//    @Operation(summary = "Criar um agendamento", security = @SecurityRequirement(name = "bearerAuth"))
-//    @PostMapping
-//    public ResponseEntity<AgendamentoListagemDto> Agendar(@RequestBody AgendamentoCriacaoDto agendamentoDto, @RequestParam("barbeiro") Barbeiro barbeiro, @RequestParam("cliente") Cliente cliente) {
-//        Agendamento agendamento = agendamentoService.criarAgendamento(agendamentoDto, barbeiro, cliente);
-//        URI uri = URI.create("/clientes/" + cliente.getId() + "/agendamentos");
-//        return ResponseEntity.created(uri).body(AgendamentoMapper.toDto(agendamento));
-//    }
-//
-//    @ApiOperation("Listar os agendamentos a depender do barbeiro logado buscando.")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "Agendamentos encontrados com sucesso!"),
-//            @ApiResponse(code = 204, message = "Não existem agendamentos para retornar."),
-//            @ApiResponse(code = 404, message = "Barbeiro não encontrado.")
-//    })
-//    @Operation(summary = "Listar agendamentos", security = @SecurityRequirement(name = "bearerAuth"))
-//    @GetMapping
-//    public ResponseEntity<List<AgendamentoListagemDto>> listarAgendamentos(@RequestParam("idBarbeiro") Long idBarbeiro) {
-//        List<Agendamento> agendamentos = agendamentoService.listarAgendamentosPorBarbeiro(idBarbeiro);
-//        if (agendamentos.isEmpty()) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//        return ResponseEntity.status(HttpStatus.OK).body(AgendamentoMapper.toDto(agendamentos));
-//    }
-//
-//    @ApiOperation("Atualizar um agendamento pelo ID.")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
-//            @ApiResponse(code = 404, message = "Agendamento não encontrado.")
-//    })
-////    @Operation(summary = "Buscar um agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
-////    @PutMapping("/{idAgendamento}")
-////    public ResponseEntity<AgendamentoListagemDto> atualizarAgendamento(Long idAgendamento, @RequestBody AgendamentoAtualizacaoDto agendamentoDto) {
-////        return ResponseEntity.status(HttpStatus.OK).body(AgendamentoMapper.toDto(agendamentoService.atualizarAgendamentoPorId(idAgendamento, agendamentoDto)));
-////    }
-//
-////    @ApiOperation("Deletar um agendamento pelo ID.")
-////    @ApiResponses(value = {
-////            @ApiResponse(code = 200, message = "Agendamento encontrado com sucesso!"),
-////            @ApiResponse(code = 404, message = "Agendamento não encontrado.")
-////    })
-//    @Operation(summary = "Buscar um agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
-//    @DeleteMapping
-//    public ResponseEntity<Void> deletarAgendamento(Long idAgendamento) {
-//        agendamentoService.delearAgendamento(idAgendamento);
-//        return ResponseEntity.status(HttpStatus.OK).build();
-//    }
+    @ApiOperation(value = "Excluir um agendamento por ID.", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agendamento deletado com sucesso!"),
+            @ApiResponse(code = 404, message = "Agendamento não encontrado.")
+    })
+    @Operation(summary = "Excluir agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @DeleteMapping("/{idAgendamento}")
+    public ResponseEntity<Void> excluirAgendamento(@PathVariable Long idAgendamento){
+        agendamentoService.excluirAgendamento(idAgendamento);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
