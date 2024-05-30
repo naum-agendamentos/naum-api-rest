@@ -1,20 +1,18 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.id.IntegralDataTypeHolder;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import school.sptech.naumspringapi.entity.Servico;
+import school.sptech.naumspringapi.entity.Barbeiro;
+import school.sptech.naumspringapi.entity.Agendamento;
+import org.springframework.security.core.context.SecurityContextHolder;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoQtdMesListagemDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroLucroListagemDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroQtdCortesListagemDto;
-import school.sptech.naumspringapi.dto.servicoDto.ServicoQtdMesListagemDto;
-import school.sptech.naumspringapi.entity.Agendamento;
-import school.sptech.naumspringapi.entity.Barbeiro;
-import school.sptech.naumspringapi.entity.Servico;
 import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioDetalhesDto;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,7 +69,7 @@ public class DashboardService {
         List<Integer> quantidades = new ArrayList<>();
         for (int i = 1; i <= 7; i++) {
             LocalDateTime today = LocalDateTime.now();
-            quantidades.add(agendamentoService.buscarAgendamentoPorData(today.minusDays(i)).stream().toList().size());
+            quantidades.add(agendamentoService.buscarAgendamentoPorData(today.minusDays(i)).size());
         }
         return quantidades;
     }
