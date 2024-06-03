@@ -1,6 +1,7 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
+import school.sptech.naumspringapi.email.EmailService;
 import school.sptech.naumspringapi.entity.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class AgendamentoService {
     private final ServicoRepository servicoRepository;
     private final BarbeiroService barbeiroService;
     private final ClienteService clienteService;
+    private final EmailService emailService;
 
     @Transactional
     public Agendamento criarAgendamento(Long barbeiroId, Long clienteId, List<Long> servicoIds, LocalDateTime inicio) {
@@ -65,6 +67,10 @@ public class AgendamentoService {
         agendamento.setFim(fim);
         agendamento.setServicosIds(List.copyOf(servicosValidos)); // Converter Set para List
         agendamento.setValorTotal(valorTotal); // Definir o valor total
+
+        // Enviar email
+        emailService.sendEmail(cliente.getEmail());
+        emailService.sendEmailBarbeiro(barbeiro.getEmail());
 
         return agendamentoRepository.save(agendamento);
     }
