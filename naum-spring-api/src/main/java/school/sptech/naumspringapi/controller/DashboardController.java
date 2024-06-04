@@ -64,17 +64,15 @@ public class DashboardController {
         return servicosQtd.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(servicosQtd);
     }
 
-    // quantidade de agendamentos feitos semanalmente (por dia)
-    @ApiOperation(value = "Lista quantidade de agendamentos realizados nos últimos 7 dias.")
+    // Lucro total da barbearia
+    @ApiOperation(value = "Lucro total da barbearia.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Listagem realizada com sucesso!"),
-            @ApiResponse(code = 204, message = "Busca sem resultados, lista vazia.")
+            @ApiResponse(code = 200, message = "Requisição realizada com sucesso!")
     })
-    @Operation(summary = "Lista quantidade de agendamentos da última semana", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/agendamentos-semanais")
-    public ResponseEntity<List<Integer>> agendamentosSemana() {
-        List<Integer> agendamentos = dashboardService.agendamentosPorSemana();
-        return agendamentos.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(agendamentos);
+    @Operation(summary = "Lucro total", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/lucro")
+    public ResponseEntity<Double> agendamentosSemana() {
+        return ResponseEntity.ok(dashboardService.lucroTotal());
     }
 
 }

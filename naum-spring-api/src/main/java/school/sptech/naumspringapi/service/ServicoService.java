@@ -47,7 +47,7 @@ public class ServicoService {
     @Transactional
     public Servico criarServicoPorBarbearia(ServicoCriacaoDto servicoDto, Long idBarbearia) {
         if (Objects.isNull(servicoDto) || Objects.isNull(idBarbearia)) throw new EntidadeImprocessavelException("Serviço ou idBarbearia");
-        return servicoRepository.save(ServicoMapper.toEntity(servicoDto, barbeariaService.buscarPorId(idBarbearia)));
+        return servicoRepository.save(Objects.requireNonNull(ServicoMapper.toEntity(servicoDto, barbeariaService.buscarPorId(idBarbearia))));
     }
 
     public Servico buscarServicoPorId(Long idBarbearia, Long idServico) {
@@ -55,6 +55,7 @@ public class ServicoService {
         return servicoRepository.findByIdAndBarbearia(idServico, barbeariaService.buscarPorId(idBarbearia));
     }
 
+    @Transactional
     public Servico atualizarServicoPorId(Long idServico, ServicoAtualizacaoDto servicoDto) {
         if (Objects.isNull(servicoDto) || Objects.isNull(idServico)) throw new EntidadeImprocessavelException("Serviço ou idServico");
         Servico servicoAtual = servicoRepository.findById(idServico).orElseThrow(() -> new NaoEncontradoException("Serviço"));

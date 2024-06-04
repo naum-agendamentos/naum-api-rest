@@ -12,7 +12,6 @@ import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroQtdCortesListagemDto;
 import school.sptech.naumspringapi.service.usuario.autenticacao.dto.UsuarioDetalhesDto;
 
 import java.util.*;
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,13 +64,12 @@ public class DashboardService {
         return servicoQtdMesListagemDtos;
     }
 
-    public List<Integer> agendamentosPorSemana() {
-        List<Integer> quantidades = new ArrayList<>();
-        for (int i = 1; i <= 7; i++) {
-            LocalDateTime today = LocalDateTime.now();
-            quantidades.add(agendamentoService.buscarAgendamentoPorData(today.minusDays(i)).size());
+    public Double lucroTotal() {
+        List<BarbeiroLucroListagemDto> listaDeLucros = lucroPorBarbeiro();
+        Double lucroTotal = 0.0;
+        for (BarbeiroLucroListagemDto b : listaDeLucros) {
+            lucroTotal += b.getLucro();
         }
-        return quantidades;
+        return lucroTotal;
     }
-
 }
