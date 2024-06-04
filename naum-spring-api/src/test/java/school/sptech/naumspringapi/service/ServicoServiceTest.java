@@ -8,10 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import school.sptech.naumspringapi.entity.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import school.sptech.naumspringapi.mapper.ServicoMapper;
 import school.sptech.naumspringapi.repository.ServicoRepository;
 import school.sptech.naumspringapi.exception.NaoEncontradoException;
-import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
 import school.sptech.naumspringapi.repository.AgendamentoRepository;
 import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
