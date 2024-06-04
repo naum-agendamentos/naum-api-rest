@@ -72,7 +72,7 @@ public class BarbeariaController {
             @ApiResponse(code = 400, message = "Dados inválidos."),
             @ApiResponse(code = 404, message = "Barbearia não encontrada."),
     })
-    @Operation(summary = "Atualizar uma barbearia pelo ID.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Atualizar uma barbearia pelo ID", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{id}")
     public ResponseEntity<BarbeariaListagemDto> atualizarBarbearia(@PathVariable Long id, @RequestBody @Valid BarbeariaCriacaoDto novaBarbearia) {
         Barbearia barbeariaAtualizada = barbeariaService.atualizarBarbearia(id, novaBarbearia);
@@ -85,7 +85,7 @@ public class BarbeariaController {
             @ApiResponse(code = 400, message = "Dados inválidos."),
             @ApiResponse(code = 404, message = "Barbearia não encontrada."),
     })
-    @Operation(summary = "Desativar uma barbearia pelo ID.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Desativar uma barbearia pelo ID", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/desativar/{id}")
     public ResponseEntity<BarbeariaListagemDto> desativarBarbearia(@PathVariable Long id){
         return ResponseEntity.status(200).body(BarbeariaMapper.toDto(barbeariaService.desativarBarbearia(id)));

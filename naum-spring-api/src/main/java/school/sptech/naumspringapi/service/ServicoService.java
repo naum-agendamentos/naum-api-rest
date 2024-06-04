@@ -2,8 +2,8 @@ package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Servico;
+import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.mapper.ServicoMapper;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.repository.ServicoRepository;
@@ -12,9 +12,9 @@ import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
 import school.sptech.naumspringapi.dto.servicoDto.ServicoAtualizacaoDto;
 import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +47,7 @@ public class ServicoService {
     @Transactional
     public Servico criarServicoPorBarbearia(ServicoCriacaoDto servicoDto, Long idBarbearia) {
         if (Objects.isNull(servicoDto) || Objects.isNull(idBarbearia)) throw new EntidadeImprocessavelException("Serviço ou idBarbearia");
-        return servicoRepository.save(ServicoMapper.toEntity(servicoDto, barbeariaService.buscarPorId(idBarbearia)));
+        return servicoRepository.save(Objects.requireNonNull(ServicoMapper.toEntity(servicoDto, barbeariaService.buscarPorId(idBarbearia))));
     }
 
     public Servico buscarServicoPorId(Long idBarbearia, Long idServico) {
@@ -55,6 +55,7 @@ public class ServicoService {
         return servicoRepository.findByIdAndBarbearia(idServico, barbeariaService.buscarPorId(idBarbearia));
     }
 
+    @Transactional
     public Servico atualizarServicoPorId(Long idServico, ServicoAtualizacaoDto servicoDto) {
         if (Objects.isNull(servicoDto) || Objects.isNull(idServico)) throw new EntidadeImprocessavelException("Serviço ou idServico");
         Servico servicoAtual = servicoRepository.findById(idServico).orElseThrow(() -> new NaoEncontradoException("Serviço"));

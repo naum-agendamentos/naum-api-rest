@@ -4,16 +4,16 @@ import lombok.RequiredArgsConstructor;
 import school.sptech.naumspringapi.email.EmailService;
 import school.sptech.naumspringapi.entity.*;
 import org.springframework.stereotype.Service;
+import school.sptech.naumspringapi.repository.ServicoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.repository.AgendamentoRepository;
 import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
-import school.sptech.naumspringapi.repository.ServicoRepository;
 
+import java.util.Set;
+import java.util.List;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 

@@ -1,12 +1,14 @@
 package school.sptech.naumspringapi.entity;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@RequiredArgsConstructor
 public class Servico {
 
     @Id
