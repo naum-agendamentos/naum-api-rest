@@ -126,7 +126,7 @@ public class AgendamentoService {
         // Verificar conflitos de horário
         List<Agendamento> agendamentosExistentes = agendamentoRepository.findByBarbeiroId(barbeiroId);
         for (Agendamento agendamentoExistente : agendamentosExistentes) {
-            if (horarioConflitante(inicio, fim, agendamentoExistente)) {
+            if (!agendamentoExistente.getId().equals(idAgendamento) && horarioConflitante(inicio, fim, agendamentoExistente)) {
                 throw new IllegalArgumentException("Conflito de horário com outro agendamento.");
             }
         }

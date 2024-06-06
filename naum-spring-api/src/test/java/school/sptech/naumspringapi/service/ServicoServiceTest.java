@@ -5,9 +5,11 @@ import org.mockito.InjectMocks;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import school.sptech.naumspringapi.dto.servicoDto.ServicoCriacaoDto;
 import school.sptech.naumspringapi.entity.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import school.sptech.naumspringapi.mapper.ServicoMapper;
 import school.sptech.naumspringapi.repository.ServicoRepository;
 import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.repository.AgendamentoRepository;
@@ -33,6 +35,8 @@ class ServicoServiceTest {
     private BarbeiroService barbeiroService;
     @Mock
     private ClienteService clienteService;
+    @Mock
+    private ServicoMapper servicoMapper;
     @InjectMocks
     private ServicoService servicoService;
 
@@ -70,6 +74,7 @@ class ServicoServiceTest {
         agendamento.setServicosIds(List.of(servico.getId()));
         agendamentosExpected = new ArrayList<>();
         agendamentosExpected.add(agendamento);
+        servicoMapper = new ServicoMapper();
     }
 
     @Test
@@ -129,26 +134,26 @@ class ServicoServiceTest {
         });
     }
 
-//    @Test
-//    @DisplayName("Cria novo serviço com sucesso")
-//    void criarServicoComSucesso() {
-//        ServicoCriacaoDto servicoDto = new ServicoCriacaoDto();
-//        servicoDto.setNomeServico("corte2");
-//        servicoDto.setTempoServico(40);
-//        servicoDto.setPreco(40.0);
-//        Servico servico2 = new Servico();
-//        servico2.setId(1L);
-//        servico2.setNomeServico("corte2");
-//        servico2.setTempoServico(40);
-//        servico2.setPreco(40.0);
-//        servico2.setBarbearia(barbearia);
-//        when(servicoService.criarServicoPorBarbearia(servicoDto, barbearia.getId())).thenReturn(servico2);
-//        when(barbeariaService.buscarPorId(1L)).thenReturn(barbearia);
-//
-//        Servico servicoResponse = servicoService.criarServicoPorBarbearia(servicoDto, barbearia.getId());
-//
-//        assertEquals(servico2, servicoResponse);
-//    }
+    @Test
+    @DisplayName("Cria novo serviço com sucesso")
+    void criarServicoComSucesso() {
+        ServicoCriacaoDto servicoDto = new ServicoCriacaoDto();
+        servicoDto.setNomeServico("corte2");
+        servicoDto.setTempoServico(40);
+        servicoDto.setPreco(40.0);
+        Servico servico2 = new Servico();
+        servico2.setId(2L);
+        servico2.setNomeServico("corte2");
+        servico2.setTempoServico(40);
+        servico2.setPreco(40.0);
+        servico2.setBarbearia(barbearia);
+        when(servicoService.criarServicoPorBarbearia(servicoDto, barbearia.getId())).thenReturn(servico2);
+        when(barbeariaService.buscarPorId(barbearia.getId())).thenReturn(barbearia);
+
+        Servico servicoResponse = servicoService.criarServicoPorBarbearia(servicoDto, barbearia.getId());
+
+        assertEquals(servico2, servicoResponse);
+    }
 
     @Test
     @DisplayName("Cria serviço com campos inválidos")

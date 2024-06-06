@@ -28,6 +28,7 @@ public class BarbeiroService {
 
     private final UsuarioService usuarioService;
     private final BarbeiroRepository barbeiroRepository;
+    private final BarbeariaService barbeariaService;
 
 
     // MÉTODO CRIAÇÃO DO BARBEIRO
@@ -125,15 +126,21 @@ public class BarbeiroService {
     }
 
     public boolean verificarBarbeiroAtivo(Barbeiro barbeiro){
-        return barbeiro.getBarbeiroAtivo();
+        return barbeiro.isBarbeiroAtivo();
     }
 
     @Transactional
     public Barbeiro reativarBarbeiro(Long id){
         if (Objects.isNull(id)) throw new EntidadeImprocessavelException("idBarbeiro");
         Barbeiro barbeiroAtual = barbeiroRepository.findById(id).orElseThrow(() -> new NaoEncontradoException("Barbeiro"));
-        if(barbeiroAtual.getBarbeiroAtivo()) throw new RequisicaoInvalidaException("Barbeiro");
+        if(barbeiroAtual.isBarbeiroAtivo()) throw new RequisicaoInvalidaException("Barbeiro");
         barbeiroAtual.setBarbeiroAtivo(true);
         return barbeiroRepository.save(barbeiroAtual);
+    }
+
+
+    public List<Barbeiro> listaBarbeirosPorBarbeariaCliente(Long id) {
+        Barbearia barbearia = barbeariaService.buscarPorId(id);
+        return barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId());
     }
 }
