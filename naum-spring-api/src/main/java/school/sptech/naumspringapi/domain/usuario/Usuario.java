@@ -16,6 +16,6 @@ public class Usuario {
     private String email;
     private String senha;
 
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private UsuarioTipo tipo;
 }
