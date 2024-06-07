@@ -19,7 +19,7 @@ public class Barbeiro {
     private String senha;
     private String telefone;
     private String descricao;
-    private Boolean barbeiroAtivo;
+    private boolean barbeiroAtivo;
     private String foto;
     @ManyToOne
     private Barbearia barbearia;

@@ -55,7 +55,7 @@ public class BarbeiroMapper {
 
         BarbeiroDesativacaoDto dto = new BarbeiroDesativacaoDto();
         dto.setId(entity.getId());
-        dto.setBarbeiroAtivo(entity.getBarbeiroAtivo());
+        dto.setBarbeiroAtivo(entity.isBarbeiroAtivo());
 
         return dto;
     }

@@ -1,9 +1,10 @@
 package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
-import school.sptech.naumspringapi.email.EmailService;
 import school.sptech.naumspringapi.entity.*;
 import org.springframework.stereotype.Service;
+import school.sptech.naumspringapi.email.EmailService;
+import school.sptech.naumspringapi.exception.ConflitoException;
 import school.sptech.naumspringapi.repository.ServicoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.exception.NaoEncontradoException;
@@ -56,7 +57,7 @@ public class AgendamentoService {
         List<Agendamento> agendamentosExistentes = agendamentoRepository.findByBarbeiroId(barbeiroId);
         for (Agendamento agendamentoExistente : agendamentosExistentes) {
             if (horarioConflitante(inicio, fim, agendamentoExistente)) {
-                throw new IllegalArgumentException("Conflito de horário com outro agendamento.");
+                throw new ConflitoException("Conflito de horário com outro agendamento.");
             }
         }
 
@@ -88,7 +89,7 @@ public class AgendamentoService {
         return agendamentoRepository.findByClienteId(clienteId);
     }
 
-    private boolean horarioConflitante(LocalDateTime inicio, LocalDateTime fim, Agendamento agendamentoExistente) {
+    boolean horarioConflitante(LocalDateTime inicio, LocalDateTime fim, Agendamento agendamentoExistente) {
         return inicio.isBefore(agendamentoExistente.getFim()) && fim.isAfter(agendamentoExistente.getInicio());
     }
 
@@ -126,8 +127,8 @@ public class AgendamentoService {
         // Verificar conflitos de horário
         List<Agendamento> agendamentosExistentes = agendamentoRepository.findByBarbeiroId(barbeiroId);
         for (Agendamento agendamentoExistente : agendamentosExistentes) {
-            if (horarioConflitante(inicio, fim, agendamentoExistente)) {
-                throw new IllegalArgumentException("Conflito de horário com outro agendamento.");
+            if (!agendamentoExistente.getId().equals(idAgendamento) && horarioConflitante(inicio, fim, agendamentoExistente)) {
+                throw new ConflitoException("Conflito de horário com outro agendamento.");
             }
         }
 
@@ -146,9 +147,5 @@ public class AgendamentoService {
     @Transactional
     public void excluirAgendamento(Long idAgendamento) {
         agendamentoRepository.delete(agendamentoRepository.findById(idAgendamento).orElseThrow(() -> new NaoEncontradoException("Agendamento")));
-    }
-
-    public List<Agendamento> buscarAgendamentoPorData(LocalDateTime data) {
-        return agendamentoRepository.findByInicioEquals(data);
     }
 }

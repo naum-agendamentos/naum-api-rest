@@ -111,4 +111,22 @@ public class AgendamentoController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @ApiOperation(value = "Listar os agendamentos por Cliente.", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agendamentos encontrados com sucesso!"),
+            @ApiResponse(code = 204, message = "Não existem agendamentos para retornar."),
+            @ApiResponse(code = 404, message = "Cliente não encontrado.")
+    })
+    @Operation(summary = "Listar agendamentos por Cliente", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<AgendamentoListagemDto>> listarAgendamentosPorCliente(@PathVariable Long clienteId) {
+        List<Agendamento> agendamentos = agendamentoService.listarPorCliente(clienteId);
+        if (agendamentos.isEmpty()) return ResponseEntity.noContent().build();
+        List<List<Servico>> listasDeServicos = servicoService.buscarServicosPorAgendamentos(agendamentos);
+        List<AgendamentoListagemDto> agendamentoListagemDtos = new ArrayList<>();
+        for (int i = 0; i < agendamentos.size(); i++) {
+            agendamentoListagemDtos.add(AgendamentoMapper.toDto(agendamentos.get(i), listasDeServicos.get(i)));
+        }
+        return ResponseEntity.ok(agendamentoListagemDtos);
+    }
 }

@@ -104,4 +104,18 @@ public class BarbeiroController {
     public ResponseEntity<BarbeiroDesativacaoDto> reativarBarbeiro(@PathVariable Long idBarbeiro){
         return ResponseEntity.status(200).body(BarbeiroMapper.toDtoDesativacao(barbeiroService.reativarBarbeiro(idBarbeiro)));
     }
+
+    @ApiOperation("Listar barbeiros de uma barbearia para os clientes.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Barbeiros listados com sucesso!"),
+            @ApiResponse(code = 204, message = "Não existem barbeiros cadastrados.")
+    })
+    @Operation(summary = "Listar barbeiros de uma barbearia para os clientes", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/listar")
+    public ResponseEntity<List<BarbeiroListagemDto>> listarBarbeiroCliente(@RequestParam Long idBarbearia) {
+        List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbeariaCliente(idBarbearia);
+        if (barbeiros.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.OK).body(BarbeiroMapper.toDto(barbeiros));
+    }
+
 }
