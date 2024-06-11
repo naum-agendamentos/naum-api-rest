@@ -3,7 +3,7 @@
 
 Este repositório contém a api de gerenciamento de babrearias da NA.UM.
 
-A API-REST da NA.UM tem como objetivo fornecer uma solução completa para o gerenciamento de uma barbearia com foco principal no agendamento, nela é possivel realizar o CRUD de clientes, serviços, barbeiros e agendamentos. Também conta com uma dashBoard para o acompanhamento da barbearia.
+A API-REST da NA.UM tem como objetivo fornecer uma solução completa para o gerenciamento de uma barbearia com foco principal no agendamento. Nela é possivel realizar o CRUD de clientes, serviços, barbeiros e agendamentos. Também conta com uma dashBoard para o acompanhamento da barbearia.
 
 ## ⚙️ Funcionalidades
 ### 👤 Gerenciamento de Clientes
