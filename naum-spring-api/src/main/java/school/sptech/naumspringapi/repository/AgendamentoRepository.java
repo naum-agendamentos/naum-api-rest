@@ -23,4 +23,7 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
                                                               @Param("endDate") LocalDateTime endDate);
     List<Agendamento> findByInicioEquals(LocalDateTime data);
 
+    @Query("SELECT COUNT(a) FROM Agendamento a WHERE DATE(a.inicio) = :dataHoje")
+    Integer totalAgendamentoPorData(@Param("dataHoje") LocalDate dataHoje);
+
 }

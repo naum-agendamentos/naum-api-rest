@@ -11,6 +11,7 @@ import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.repository.AgendamentoRepository;
 import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.List;
 import java.time.Duration;
@@ -147,5 +148,26 @@ public class AgendamentoService {
     @Transactional
     public void excluirAgendamento(Long idAgendamento) {
         agendamentoRepository.delete(agendamentoRepository.findById(idAgendamento).orElseThrow(() -> new NaoEncontradoException("Agendamento")));
+    }
+
+    public Integer agendamentoHoje() {
+        LocalDate dataAtual = LocalDate.now();
+        return agendamentoRepository.totalAgendamentoPorData(dataAtual);
+    }
+
+    public Integer agendamentoOntem() {
+        LocalDate dataOntem = LocalDate.now().minusDays(1);
+        return agendamentoRepository.totalAgendamentoPorData(dataOntem);
+    }
+
+    public Double porcentagemAgendamentosHojeComparadoOntem() {
+        Integer totalHoje = agendamentoHoje();
+        Integer totalOntem = agendamentoOntem();
+
+        if (totalOntem == 0) {
+            return totalHoje > 0 ? 100.0 : 0.0;
+        }
+
+        return ((totalHoje - totalOntem) / (double) totalOntem) * 100;
     }
 }

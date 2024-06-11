@@ -21,6 +21,7 @@ public class DashboardService {
     private final BarbeiroService barbeiroService;
     private final ServicoService servicoService;
     private final AgendamentoService agendamentoService;
+    private final AvaliacaoService avaliacaoService;
 
     public List<BarbeiroQtdCortesListagemDto> qtdCortesPorBarbeiro() {
         List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbearia();
@@ -71,5 +72,17 @@ public class DashboardService {
             lucroTotal += b.getLucro();
         }
         return lucroTotal;
+    }
+
+    public Integer agendamentoHoje() {
+        return agendamentoService.agendamentoHoje();
+    }
+
+    public Double porcentagemAgendHojeOntem() {
+        return agendamentoService.porcentagemAgendamentosHojeComparadoOntem();
+    }
+
+    public Double mediaAvaliacao(Long idBarbearia) {
+        return avaliacaoService.mediaAvaliacao(idBarbearia);
     }
 }

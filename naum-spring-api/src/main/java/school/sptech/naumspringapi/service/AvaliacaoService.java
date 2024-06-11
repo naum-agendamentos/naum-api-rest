@@ -81,4 +81,9 @@ public class AvaliacaoService {
         if (Objects.isNull(idAvaliacao)) throw new EntidadeImprocessavelException("Avaliação");
         avaliacaoRepository.delete(avaliacaoRepository.findById(idAvaliacao).orElseThrow(() -> new NaoEncontradoException("Avaliação")));
     }
+
+
+    public Double mediaAvaliacao(Long idBarbearia) {
+        return avaliacaoRepository.mediaAvaliacaoEstrelas(idBarbearia);
+    }
 }
