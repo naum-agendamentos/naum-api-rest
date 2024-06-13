@@ -5,6 +5,7 @@ import school.sptech.naumspringapi.entity.*;
 import org.springframework.stereotype.Service;
 import school.sptech.naumspringapi.email.EmailService;
 import school.sptech.naumspringapi.exception.ConflitoException;
+import school.sptech.naumspringapi.mapper.AgendamentoMapper;
 import school.sptech.naumspringapi.repository.ServicoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.exception.NaoEncontradoException;
@@ -73,6 +74,7 @@ public class AgendamentoService {
         // Enviar email
         emailService.sendEmail(cliente.getEmail());
         emailService.sendEmailBarbeiro(barbeiro.getEmail());
+        emailService.colocarLista(AgendamentoMapper.toDto(agendamento, servicos));
 
         return agendamentoRepository.save(agendamento);
     }
