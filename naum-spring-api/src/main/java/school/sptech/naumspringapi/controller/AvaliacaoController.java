@@ -34,7 +34,7 @@ public class AvaliacaoController {
     })
     @Operation(summary = "Criar avaliação", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/{idBarbearia}")
-    public ResponseEntity<AvaliacaoListagemDto> realizarAvaliacao(@RequestBody @Valid AvaliacaoCriacaoDto novaAvaliacao, Long idCliente, @PathVariable Long idBarbearia){
+    public ResponseEntity<AvaliacaoListagemDto> realizarAvaliacao(@RequestBody @Valid AvaliacaoCriacaoDto novaAvaliacao, @RequestParam Long idCliente, @PathVariable Long idBarbearia){
         Avaliacao avaliacao = avaliacaoService.criarAvaliacao(novaAvaliacao, idCliente, idBarbearia);
         URI uri = URI.create("/avaliacoes/" + avaliacao.getId());
         return ResponseEntity.created(uri).body(AvaliacaoMapper.toDto(avaliacao));

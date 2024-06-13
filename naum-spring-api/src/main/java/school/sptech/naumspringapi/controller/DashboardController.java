@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 import school.sptech.naumspringapi.service.DashboardService;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,5 +75,39 @@ public class DashboardController {
     public ResponseEntity<Double> agendamentosSemana() {
         return ResponseEntity.ok(dashboardService.lucroTotal());
     }
+
+    // Total de agendamentos no dia
+    @ApiOperation(value = "Total agendamentos hoje.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Requisição realizada com sucesso!")
+    })
+    @Operation(summary = "Total Agendamento", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/total-agendamento-hoje")
+    public ResponseEntity<Integer> totalAgendamentoHoje() {
+        return ResponseEntity.ok(dashboardService.agendamentoHoje());
+    }
+
+    // Porcentagem de agendamentos comparando hoje e ontem
+    @ApiOperation(value = "Porcentagem agendamentos hoje com ontem.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Requisição realizada com sucesso!")
+    })
+    @Operation(summary = "Porcentagem Agendamento hoje com ontem", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/porcentagem-agendamento-hoje-ontem")
+    public ResponseEntity<Double> porcentagemCompaHojeOntem() {
+        return ResponseEntity.ok(dashboardService.porcentagemAgendHojeOntem());
+    }
+
+    // Porcentagem de avaliação
+    @ApiOperation(value = "Media avaliacao barbearia")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Requisição realizada com sucesso!")
+    })
+    @Operation(summary = "Media avaliacao", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/media-avaliacao/{idBarbearia}")
+    public ResponseEntity<Double> mediaAvaliacao(@PathVariable Long idBarbearia) {
+        return ResponseEntity.ok(dashboardService.mediaAvaliacao(idBarbearia));
+    }
+
 
 }
