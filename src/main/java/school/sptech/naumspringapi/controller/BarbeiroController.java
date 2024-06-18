@@ -5,8 +5,10 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.service.AgendamentoService;
+import school.sptech.naumspringapi.service.ArquivoCsvService;
 import school.sptech.naumspringapi.service.BarbeiroService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
@@ -33,6 +36,8 @@ public class BarbeiroController {
     private final BarbeiroService barbeiroService;
 
     private final AgendamentoService agendamentoService;
+
+    private final ArquivoCsvService arquivoCsvService;
 
     @ApiOperation("Cadastrar um barbeiro novo.")
     @ApiResponses(value = {
@@ -116,6 +121,22 @@ public class BarbeiroController {
         List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbeariaCliente(idBarbearia);
         if (barbeiros.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.status(HttpStatus.OK).body(BarbeiroMapper.toDto(barbeiros));
+    }
+
+    @ApiOperation(value = "Gerar Csv Barbeiros", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Csv gerado com sucesso!"),
+    })
+    @Operation(summary = "Gerar Csv", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/gerar-csv-barbeiros")
+    public ResponseEntity<byte[]> csvBarbeiros() {
+        byte[] csvBytes = arquivoCsvService.recuperarValores();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType("text/csv"));
+        headers.setContentDispositionFormData("attachment", "barbeiros.csv");
+
+        return ResponseEntity.ok().headers(headers).body(csvBytes);
     }
 
 }
