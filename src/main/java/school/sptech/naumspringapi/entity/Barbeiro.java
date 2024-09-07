@@ -20,6 +20,7 @@ public class Barbeiro {
     private String telefone;
     private String descricao;
     private boolean barbeiroAtivo;
+    @Column(length = 1000)
     private String foto;
     @ManyToOne
     private Barbearia barbearia;

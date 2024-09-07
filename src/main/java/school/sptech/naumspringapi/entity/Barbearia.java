@@ -12,8 +12,10 @@ public class Barbearia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    @Column(length = 1000)
     private String linkBarbearia;
     private Boolean ativa;
+    @Column(length = 1000)
     private String fotoBarbearia;
 
     @ManyToOne
