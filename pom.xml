@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -14,8 +15,6 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -54,43 +53,67 @@
 			<version>8.4.0</version>
 		</dependency>
 
-		<!-- Swagger e Spring Security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+<!--		SWAGGER E SPRING SECURITY-->
+		<!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.5.0</version>
 		</dependency>
+
+		<!-- Spring Boot Starter Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+
+		<!-- Spring Security Test -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- jjwt -->
+		<!-- jjwt-api -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
 			<version>0.11.5</version>
 		</dependency>
+
+		<!-- jjwt-impl -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
 			<version>0.11.2</version>
 		</dependency>
+
+		<!-- jjwt-jackson -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.1</version>
 		</dependency>
 
-		<!-- Spring Boot Actuator -->
+		<!-- Spring Boot Starter Actuator -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+			<version>3.0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>io.swagger</groupId>
@@ -98,7 +121,7 @@
 			<version>1.5.20</version>
 		</dependency>
 
-		<!-- Config email -->
+<!--		Config email-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
@@ -119,15 +142,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
-				<configuration>
-					<source>17</source>
-					<target>17</target>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
+
 </project>
