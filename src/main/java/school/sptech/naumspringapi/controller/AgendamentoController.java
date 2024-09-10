@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoBloqListagemDto;
 import school.sptech.naumspringapi.email.EmailService;
 import school.sptech.naumspringapi.entity.Cliente;
 import school.sptech.naumspringapi.entity.Barbeiro;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Api(tags = "AgendamentoController", description = "Controller de Agendamentos.")
 @RestController
@@ -86,6 +88,25 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentoListagemDtos);
     }
 
+    @ApiOperation(value = "Listar os agendamentos por barbeiro Bloqueio.", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Agendamentos encontrados com sucesso!"),
+            @ApiResponse(code = 204, message = "Não existem agendamentos para retornar."),
+            @ApiResponse(code = 404, message = "Barbeiro não encontrado.")
+    })
+    @Operation(summary = "Listar agendamentos por babeiro", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/barbeiroBloq/{barbeiroId}")
+    public ResponseEntity<List<AgendamentoBloqListagemDto>> listarAgendamentosPorBarbeiroBloq(@PathVariable Long barbeiroId) {
+        List<Agendamento> agendamentos = agendamentoService.listarPorBarbeiro(barbeiroId);
+        if (agendamentos.isEmpty()) return ResponseEntity.noContent().build();
+        List<List<Servico>> listasDeServicos = servicoService.buscarServicosPorAgendamentos(agendamentos);
+        List<AgendamentoBloqListagemDto> agendamentoListagemDtos = new ArrayList<>();
+        for (int i = 0; i < agendamentos.size(); i++) {
+            agendamentoListagemDtos.add(AgendamentoMapper.toDtoBloq(agendamentos.get(i),listasDeServicos.get(i)));
+        }
+        return ResponseEntity.ok(agendamentoListagemDtos);
+    }
+
     @ApiOperation(value = "Atualizar um agendamento por ID.", response = AgendamentoListagemDto.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Agendamento atualizado com sucesso!"),
@@ -93,7 +114,7 @@ public class AgendamentoController {
     })
     @Operation(summary = "Atualizar agendamento por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/{idAgendamento}")
-    public ResponseEntity<AgendamentoListagemDto> atualizarAgendamento(@PathVariable Long idAgendamento, @RequestParam Long barbeiroId, @RequestParam Long clienteId, @RequestParam List<Long> servicoIds, @RequestParam LocalDateTime inicio){
+        public ResponseEntity<AgendamentoListagemDto> atualizarAgendamento(@PathVariable Long idAgendamento, @RequestParam Long barbeiroId, @RequestParam Long clienteId, @RequestParam List<Long> servicoIds, @RequestParam LocalDateTime inicio){
         Agendamento agendamento = agendamentoService.atualizarAgendamento(idAgendamento, barbeiroId, clienteId, servicoIds, inicio);
         List<Servico> servicos = servicoService.buscarServicosPorIds(agendamento.getServicosIds());
         return ResponseEntity.ok(AgendamentoMapper.toDto(agendamento, servicos));
@@ -129,4 +150,28 @@ public class AgendamentoController {
         }
         return ResponseEntity.ok(agendamentoListagemDtos);
     }
+
+    //bloquear  horários de atendimento
+    @ApiOperation(value = "Bloquear Horários de funcionamento", response = AgendamentoListagemDto.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Horários Bloqueados"),
+            @ApiResponse(code = 422, message = "Dados inválidos."),
+            @ApiResponse(code = 404, message = "Barbeiro não encontrado")
+    })
+    @Operation(summary = "Bloquear Horários de funcionamento", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping("/bloquearHorarios")
+    public ResponseEntity<List<AgendamentoBloqListagemDto>> bloquearHorarios(@RequestParam Long barbeiroId,@RequestParam List<LocalDateTime> datas) {
+        List<Agendamento> agendamentos = agendamentoService.bloquearHorarios(barbeiroId, datas);
+        List<List<Servico>> listasDeServicos = servicoService.buscarServicosPorAgendamentos(agendamentos);
+        URI uri = URI.create("/agendamentos/" + agendamentos.get(0).getId());
+        List<AgendamentoBloqListagemDto> agendamentoBloqListagemDtos = new ArrayList<>();
+
+        for (int i = 0; i < agendamentos.size(); i++) {
+                agendamentoBloqListagemDtos.add(AgendamentoMapper.toDtoBloq(agendamentos.get(i), listasDeServicos.get(i)));
+        }
+
+
+        return ResponseEntity.created(uri).body(agendamentoBloqListagemDtos);
+    }
+
 }

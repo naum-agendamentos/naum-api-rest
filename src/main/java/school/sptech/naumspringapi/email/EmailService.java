@@ -61,6 +61,18 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    public void sendEmailCancelamento(String email){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@email.com");
+        message.setTo(email);
+        message.setSubject("Agendamento Barbearia TM");
+        message.setText("Agendamento Cancelado\n" +
+                "O Barbeiro cancelou seu Agendamento por conta de um imprevisto\n" +
+                "Caso ainda pretenda ir, marcar um novo agendamento pelo nosso site.\n" +
+                "Muito Obrigado!");
+        mailSender.send(message);
+    }
+
     public void sendEmailDia() {
         enviaFila();
         LocalDate dataAtual = LocalDate.now();

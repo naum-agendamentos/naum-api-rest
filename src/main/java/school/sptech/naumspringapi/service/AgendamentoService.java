@@ -13,6 +13,7 @@ import school.sptech.naumspringapi.repository.AgendamentoRepository;
 import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.List;
 import java.time.Duration;
@@ -96,6 +97,17 @@ public class AgendamentoService {
         return inicio.isBefore(agendamentoExistente.getFim()) && fim.isAfter(agendamentoExistente.getInicio());
     }
 
+    List<Agendamento> horarioConflitante(LocalDateTime inicio, LocalDateTime fim, List<Agendamento> agendamentosExistentes) {
+        List<Agendamento> conflitantes = new ArrayList<Agendamento>();
+        for(Agendamento agendamentoExistente : agendamentosExistentes){
+            if(inicio.isBefore(agendamentoExistente.getFim()) && fim.isAfter(agendamentoExistente.getInicio())){
+                conflitantes.add(agendamentoExistente);
+            }
+        }
+        return conflitantes;
+
+    }
+
     public List<Agendamento> agendamentosUltimoMes(List<Long> servicosId) {
         LocalDateTime endDate = LocalDateTime.now();
         LocalDateTime startDate = endDate.minusMonths(1);
@@ -145,6 +157,50 @@ public class AgendamentoService {
         agendamento.setValorTotal(valorTotal); // Definir o valor total
 
         return agendamentoRepository.save(agendamento);
+    }
+
+    @Transactional
+    public List<Agendamento> bloquearHorarios(Long barbeiroId, List<LocalDateTime> datas) {
+        Barbeiro barbeiro = barbeiroService.buscarPorId(barbeiroId);
+//        LocalDateTime fim = inicio.plusMinutes(tempoTotal);
+
+        // Verificar conflitos de horário
+        List<Agendamento> agendamentosExistentes = agendamentoRepository.findByBarbeiroId(barbeiroId);
+//        for (Agendamento agendamentoExistente : agendamentosExistentes) {
+//            if (horarioConflitante(inicio, fim, agendamentoExistente)) {
+//                throw new ConflitoException("Conflito de horário com outro agendamento.");
+//            }
+//        }
+        List<Agendamento> agendamentosParaCriar = new ArrayList<>();
+        for(LocalDateTime dataDaVez : datas){
+            List<Agendamento> agendamentosConflitantes = horarioConflitante(dataDaVez,dataDaVez.plusMinutes(30),agendamentosExistentes);
+            if(agendamentosConflitantes != null && agendamentosConflitantes.size() > 0){
+                for (Agendamento agendamento : agendamentosConflitantes){
+                    // Enviar email
+                    emailService.sendEmailCancelamento(agendamento.getCliente().getEmail());
+                    emailService.colocarLista(AgendamentoMapper.toDto(agendamento, new ArrayList<>() ));
+
+                    excluirAgendamento(agendamento.getId());
+                }
+            }
+            Agendamento agendamento = new Agendamento();
+            agendamento.setBarbeiro(barbeiro);
+            agendamento.setCliente(null);
+            agendamento.setInicio(dataDaVez);
+            agendamento.setFim(dataDaVez.plusMinutes(30));
+            agendamento.setServicosIds(null); // Converter Set para List
+            agendamento.setValorTotal(null); // Definir o valor total
+
+            agendamentosParaCriar.add(agendamento);
+        }
+
+
+
+        return agendamentoRepository.saveAll(agendamentosParaCriar);
+
+
+
+
     }
 
     @Transactional

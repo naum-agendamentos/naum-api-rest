@@ -30,8 +30,11 @@ public class ServicoService {
 
     public List<Servico> buscarServicosPorIds(List<Long> idServicos) {
         List<Servico> servicos = new ArrayList<>();
-        for (Long idServico : idServicos) {
-            servicos.add(servicoRepository.findById(idServico).orElseThrow(() -> new NaoEncontradoException("Serviço")));
+        if(idServicos != null){
+            for (Long idServico : idServicos) {
+                servicos.add(servicoRepository.findById(idServico).orElseThrow(() -> new NaoEncontradoException("Serviço")));
+            }
+
         }
         return servicos;
     }
