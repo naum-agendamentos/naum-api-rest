@@ -28,6 +28,7 @@ import school.sptech.naumspringapi.service.ServicoService;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -148,7 +149,7 @@ public class AgendamentoController {
         for (int i = 0; i < agendamentos.size(); i++) {
             agendamentoListagemDtos.add(AgendamentoMapper.toDto(agendamentos.get(i), listasDeServicos.get(i)));
         }
-        return ResponseEntity.ok(agendamentoListagemDtos);
+        return ResponseEntity.ok(agendamentoListagemDtos.stream().sorted(Comparator.comparing(AgendamentoListagemDto::getDataHoraAgendamento).reversed()).collect(Collectors.toList()));
     }
 
     //bloquear  horários de atendimento
