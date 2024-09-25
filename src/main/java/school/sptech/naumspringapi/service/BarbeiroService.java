@@ -111,6 +111,12 @@ public class BarbeiroService {
         return barbeiroRepository.save(entity);
     }
 
+    //BUSCAR BARBEIRO POR IDUSUARIO
+    public Barbeiro buscarBarbPorUsuario(Long idUsuario) {
+        Usuario usuario = usuarioService.buscarUsuarioPorId(idUsuario);
+        return barbeiroRepository.findByUsuario(usuario);
+    }
+
     // MÉTODO DE DESATIVAR BARBEIRO
     @Transactional
     public Barbeiro desativarBarbeiro(Long id){

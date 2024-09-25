@@ -13,9 +13,11 @@ import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
+import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
 import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
+import school.sptech.naumspringapi.mapper.ClienteMapper;
 import school.sptech.naumspringapi.service.AgendamentoService;
 import school.sptech.naumspringapi.service.ArquivoCsvService;
 import school.sptech.naumspringapi.service.BarbeiroService;
@@ -138,5 +140,16 @@ public class BarbeiroController {
 
         return ResponseEntity.ok().headers(headers).body(csvBytes);
     }
+    @ApiOperation("Buscar barbeiro por UserId.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "barbeiro encontrado com sucesso!"),
+            @ApiResponse(code = 404, message = "barbeiro não encontrado.")
+    })
+    @Operation(summary = "Buscar barbeiro por ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/usuario")
+    public ResponseEntity<BarbeiroListagemDto> buscarBarbeiroPorUser(@RequestParam("idUsuario") Long idUsuario) {
+        return ResponseEntity.status(HttpStatus.OK).body(BarbeiroMapper.toDto(barbeiroService.buscarBarbPorUsuario(idUsuario)));
+    }
+
 
 }

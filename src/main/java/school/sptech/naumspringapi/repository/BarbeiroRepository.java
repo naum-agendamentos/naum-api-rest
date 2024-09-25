@@ -1,6 +1,7 @@
 package school.sptech.naumspringapi.repository;
 
 import org.springframework.stereotype.Repository;
+import school.sptech.naumspringapi.domain.usuario.Usuario;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Barbearia;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,6 @@ public interface BarbeiroRepository extends JpaRepository<Barbeiro, Long> {
     Optional<Barbeiro> findById(Long id);
     List<Barbeiro> findAllByBarbeariaAndBarbeiroAtivo(Barbearia barbearia, boolean ativo);
     Barbeiro findByIdAndBarbeiroAtivoTrue(Long id);
+
+    Barbeiro findByUsuario(Usuario usuario);
 }
