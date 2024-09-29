@@ -14,6 +14,7 @@ import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
 import java.time.Duration;
@@ -174,15 +175,16 @@ public class AgendamentoService {
         List<Agendamento> agendamentosParaCriar = new ArrayList<>();
         for(LocalDateTime dataDaVez : datas){
             List<Agendamento> agendamentosConflitantes = horarioConflitante(dataDaVez,dataDaVez.plusMinutes(30),agendamentosExistentes);
+            Set<Long> idsExclusao = new HashSet<>();
             if(agendamentosConflitantes != null && agendamentosConflitantes.size() > 0){
                 for (Agendamento agendamento : agendamentosConflitantes){
                     // Enviar email
                     emailService.sendEmailCancelamento(agendamento.getCliente().getEmail());
                     emailService.colocarLista(AgendamentoMapper.toDto(agendamento, new ArrayList<>() ));
-
-                    excluirAgendamento(agendamento.getId());
+                    idsExclusao.add(agendamento.getId());
                 }
             }
+            excluirAgendamentoEmMassa(idsExclusao);
             Agendamento agendamento = new Agendamento();
             agendamento.setBarbeiro(barbeiro);
             agendamento.setCliente(null);
@@ -206,6 +208,11 @@ public class AgendamentoService {
     @Transactional
     public void excluirAgendamento(Long idAgendamento) {
         agendamentoRepository.delete(agendamentoRepository.findById(idAgendamento).orElseThrow(() -> new NaoEncontradoException("Agendamento")));
+    }
+
+    @Transactional
+    public void excluirAgendamentoEmMassa(Set<Long> idsAgendamento) {
+        agendamentoRepository.deleteAllById(idsAgendamento);
     }
 
     public Integer agendamentoHoje() {

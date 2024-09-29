@@ -32,6 +32,9 @@ public class Barbeiro {
     @OneToMany(mappedBy = "barbeiro", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Agendamento> agendamentos;
 
+    @OneToOne
+    @JoinColumn(name = "fk_dias_semana", referencedColumnName = "id")
+    private Semana semana;
 
 
 }

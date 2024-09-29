@@ -2,13 +2,17 @@ package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroAtualizacaoDto;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Barbearia;
+import school.sptech.naumspringapi.entity.Semana;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.domain.usuario.Usuario;
 import school.sptech.naumspringapi.domain.usuario.UsuarioTipo;
 import org.springframework.transaction.annotation.Transactional;
+import school.sptech.naumspringapi.mapper.SemanaMapper;
 import school.sptech.naumspringapi.repository.BarbeiroRepository;
+import school.sptech.naumspringapi.repository.SemanaRepository;
 import school.sptech.naumspringapi.service.usuario.UsuarioService;
 import school.sptech.naumspringapi.exception.IndisponivelException;
 import school.sptech.naumspringapi.exception.NaoEncontradoException;
@@ -28,6 +32,7 @@ public class BarbeiroService {
 
     private final UsuarioService usuarioService;
     private final BarbeiroRepository barbeiroRepository;
+    private final SemanaRepository semanaRepository;
     private final BarbeariaService barbeariaService;
 
 
@@ -91,8 +96,10 @@ public class BarbeiroService {
 
         if (Objects.isNull(barbeiroLogado) && Objects.isNull(barbeiroLogado.getBarbearia())) throw new NaoEncontradoException("Barbeiro");
 
-        Barbeiro entity = BarbeiroMapper.toEntity(barbeiroAtualizado, barbeiroLogado.getBarbearia());
-        entity.setId(barbeiroAtual.getId());
+        Barbeiro barbeiroBeforeUpdate = buscarPorId(id);
+        Barbeiro entityToSave = BarbeiroMapper.toEntity(barbeiroAtualizado, barbeiroLogado.getBarbearia());
+
+        entityToSave.setId(barbeiroAtual.getId());
 
         UsuarioCriacaoDto usuarioCriacaoDto = new UsuarioCriacaoDto();
         usuarioCriacaoDto.setNome(barbeiroAtualizado.getNome());
@@ -104,11 +111,29 @@ public class BarbeiroService {
 
         if (Objects.isNull(usuarioAtualizado)) throw new RequisicaoInvalidaException("BarbeiroService");
 
-        entity.setUsuario(usuarioAtualizado);
-        entity.setBarbeiroAtivo(true);
-        entity.setAgendamentos(barbeiroAtual.getAgendamentos());
+        entityToSave.setUsuario(usuarioAtualizado);
+        entityToSave.setBarbeiroAtivo(true);
+        entityToSave.setAgendamentos(barbeiroAtual.getAgendamentos());
+        if(barbeiroAtualizado.getSemana() != null){
+            if(barbeiroBeforeUpdate.getSemana() != null){ //caso o barbeiro ja tenha uma semana só atualiza
+                Semana semanaSalva = SemanaMapper.toEntity(barbeiroAtualizado.getSemana());
+                semanaSalva.setId(barbeiroBeforeUpdate.getSemana().getId());
+                semanaSalva = semanaRepository.save(semanaSalva);
+                entityToSave.setSemana(semanaSalva);
+            }
+            else{ //caso o barbeiro não tenha uma semana cria uma nova
+                Semana semanaSalva = semanaRepository.save(SemanaMapper.toEntity(barbeiroAtualizado.getSemana()));
+                entityToSave.setSemana(semanaSalva);
+            }
+        }
+        else{
+            if(barbeiroBeforeUpdate.getSemana() != null){
+                entityToSave.setSemana(barbeiroBeforeUpdate.getSemana());
+            }
+        }
 
-        return barbeiroRepository.save(entity);
+
+        return barbeiroRepository.save(entityToSave);
     }
 
     //BUSCAR BARBEIRO POR IDUSUARIO

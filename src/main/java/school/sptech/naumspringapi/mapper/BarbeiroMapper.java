@@ -2,6 +2,7 @@ package school.sptech.naumspringapi.mapper;
 
 import org.springframework.stereotype.Component;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemBloqDto;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
@@ -26,7 +27,7 @@ public class BarbeiroMapper {
         barbeiro.setDescricao(dto.getDescricao());
         barbeiro.setFoto(dto.getFoto());
         barbeiro.setBarbearia(barbearia);
-
+        barbeiro.setSemana(SemanaMapper.toEntity(dto.getSemana()));
         return barbeiro;
     }
 
@@ -42,12 +43,33 @@ public class BarbeiroMapper {
         dto.setFoto(entity.getFoto());
         BarbeariaListagemDto dtoBarbearia = BarbeariaMapper.toDto(entity.getBarbearia());
         dto.setBarbearia(dtoBarbearia);
+        dto.setSemana(SemanaMapper.toDto(entity.getSemana()));
 
         return dto;
     }
 
     public static List<BarbeiroListagemDto> toDto(List<Barbeiro> entities) {
         return entities.stream().map(BarbeiroMapper::toDto).toList();
+    }
+
+    public static BarbeiroListagemBloqDto toBarbeiroBloqDto(Barbeiro entity){
+        if (Objects.isNull(entity)) return null;
+        BarbeiroListagemBloqDto barbeiroDto = new BarbeiroListagemBloqDto();
+        barbeiroDto.setId(entity.getId());
+        barbeiroDto.setNome(entity.getNome());
+        barbeiroDto.setEmail(entity.getEmail());
+        barbeiroDto.setSenha(entity.getSenha());
+        barbeiroDto.setTelefone(entity.getTelefone());
+        barbeiroDto.setDescricao(entity.getDescricao());
+        barbeiroDto.setFoto(entity.getFoto());
+        BarbeariaListagemDto dtoBarbearia = BarbeariaMapper.toDto(entity.getBarbearia());
+        barbeiroDto.setBarbearia(dtoBarbearia);
+        barbeiroDto.setSemana(SemanaMapper.toDto(entity.getSemana()));
+
+        return barbeiroDto;
+    }
+    public static List<BarbeiroListagemBloqDto> toBarbeiroBloqDto(List<Barbeiro> entities) {
+        return entities.stream().map(BarbeiroMapper::toBarbeiroBloqDto).toList();
     }
 
     public static BarbeiroDesativacaoDto toDtoDesativacao(Barbeiro entity) {

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
+import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemBloqDto;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
 import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
@@ -123,6 +124,14 @@ public class BarbeiroController {
         List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbeariaCliente(idBarbearia);
         if (barbeiros.isEmpty()) return ResponseEntity.noContent().build();
         return ResponseEntity.status(HttpStatus.OK).body(BarbeiroMapper.toDto(barbeiros));
+    }
+
+    @Operation(summary = "Listar barbeiros de uma barbearia para os barbeiros", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/listarBarbeiros")
+    public ResponseEntity<List<BarbeiroListagemBloqDto>> listarBarbeiro(@RequestParam Long idBarbearia) {
+        List<Barbeiro> barbeiros = barbeiroService.listaBarbeirosPorBarbeariaCliente(idBarbearia);
+        if (barbeiros.isEmpty()) return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.OK).body(BarbeiroMapper.toBarbeiroBloqDto(barbeiros));
     }
 
     @ApiOperation(value = "Gerar Csv Barbeiros", response = AgendamentoListagemDto.class)
