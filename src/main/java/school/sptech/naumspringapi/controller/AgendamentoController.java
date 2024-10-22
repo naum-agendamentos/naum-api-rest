@@ -5,32 +5,25 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoBloqListagemDto;
-import school.sptech.naumspringapi.email.EmailService;
-import school.sptech.naumspringapi.entity.Cliente;
-import school.sptech.naumspringapi.entity.Barbeiro;
-import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Servico;
+import school.sptech.naumspringapi.entity.Agendamento;
+import school.sptech.naumspringapi.service.ServicoService;
 import school.sptech.naumspringapi.mapper.AgendamentoMapper;
 import school.sptech.naumspringapi.service.AgendamentoService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoCriacaoDto;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
-import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoAtualizacaoDto;
-import school.sptech.naumspringapi.service.ServicoService;
+import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoBloqListagemDto;
 
 
 import java.net.URI;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Api(tags = "AgendamentoController", description = "Controller de Agendamentos.")
@@ -161,7 +154,7 @@ public class AgendamentoController {
     })
     @Operation(summary = "Bloquear Horários de funcionamento", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/bloquearHorarios")
-    public ResponseEntity<List<AgendamentoBloqListagemDto>> bloquearHorarios(@RequestParam Long barbeiroId,@RequestParam List<LocalDateTime> datas) {
+    public ResponseEntity<List<AgendamentoBloqListagemDto>> bloquearHorarios(@RequestParam Long barbeiroId, @RequestParam List<LocalDateTime> datas) {
         List<Agendamento> agendamentos = agendamentoService.bloquearHorarios(barbeiroId, datas);
         List<List<Servico>> listasDeServicos = servicoService.buscarServicosPorAgendamentos(agendamentos);
         URI uri = URI.create("/agendamentos/" + agendamentos.get(0).getId());

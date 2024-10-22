@@ -17,6 +17,7 @@ import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemBloqDto;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
 import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
+import school.sptech.naumspringapi.entity.Semana;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.mapper.ClienteMapper;
 import school.sptech.naumspringapi.service.AgendamentoService;
@@ -89,6 +90,18 @@ public class BarbeiroController {
     @PutMapping("/{id}")
     public ResponseEntity<BarbeiroListagemDto> atualizarBarbeiro(@PathVariable Long id, @RequestBody @Valid BarbeiroCriacaoDto novoBarbeiro) {
         return ResponseEntity.ok(BarbeiroMapper.toDto(barbeiroService.atualizarBarbeiro(id, novoBarbeiro)));
+    }
+
+    @ApiOperation("Atualizar semana do barbeiro por ID.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Semana atualizada com sucesso!"),
+            @ApiResponse(code = 400, message = "Dados inválidos"),
+            @ApiResponse(code = 404, message = "Barbeiro não encontrado.")
+    })
+    @Operation(summary = "Atualizar semana de um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/semana/{id}")
+    public ResponseEntity<Semana> atualizarSemanaBarbeiro(@PathVariable Long id, @RequestBody Semana novaSemana) {
+        return ResponseEntity.ok(barbeiroService.atualizarSemana(id, novaSemana));
     }
 
     @ApiOperation("Desativar barbeiro por ID.")

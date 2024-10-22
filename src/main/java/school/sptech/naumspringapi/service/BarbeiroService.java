@@ -174,4 +174,12 @@ public class BarbeiroService {
         Barbearia barbearia = barbeariaService.buscarPorId(id);
         return barbeiroRepository.findByBarbeariaIdAndBarbeiroAtivoTrue(barbearia.getId());
     }
+
+    @Transactional
+    public Semana atualizarSemana(Long idBarbeiro, Semana semana) {
+        Barbeiro barbeiro = barbeiroRepository.findByIdAndBarbeiroAtivoTrue(idBarbeiro);
+        barbeiro.setSemana(semana);
+        Barbeiro barbeiroSalvo = barbeiroRepository.save(barbeiro);
+        return barbeiroSalvo.getSemana();
+    }
 }

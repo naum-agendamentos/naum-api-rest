@@ -4,20 +4,20 @@ import lombok.RequiredArgsConstructor;
 import school.sptech.naumspringapi.entity.*;
 import org.springframework.stereotype.Service;
 import school.sptech.naumspringapi.email.EmailService;
-import school.sptech.naumspringapi.exception.ConflitoException;
 import school.sptech.naumspringapi.mapper.AgendamentoMapper;
+import school.sptech.naumspringapi.exception.ConflitoException;
 import school.sptech.naumspringapi.repository.ServicoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import school.sptech.naumspringapi.exception.NaoEncontradoException;
 import school.sptech.naumspringapi.repository.AgendamentoRepository;
 import school.sptech.naumspringapi.exception.EntidadeImprocessavelException;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
+import java.util.HashSet;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -195,14 +195,7 @@ public class AgendamentoService {
 
             agendamentosParaCriar.add(agendamento);
         }
-
-
-
         return agendamentoRepository.saveAll(agendamentosParaCriar);
-
-
-
-
     }
 
     @Transactional
