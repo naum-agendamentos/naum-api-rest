@@ -98,7 +98,8 @@ public class ClienteController {
     @Operation(summary = "Deletar cliente por ID", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/{idCliente}")
     public ResponseEntity<Void> deletarCliente(@PathVariable Long idCliente) {
-        return ResponseEntity.status(HttpStatus.OK).build();
+        clienteService.excluirCliente(idCliente);
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation("Buscar agendamentos por cliente.")
