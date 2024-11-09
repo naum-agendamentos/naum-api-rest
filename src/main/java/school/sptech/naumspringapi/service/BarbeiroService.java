@@ -3,6 +3,7 @@ package school.sptech.naumspringapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroAtualizacaoDto;
+import school.sptech.naumspringapi.dto.semanaDto.SemanaAtualizacaoDto;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Barbearia;
 import school.sptech.naumspringapi.entity.Semana;
@@ -176,15 +177,31 @@ public class BarbeiroService {
     }
 
     @Transactional
-    public Semana atualizarSemana(Long idBarbeiro, Semana semana) {
+    public Semana atualizarSemana(Long idBarbeiro, SemanaAtualizacaoDto semana) {
+        // buscar barbeiro e garantir que ele existe
         Barbeiro barbeiro = barbeiroRepository.findByIdAndBarbeiroAtivoTrue(idBarbeiro);
-        if (Objects.nonNull(barbeiro.getSemana()) && Objects.nonNull(barbeiro.getSemana().getId())) {
-            Semana semanaBarbeiro = semanaRepository.findById(barbeiro.getSemana().getId()).orElse(null);
-            semana.setId(semanaBarbeiro.getId());
-        } else semana.setId(null);
-        Semana semanaSalva = semanaRepository.save(semana);
+        if (Objects.isNull(barbeiro)) throw new NaoEncontradoException("Barbeiro");
+        // instanciar semanas que serão usadas
+        Semana semanaSalva;
+        Semana semanaNova = new Semana();
+        semanaNova.setSegunda(semana.isSegunda());
+        semanaNova.setTerca(semana.isTerca());
+        semanaNova.setQuarta(semana.isQuarta());
+        semanaNova.setQuinta(semana.isQuinta());
+        semanaNova.setSexta(semana.isSexta());
+        semanaNova.setSabado(semana.isSabado());
+        semanaNova.setDomingo(semana.isDomingo());
+        // se o barbeiro não tiver uma semana, cria uma nova
+        if (Objects.isNull(barbeiro.getSemana())) {
+            semanaSalva = semanaRepository.save(semanaNova);
+        } else { // se já tiver, atualiza
+            semanaNova.setId(barbeiro.getSemana().getId());
+            semanaSalva = semanaRepository.save(semanaNova);
+        }
+        // define a semana do barbeiro usando a semana nova ou atualizada
         barbeiro.setSemana(semanaSalva);
-        Barbeiro barbeiroSalvo = barbeiroRepository.save(barbeiro);
-        return barbeiroSalvo.getSemana();
+        // salva
+        barbeiroRepository.save(barbeiro);
+        return semanaNova;
     }
 }

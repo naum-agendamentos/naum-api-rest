@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import school.sptech.naumspringapi.dto.agendamentoDto.AgendamentoListagemDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroListagemBloqDto;
 import school.sptech.naumspringapi.dto.clienteDto.ClienteListagemDto;
+import school.sptech.naumspringapi.dto.semanaDto.SemanaAtualizacaoDto;
+import school.sptech.naumspringapi.dto.semanaDto.SemanaCriacaoDto;
 import school.sptech.naumspringapi.entity.Agendamento;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Semana;
@@ -100,7 +102,7 @@ public class BarbeiroController {
     })
     @Operation(summary = "Atualizar semana de um barbeiro", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/semana/{id}")
-    public ResponseEntity<Semana> atualizarSemanaBarbeiro(@PathVariable Long id, @RequestBody Semana novaSemana) {
+    public ResponseEntity<Semana> atualizarSemanaBarbeiro(@PathVariable Long id, @RequestBody SemanaAtualizacaoDto novaSemana) {
         return ResponseEntity.ok(barbeiroService.atualizarSemana(id, novaSemana));
     }
 
