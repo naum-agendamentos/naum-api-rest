@@ -178,8 +178,7 @@ public class BarbeiroService {
     @Transactional
     public Semana atualizarSemana(Long idBarbeiro, Semana semana) {
         Barbeiro barbeiro = barbeiroRepository.findByIdAndBarbeiroAtivoTrue(idBarbeiro);
-        Semana semanaBarbeiro = semanaRepository.findById(barbeiro.getSemana().getId()).orElseThrow(
-        () -> new NaoEncontradoException("Semana"));
+        Semana semanaBarbeiro = semanaRepository.findById(barbeiro.getSemana().getId()).orElse(null);
         semana.setId(semanaBarbeiro.getId());
         Semana semanaSalva = semanaRepository.save(semana);
         barbeiro.setSemana(semanaSalva);
