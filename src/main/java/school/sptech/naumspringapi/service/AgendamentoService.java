@@ -73,10 +73,29 @@ public class AgendamentoService {
         agendamento.setServicosIds(List.copyOf(servicosValidos)); // Converter Set para List
         agendamento.setValorTotal(valorTotal); // Definir o valor total
 
-        // Enviar email
-        emailService.sendEmail(cliente.getEmail());
-        emailService.sendEmailBarbeiro(barbeiro.getEmail());
-        emailService.colocarLista(AgendamentoMapper.toDto(agendamento, servicos));
+        try {
+            emailService.sendEmail(cliente.getEmail());
+        } catch (Exception e) {
+            // Imprimir erro no console
+            System.out.println("Erro ao enviar e-mail para o cliente: " + cliente.getEmail());
+            e.printStackTrace();  // Imprime o stack trace do erro
+        }
+
+        try {
+            emailService.sendEmailBarbeiro(barbeiro.getEmail());
+        } catch (Exception e) {
+            // Imprimir erro no console
+            System.out.println("Erro ao enviar e-mail para o barbeiro: " + barbeiro.getEmail());
+            e.printStackTrace();  // Imprime o stack trace do erro
+        }
+
+        try {
+            emailService.colocarLista(AgendamentoMapper.toDto(agendamento, servicos));
+        } catch (Exception e) {
+            // Imprimir erro no console
+            System.out.println("Erro ao adicionar o agendamento à lista");
+            e.printStackTrace();  // Imprime o stack trace do erro
+        }
 
         return agendamentoRepository.save(agendamento);
     }
@@ -179,8 +198,23 @@ public class AgendamentoService {
             if(agendamentosConflitantes != null && agendamentosConflitantes.size() > 0){
                 for (Agendamento agendamento : agendamentosConflitantes){
                     // Enviar email
-                    emailService.sendEmailCancelamento(agendamento.getCliente().getEmail());
-                    emailService.colocarLista(AgendamentoMapper.toDto(agendamento, new ArrayList<>() ));
+                    try {
+                        // Enviar email
+                        emailService.sendEmailCancelamento(agendamento.getCliente().getEmail());
+                    } catch (Exception e) {
+                        // Imprimir erro no console
+                        System.out.println("Erro ao enviar e-mail de cancelamento para o cliente: " + agendamento.getCliente().getEmail());
+                        e.printStackTrace();  // Imprime o stack trace do erro
+                    }
+
+                    try {
+                        // Adicionar agendamento à lista
+                        emailService.colocarLista(AgendamentoMapper.toDto(agendamento, new ArrayList<>()));
+                    } catch (Exception e) {
+                        // Imprimir erro no console
+                        System.out.println("Erro ao adicionar o agendamento à lista: " + agendamento.getId());
+                        e.printStackTrace();  // Imprime o stack trace do erro
+                    }
                     idsExclusao.add(agendamento.getId());
                 }
             }

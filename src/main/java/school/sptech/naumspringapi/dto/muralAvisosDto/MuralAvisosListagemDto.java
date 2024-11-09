@@ -1,10 +1,8 @@
 package school.sptech.naumspringapi.dto.muralAvisosDto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
 import lombok.Data;
-import school.sptech.naumspringapi.entity.Barbeiro;
+
 import school.sptech.naumspringapi.entity.TipoAviso;
 
 import java.time.LocalDateTime;
@@ -17,5 +15,5 @@ public class MuralAvisosListagemDto {
     private String url;
     private LocalDateTime data;
     private TipoAviso tipoAviso;
-    private Barbeiro barbeiro;
+    private BarbeiroSimpleDto barbeiro;
 }
