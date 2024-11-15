@@ -1,8 +1,8 @@
 package school.sptech.naumspringapi.dto.barbeiroDto;
 
 import lombok.Data;
-import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
 import school.sptech.naumspringapi.dto.semanaDto.SemanaListagemDto;
+import school.sptech.naumspringapi.dto.barbeariaDto.BarbeariaListagemDto;
 
 @Data
 public class BarbeiroListagemDto {

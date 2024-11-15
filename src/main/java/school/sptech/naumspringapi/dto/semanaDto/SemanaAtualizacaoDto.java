@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class SemanaAtualizacaoDto {
-    private boolean segunda;
-    private boolean terca;
-    private boolean quarta;
-    private boolean quinta;
-    private boolean sexta;
-    private boolean sabado;
-    private boolean domingo;
+    private Boolean segunda;
+    private Boolean terca;
+    private Boolean quarta;
+    private Boolean quinta;
+    private Boolean sexta;
+    private Boolean sabado;
+    private Boolean domingo;
 }

@@ -2,21 +2,20 @@ package school.sptech.naumspringapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroAtualizacaoDto;
-import school.sptech.naumspringapi.dto.semanaDto.SemanaAtualizacaoDto;
+import school.sptech.naumspringapi.entity.Semana;
 import school.sptech.naumspringapi.entity.Barbeiro;
 import school.sptech.naumspringapi.entity.Barbearia;
-import school.sptech.naumspringapi.entity.Semana;
+import school.sptech.naumspringapi.mapper.SemanaMapper;
 import school.sptech.naumspringapi.mapper.BarbeiroMapper;
 import school.sptech.naumspringapi.domain.usuario.Usuario;
 import school.sptech.naumspringapi.domain.usuario.UsuarioTipo;
-import org.springframework.transaction.annotation.Transactional;
-import school.sptech.naumspringapi.mapper.SemanaMapper;
-import school.sptech.naumspringapi.repository.BarbeiroRepository;
 import school.sptech.naumspringapi.repository.SemanaRepository;
+import org.springframework.transaction.annotation.Transactional;
+import school.sptech.naumspringapi.repository.BarbeiroRepository;
 import school.sptech.naumspringapi.service.usuario.UsuarioService;
 import school.sptech.naumspringapi.exception.IndisponivelException;
 import school.sptech.naumspringapi.exception.NaoEncontradoException;
+import school.sptech.naumspringapi.dto.semanaDto.SemanaAtualizacaoDto;
 import school.sptech.naumspringapi.dto.barbeiroDto.BarbeiroCriacaoDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import school.sptech.naumspringapi.service.usuario.dto.UsuarioCriacaoDto;
@@ -32,9 +31,9 @@ import java.util.Objects;
 public class BarbeiroService {
 
     private final UsuarioService usuarioService;
-    private final BarbeiroRepository barbeiroRepository;
     private final SemanaRepository semanaRepository;
     private final BarbeariaService barbeariaService;
+    private final BarbeiroRepository barbeiroRepository;
 
 
     // MÉTODO CRIAÇÃO DO BARBEIRO
@@ -184,13 +183,13 @@ public class BarbeiroService {
         // instanciar semanas que serão usadas
         Semana semanaSalva;
         Semana semanaNova = new Semana();
-        semanaNova.setSegunda(semana.isSegunda());
-        semanaNova.setTerca(semana.isTerca());
-        semanaNova.setQuarta(semana.isQuarta());
-        semanaNova.setQuinta(semana.isQuinta());
-        semanaNova.setSexta(semana.isSexta());
-        semanaNova.setSabado(semana.isSabado());
-        semanaNova.setDomingo(semana.isDomingo());
+        semanaNova.setSegunda(semana.getSegunda());
+        semanaNova.setTerca(semana.getTerca());
+        semanaNova.setQuarta(semana.getQuarta());
+        semanaNova.setQuinta(semana.getQuinta());
+        semanaNova.setSexta(semana.getSexta());
+        semanaNova.setSabado(semana.getSabado());
+        semanaNova.setDomingo(semana.getDomingo());
         // se o barbeiro não tiver uma semana, cria uma nova
         if (Objects.isNull(barbeiro.getSemana())) {
             semanaSalva = semanaRepository.save(semanaNova);

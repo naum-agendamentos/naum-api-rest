@@ -3,7 +3,6 @@ package school.sptech.naumspringapi.dto.barbeiroDto;
 import lombok.Data;
 import jakarta.validation.constraints.*;
 import school.sptech.naumspringapi.dto.semanaDto.SemanaCriacaoDto;
-import school.sptech.naumspringapi.entity.Semana;
 
 @Data
 public class BarbeiroCriacaoDto {

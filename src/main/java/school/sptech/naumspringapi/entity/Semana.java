@@ -1,8 +1,8 @@
 package school.sptech.naumspringapi.entity;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.*;
 
 @Entity
 @Getter
@@ -12,13 +12,13 @@ public class Semana {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private boolean segunda;
-    private boolean terca;
-    private boolean quarta;
-    private boolean quinta;
-    private boolean sexta;
-    private boolean sabado;
-    private boolean domingo;
+    private Boolean segunda;
+    private Boolean terca;
+    private Boolean quarta;
+    private Boolean quinta;
+    private Boolean sexta;
+    private Boolean sabado;
+    private Boolean domingo;
 
 
 
