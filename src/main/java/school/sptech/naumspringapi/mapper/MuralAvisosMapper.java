@@ -1,6 +1,7 @@
 package school.sptech.naumspringapi.mapper;
 
 import org.springframework.stereotype.Component;
+import school.sptech.naumspringapi.dto.muralAvisosDto.BarbeiroSimpleDto;
 import school.sptech.naumspringapi.dto.muralAvisosDto.MuralAvisosCriacaoDto;
 import school.sptech.naumspringapi.dto.muralAvisosDto.MuralAvisosListagemDto;
 import school.sptech.naumspringapi.dto.muralAvisosDto.MuralAvisosAtualizacaoDto;
@@ -36,7 +37,13 @@ public class MuralAvisosMapper {
         dto.setUrl(entity.getUrl());
         dto.setData(entity.getData());
         dto.setTipoAviso(entity.getTipoAviso());
-        dto.setBarbeiro(entity.getBarbeiro());
+        
+        if (entity.getBarbeiro() != null) {
+            BarbeiroSimpleDto barbeiroSimpleDto = new BarbeiroSimpleDto();
+            barbeiroSimpleDto.setId(entity.getBarbeiro().getId());
+            barbeiroSimpleDto.setNome(entity.getBarbeiro().getNome());
+            dto.setBarbeiro(barbeiroSimpleDto);
+        }
 
         return dto;
     }
