@@ -178,6 +178,7 @@ public class BarbeiroService {
     @Transactional
     public Semana atualizarSemana(Long idBarbeiro, SemanaAtualizacaoDto semana) {
         // buscar barbeiro e garantir que ele existe
+        System.out.println("LOG: Atualizar semana do barbeiro.");
         Barbeiro barbeiro = barbeiroRepository.findByIdAndBarbeiroAtivoTrue(idBarbeiro);
         if (Objects.isNull(barbeiro)) throw new NaoEncontradoException("Barbeiro");
         // instanciar semanas que serão usadas
@@ -190,16 +191,20 @@ public class BarbeiroService {
         semanaNova.setSexta(semana.getSexta());
         semanaNova.setSabado(semana.getSabado());
         semanaNova.setDomingo(semana.getDomingo());
+        System.out.println("LOG: Semana nova: " + semanaNova);
         // se o barbeiro não tiver uma semana, cria uma nova
         if (Objects.isNull(barbeiro.getSemana())) {
+            System.out.println("LOG: Semana nova salva!");
             semanaSalva = semanaRepository.save(semanaNova);
         } else { // se já tiver, atualiza
+            System.out.println("LOG: Semana nova Atualizada!");
             semanaNova.setId(barbeiro.getSemana().getId());
             semanaSalva = semanaRepository.save(semanaNova);
         }
         // define a semana do barbeiro usando a semana nova ou atualizada
         barbeiro.setSemana(semanaSalva);
         // salva
+        System.out.println("LOG: Salvando barbeiro: " + barbeiro);
         barbeiroRepository.save(barbeiro);
         return semanaNova;
     }
