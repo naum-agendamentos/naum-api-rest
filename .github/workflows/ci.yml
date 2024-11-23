@@ -79,4 +79,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: bryansilva117/naum-api-rest:api-actions-${{ github.sha }}
+          tags: bryansilva117/naum-api-rest:api-actions
