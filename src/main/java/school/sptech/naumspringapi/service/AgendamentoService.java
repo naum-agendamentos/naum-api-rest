@@ -73,6 +73,7 @@ public class AgendamentoService {
         agendamento.setServicosIds(List.copyOf(servicosValidos)); // Converter Set para List
         agendamento.setValorTotal(valorTotal); // Definir o valor total
 
+        /*
         try {
             emailService.sendEmail(cliente.getEmail());
         } catch (Exception e) {
@@ -96,6 +97,7 @@ public class AgendamentoService {
             System.out.println("Erro ao adicionar o agendamento à lista");
             e.printStackTrace();  // Imprime o stack trace do erro
         }
+         */
 
         return agendamentoRepository.save(agendamento);
     }
@@ -197,6 +199,8 @@ public class AgendamentoService {
             Set<Long> idsExclusao = new HashSet<>();
             if(agendamentosConflitantes != null && agendamentosConflitantes.size() > 0){
                 for (Agendamento agendamento : agendamentosConflitantes){
+
+                    /*
                     // Enviar email
                     try {
                         // Enviar email
@@ -215,6 +219,8 @@ public class AgendamentoService {
                         System.out.println("Erro ao adicionar o agendamento à lista: " + agendamento.getId());
                         e.printStackTrace();  // Imprime o stack trace do erro
                     }
+
+                     */
                     idsExclusao.add(agendamento.getId());
                 }
             }
