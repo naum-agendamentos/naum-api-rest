@@ -1,4 +1,4 @@
-name: Exemplo de CI
+name: CI Naum
 
 on:
   push:
